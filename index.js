@@ -34,16 +34,16 @@ app.get('/api/name', (req, res) => {
 //  res.json({ name });
 });
 
-let curentSocketIds = [];
+//let curentSocketIds = [];
 
-io.on('connection', (sock) => {
+io.on('connection', (socket) => {
 
   console.log("New connection from " + socket.id);
-  curentSocketIds.push(socket.id);
+ // curentSocketIds.push(socket.id);
 
   sock.on('heartbeat', (payload) => {
     payload.nodeName = name;
-    sock.emit('heartbeat', payload);
+    socket.emit('heartbeat', payload);
   });
 
   socket.broadcast.emit('add-users', {
