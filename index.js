@@ -41,7 +41,7 @@ io.on('connection', (socket) => {
   console.log("New connection from " + socket.id);
  // curentSocketIds.push(socket.id);
 
-  sock.on('heartbeat', (payload) => {
+  socket.on('heartbeat', (payload) => {
     payload.nodeName = name;
     socket.emit('heartbeat', payload);
   });

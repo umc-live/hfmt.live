@@ -28,6 +28,25 @@ const startButton = document.getElementById('startButton');
 const callButton = document.getElementById('callButton');
 const hangupButton = document.getElementById('hangupButton');
 
+
+
+// Handles hangup action: ends up call, closes connections and resets peers.
+function hangupAction() {
+  localPeerConnection.close();
+  remotePeerConnection.close();
+  localPeerConnection = null;
+  remotePeerConnection = null;
+  hangupButton.disabled = true;
+  callButton.disabled = false;
+  trace('Ending call.');
+}
+
+// Add click event handlers for buttons.
+startButton.addEventListener('click', startAction);
+callButton.addEventListener('click', callAction);
+hangupButton.addEventListener('click', hangupAction);
+
+
 // Set up initial action buttons status: disable call and hangup.
 callButton.disabled = true;
 hangupButton.disabled = true;
