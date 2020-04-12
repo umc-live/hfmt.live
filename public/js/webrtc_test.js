@@ -49,13 +49,13 @@ function startAction() {
 function gotLocalMediaStream(mediaStream) {
     localVideo.srcObject = mediaStream;
     localStream = mediaStream;
-    trace('Received local stream.');
+    console.log('Received local stream.');
     callButton.disabled = false;  // Enable call button.
 }
 
 // Handles error by logging a message to the console.
 function handleLocalMediaStreamError(error) {
-    trace(`navigator.getUserMedia error: ${error.toString()}.`);
+    console.log(`navigator.getUserMedia error: ${error.toString()}.`);
 }
 
 // Handles remote MediaStream success by adding it as the remoteVideo src.
@@ -63,7 +63,7 @@ function gotRemoteMediaStream(event) {
     const mediaStream = event.stream;
     remoteVideo.srcObject = mediaStream;
     remoteStream = mediaStream;
-    trace('Remote peer connection received remote stream.');
+    console.log('Remote peer connection received remote stream.');
 }
 
 
@@ -72,7 +72,7 @@ function gotRemoteMediaStream(event) {
 // Logs a message with the id and size of a video element.
 function logVideoLoaded(event) {
     const video = event.target;
-    trace(`${video.id} videoWidth: ${video.videoWidth}px, ` +
+    console.log(`${video.id} videoWidth: ${video.videoWidth}px, ` +
         `videoHeight: ${video.videoHeight}px.`);
 }
 
@@ -84,7 +84,7 @@ function logResizedVideo(event) {
     if (startTime) {
         const elapsedTime = window.performance.now() - startTime;
         startTime = null;
-        trace(`Setup time: ${elapsedTime.toFixed(3)}ms.`);
+        console.log(`Setup time: ${elapsedTime.toFixed(3)}ms.`);
     }
 }
 
