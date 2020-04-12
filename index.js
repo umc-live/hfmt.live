@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
     payload.nodeName = name;
     socket.emit('heartbeat', payload);
   });
-
+/*
   socket.broadcast.emit('add-users', {
       users: [socket.id]
   });
@@ -79,7 +79,7 @@ io.on('connection', (socket) => {
           candidate: data.candidate
       });
   });
-
+*/
 });
 
 
