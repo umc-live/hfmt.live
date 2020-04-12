@@ -17,8 +17,6 @@ app.get('/', (req, res) => {
   res.send('failed to route static from nginx');
 });
 
-//app.use('/scripts', express.static(__dirname + '/node_modules/'));
-
 app.get('/api/test', (req, res) => {
 //  res.send('hello api/test');
 //  console.log('received req');
@@ -36,20 +34,52 @@ app.get('/api/name', (req, res) => {
 //  res.json({ name });
 });
 
+let curentSocketIds = [];
 
 io.on('connection', (sock) => {
-  console.log('Client connected');
 
-  sock.send("hello there!");
+  console.log("New connection from " + socket.id);
+  curentSocketIds.push(socket.id);
 
   sock.on('heartbeat', (payload) => {
     payload.nodeName = name;
     sock.emit('heartbeat', payload);
   });
 
-  sock.on('disconnect', () => {
-    console.log('Socket Disconnected');
+  socket.broadcast.emit('add-users', {
+      users: [socket.id]
   });
+
+  socket.on('connect', () => {
+      io.emit('add-users', socket.id);
+  });
+
+  socket.on('disconnect', () => {
+      curentSocketIds.splice(curentSocketIds.indexOf(socket.id), 1);
+      io.emit('remove-user', socket.id);
+  });
+
+  socket.on('make-offer', (data) => {
+      socket.to(data.to).emit('offer-made', {
+          offer: data.offer,
+          socket: socket.id
+      });
+  });
+
+  socket.on('make-answer', (data) => {
+      socket.to(data.to).emit('answer-made', {
+          socket: socket.id,
+          answer: data.answer
+      });
+  });
+
+  socket.on('send-candidate', (data) => {
+      socket.to(data.to).emit('candidate-sent', {
+          socket: socket.id,
+          candidate: data.candidate
+      });
+  });
+
 });
 
 
