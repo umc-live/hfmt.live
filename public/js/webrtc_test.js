@@ -26,6 +26,7 @@ let peerConnectionConfig = {
     ]
 };
 
+let peerList = new Map();
 
 let localVideo;
 let remoteVideo;
@@ -48,7 +49,8 @@ function startAction() {
 
 }
 
-function gotMessageFromServer(message) {
+function gotMessageFromServer(message) 
+{
     if (!peerConnection) {
         joinRoom(false);
     }
@@ -61,25 +63,29 @@ function gotMessageFromServer(message) {
     if (signal.uuid == uuid)
         return;
 
-    if (signal.sdp) {
-        peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp))
+    if (signal.sdp) 
+    {
+        peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp) )
             .then(() => {
                 // Only create answers in response to offers
-                if (signal.sdp.type == 'offer') {
+                if (signal.sdp.type == 'offer') 
+                {
                     peerConnection.createAnswer()
-                        .then(createdDescription)
-                        .catch(errorHandler);
+                        .then( createdDescription )
+                        .catch( errorHandler );
                 }
             }).catch(errorHandler);
 
     }
-    else if (signal.ice) {
+    else if (signal.ice) 
+    {
         peerConnection.addIceCandidate(new RTCIceCandidate(signal.ice))
             .catch(errorHandler);
     }
 }
 
-function gotIceCandidate(event) {
+function gotIceCandidate(event) 
+{
     if (event.candidate != null) {
         socket.emit('room',
             JSON.stringify({
@@ -107,11 +113,13 @@ function createdDescription(description) {
 async function getId( pc )
 {
     const identity = await event.target.peerIdentity;
-    return identity.name;
+    return identity;
 }
 
-function gotRemoteStream(event) {
+function gotRemoteStream( event ) 
+{
     console.log('got remote stream', event.target);
+
 /*
     const identity = await pc.peerIdentity;
     return identity;
@@ -156,7 +164,6 @@ function joinRoom(isCaller) {
     peerConnection.ontrack = gotRemoteStream;
     peerConnection.oniceconnectionstatechange = handleConnectionChange;
     peerConnection.addStream( localStream );
-
 
     if (isCaller) {
         peerConnection.createOffer()
