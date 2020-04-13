@@ -46,6 +46,10 @@ io.on('connection', (socket) => {
     socket.emit('heartbeat', payload);
   });
 
+  socket.on('room', (data) => {
+    io.broadcast(data); // forward to all
+  });
+
   socket.broadcast.emit('add-users', {
       users: [socket.id]
   });
@@ -81,7 +85,7 @@ io.on('connection', (socket) => {
   });
 
 
-  
+
 });
 
 
