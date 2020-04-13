@@ -14,8 +14,7 @@ socket.on('message', (m) => {
 });
 
 const mediaStreamConstraints = {
-    video: true,
-    audio: true
+    video: true //, audio: true
 };
 
 let startTime = null;   
