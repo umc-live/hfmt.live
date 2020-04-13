@@ -9,8 +9,7 @@ socket.on('connection', (event) => {
 
 socket.on('message', (m) => { 
     console.log('got message', m);
-    
-    //gotMessageFromServer(m);
+    gotMessageFromServer(m);
 });
  
 const mediaStreamConstraints = {
