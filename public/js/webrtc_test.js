@@ -59,24 +59,40 @@ function gotMessageFromServer(message)
     var signal = JSON.parse(message);
   
     console.log('got message', signal);
-    // Ignore messages from ourself
-    if(signal.uuid == uuid) return;
-  
-    if(signal.sdp) {
-      peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(function() {
-        // Only create answers in response to offers
-        if(signal.sdp.type == 'offer') {
-          peerConnection.createAnswer().then(createdDescription).catch(errorHandler);
-        }
-      }).catch(errorHandler);
-    } else if(signal.ice) {
-      peerConnection.addIceCandidate(new RTCIceCandidate(signal.ice)).catch(errorHandler);
+    
+    // ignore messages from ourselves (although I think socket.io deals with that anyway)
+    if( signal.uuid == uuid) 
+        return;
+
+    if( signal.sdp ) 
+    {
+      peerConnection.setRemoteDescription( new RTCSessionDescription(signal.sdp) )
+        .then( () => {
+            // Only create answers in response to offers
+            if(signal.sdp.type == 'offer') 
+            {
+                peerConnection.createAnswer()
+                    .then(createdDescription)
+                    .catch(errorHandler);
+            }
+        }).catch(errorHandler);
+
+    } 
+    else if(signal.ice) 
+    {
+      peerConnection.addIceCandidate(new RTCIceCandidate(signal.ice) )
+        .catch( errorHandler );
     }
   }
   
   function gotIceCandidate(event) {
     if(event.candidate != null) {
-        socket.emit('room', JSON.stringify({'ice': event.candidate, 'uuid': uuid}));
+        socket.emit('room', 
+            JSON.stringify({
+                'ice': event.candidate, 
+                'uuid': uuid
+            })
+        );
     }
   }
   
@@ -84,14 +100,15 @@ function gotMessageFromServer(message)
   {
     console.log('got description');
   
-    peerConnection.setLocalDescription(description).then(function() {
-      socket.emit('room', 
-            JSON.stringify({
-                'sdp': peerConnection.localDescription, 
-                'uuid': uuid
-            })
-        );
-    }).catch(errorHandler);
+    peerConnection.setLocalDescription(description)
+        .then(() => {
+            socket.emit('room', 
+                    JSON.stringify({
+                        'sdp': peerConnection.localDescription, 
+                        'uuid': uuid
+                    })
+                );
+        }).catch( errorHandler );
   }
   
   function gotRemoteStream(event) {
@@ -112,8 +129,21 @@ function joinRoom(isCaller)
     peerConnection.ontrack = gotRemoteStream;
     peerConnection.addStream( localStream );
   
-    if(isCaller) {
-      peerConnection.createOffer().then(createdDescription).catch(errorHandler);
+    if(isCaller) 
+    {
+      peerConnection.createOffer()
+        .then( offerDescripion => {
+            peerConnection.setLocalDescription( offerDescripion )
+            .then(() => {
+                socket.emit('room', 
+                    JSON.stringify({
+                        'sdp': peerConnection.localDescription, 
+                        'uuid': uuid
+                    })
+                );
+            }).catch( errorHandler );
+        } )
+        .catch( errorHandler );
     }
 
 }
