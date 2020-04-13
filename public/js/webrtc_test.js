@@ -107,7 +107,7 @@ function createdDescription(description) {
 async function getId( pc )
 {
     const identity = await event.target.peerIdentity;
-    return identity;
+    return identity.name;
 }
 
 function gotRemoteStream(event) {
