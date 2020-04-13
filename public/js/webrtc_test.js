@@ -59,14 +59,14 @@ function startAction()
 
 }
 
-function gotMessageFromServer(message) 
+function gotMessageFromServer(signal) 
 {
     if(!peerConnection) 
     {
         joinRoom(false);
     }
         
-    var signal = JSON.parse(message.data);
+   // var signal = JSON.parse(message.data);
   
     // Ignore messages from ourself
     if(signal.uuid == uuid) return;
