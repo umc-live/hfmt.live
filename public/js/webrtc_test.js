@@ -186,6 +186,26 @@ function callAction()
   }
 
 
+// Logs error when setting session description fails.
+function setSessionDescriptionError(error) {
+    console.log(`Failed to create session description: ${error.toString()}.`);
+  }
+  
+  // Logs success when setting session description.
+  function setDescriptionSuccess(peerConnection, functionName) {
+    const peerName = getPeerName(peerConnection);
+    console.log(`${peerName} ${functionName} complete.`);
+  }
+  
+  // Logs success when localDescription is set.
+  function setLocalDescriptionSuccess(peerConnection) {
+    setDescriptionSuccess(peerConnection, 'setLocalDescription');
+  }
+  
+  // Logs success when remoteDescription is set.
+  function setRemoteDescriptionSuccess(peerConnection) {
+    setDescriptionSuccess(peerConnection, 'setRemoteDescription');
+  }
 
 // Logs offer creation and sets peer connection session descriptions.
 function createdOffer(description) {
