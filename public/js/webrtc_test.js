@@ -31,6 +31,13 @@ let peerConnectionConfig = {
 
 let peerList = new Map();
 
+function Connection()
+{
+    this.conneciton = RTCPeerConnection;
+    this.stream = MediaStream;
+    this.id = "";
+}
+
 let localVideo;
 let remoteVideo;
 let startButton;
@@ -54,13 +61,14 @@ function startAction() {
 
 function gotMessageFromServer(message) 
 {
-    if (!peerConnection) {
-        joinRoom(false);
-    }
 
     var signal = JSON.parse(message);
-
     console.log('got message', signal);
+
+    if (!peerConnection) 
+    {
+        joinRoom(false);
+    }
 
     // ignore messages from ourselves (although I think socket.io deals with that anyway)
     if (signal.uuid == uuid)
@@ -144,8 +152,6 @@ function gotRemoteStream( event )
     remoteVideo.autoplay = true;
     remoteVideo.setAttribute('playsinline', true);
 
-    //remoteVideo.playsinline = true;
-
     videoDiv.appendChild( remoteVideo );
 
     getId( event.target )
@@ -163,7 +169,9 @@ function handleConnectionChange(event) {
     console.log(`ICE state: ${peerConnection.iceConnectionState}.`);
 }
 
-function joinRoom( isCaller ) {
+function joinRoom( isCaller ) 
+{
+    console.log('joining room, is caller:', isCaller);
     peerConnection = new RTCPeerConnection( peerConnectionConfig );
     peerConnection.onicecandidate = gotIceCandidate;
     peerConnection.ontrack = gotRemoteStream;
