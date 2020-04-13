@@ -182,7 +182,7 @@ window.addEventListener("load", function () {
     startButton = document.getElementById('startButton');
     joinButton = document.getElementById('joinButton');
 
-    videoDiv = document.getElementById('videos');
+    videoDiv = document.getElementById('remoteVideos');
 
     startButton.addEventListener('click', startAction);
     joinButton.addEventListener('click', () => {
