@@ -186,6 +186,47 @@ function callAction()
   }
 
 
+
+// Logs offer creation and sets peer connection session descriptions.
+function createdOffer(description) {
+    console.log(`Offer from localPeerConnection:\n${description.sdp}`);
+  
+    console.log('localPeerConnection setLocalDescription start.');
+    localPeerConnection.setLocalDescription(description)
+      .then(() => {
+        setLocalDescriptionSuccess(localPeerConnection);
+      }).catch(setSessionDescriptionError);
+  
+    console.log('remotePeerConnection setRemoteDescription start.');
+    remotePeerConnection.setRemoteDescription(description)
+      .then(() => {
+        setRemoteDescriptionSuccess(remotePeerConnection);
+      }).catch(setSessionDescriptionError);
+  
+    console.log('remotePeerConnection createAnswer start.');
+    remotePeerConnection.createAnswer()
+      .then(createdAnswer)
+      .catch(setSessionDescriptionError);
+  }
+  
+  // Logs answer to offer creation and sets peer connection session descriptions.
+  function createdAnswer(description) {
+    console.log(`Answer from remotePeerConnection:\n${description.sdp}.`);
+  
+    console.log('remotePeerConnection setLocalDescription start.');
+    remotePeerConnection.setLocalDescription(description)
+      .then(() => {
+        setLocalDescriptionSuccess(remotePeerConnection);
+      }).catch(setSessionDescriptionError);
+  
+    console.log('localPeerConnection setRemoteDescription start.');
+    localPeerConnection.setRemoteDescription(description)
+      .then(() => {
+        setRemoteDescriptionSuccess(localPeerConnection);
+      }).catch(setSessionDescriptionError);
+  }
+  
+
 function gotRemoteMediaStream( event ) 
 {
     const mediaStream = event.stream;
