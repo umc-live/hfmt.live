@@ -183,6 +183,8 @@ function joinRoom( isCaller )
             .catch(errorHandler);
     }
 
+    joinButton.disabled = true;
+
 }
 
 
