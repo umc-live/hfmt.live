@@ -28,16 +28,11 @@ export interface Connection {
 }
 */
 
-const mediaStreamConstraints = {
-    video: true,
-};
-
 // Set up to exchange only video.
 const offerOptions = {
     offerToReceiveVideo: 1,
 };
 
-// Define initial start time of the call (defined as connection between peers).
 let startTime = null;
 
 let localStream;
@@ -48,7 +43,6 @@ let remotePeerConnection;
 
 const localVideo = document.getElementById('localVideo');
 const remoteVideo = document.getElementById('remoteVideo');
-
 const startButton = document.getElementById('startButton');
 const callButton = document.getElementById('callButton');
 const hangupButton = document.getElementById('hangupButton');
@@ -63,13 +57,8 @@ function hangupAction() {
   remotePeerConnection = null;
   hangupButton.disabled = true;
   callButton.disabled = false;
-  trace('Ending call.');
+  console.log('Ending call.');
 }
-
-// Add click event handlers for buttons.
-startButton.addEventListener('click', startAction);
-callButton.addEventListener('click', callAction);
-hangupButton.addEventListener('click', hangupAction);
 
 
 // Set up initial action buttons status: disable call and hangup.
@@ -77,62 +66,154 @@ callButton.disabled = true;
 hangupButton.disabled = true;
 
 
-// Handles start button action: creates local MediaStream.
-function startAction() {
-    startButton.disabled = true;
-    navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
-        .then(gotLocalMediaStream).catch(handleLocalMediaStreamError);
 
-    console.log('Requesting local stream.');
-}
+const mediaStreamConstraints = {
+    video: true
+};
 
 
-// Define MediaStreams callbacks.
-
-// Sets the MediaStream as the video element src.
-function gotLocalMediaStream(mediaStream) {
-    localVideo.srcObject = mediaStream;
+function gotLocalMediaStream(mediaStream) 
+{
+    localVideo.srcObject = mediaStream; // set stream 
     localStream = mediaStream;
     console.log('Received local stream.');
     callButton.disabled = false;  // Enable call button.
 }
 
-// Handles error by logging a message to the console.
-function handleLocalMediaStreamError(error) {
+function handleLocalMediaStreamError(error) 
+{
     console.log(`navigator.getUserMedia error: ${error.toString()}.`);
 }
 
-// Handles remote MediaStream success by adding it as the remoteVideo src.
-function gotRemoteMediaStream(event) {
+function startAction() 
+{
+    startButton.disabled = true;
+    navigator.mediaDevices.getUserMedia( mediaStreamConstraints )
+        .then( gotLocalMediaStream )
+        .catch( handleLocalMediaStreamError );
+
+    console.log('Requesting local stream.');
+}
+
+
+// Connects with new peer candidate.
+function handleConnection(event) 
+{
+    const peerConnection = event.target;
+    const iceCandidate = event.candidate;
+  
+    if (iceCandidate) {
+      const newIceCandidate = new RTCIceCandidate(iceCandidate);
+      const otherPeer = getOtherPeer(peerConnection);
+  
+      otherPeer.addIceCandidate(newIceCandidate)
+        .then(() => {
+          handleConnectionSuccess(peerConnection);
+        }).catch((error) => {
+          handleConnectionFailure(peerConnection, error);
+        });
+  
+      console.log(`${getPeerName(peerConnection)} ICE candidate:\n` +
+        `${event.candidate.candidate}.`);
+    }
+  }
+  
+  // Logs that the connection succeeded.
+  function handleConnectionSuccess(peerConnection) {
+    console.log(`${getPeerName(peerConnection)} addIceCandidate success.`);
+  };
+  
+  // Logs that the connection failed.
+  function handleConnectionFailure(peerConnection, error) {
+    console.log(`${getPeerName(peerConnection)} failed to add ICE Candidate:\n` +
+      `${error.toString()}.`);
+  }
+  
+  // Logs changes to the connection state.
+  function handleConnectionChange(event) {
+    const peerConnection = event.target;
+    console.log('ICE state change event: ', event);
+    console.log(`${getPeerName(peerConnection)} ICE state: ` +
+      `${peerConnection.iceConnectionState}.`);
+  }
+  
+
+function callAction() 
+{
+    callButton.disabled = true;
+    hangupButton.disabled = false;
+  
+    console.log('Starting call.');
+    startTime = window.performance.now();
+  
+    // Get local media stream tracks.
+    const videoTracks = localStream.getVideoTracks();
+    const audioTracks = localStream.getAudioTracks();
+
+    if (videoTracks.length > 0) {
+      console.log(`Using video device: ${videoTracks[0].label}.`);
+    }
+    if (audioTracks.length > 0) {
+      console.log(`Using audio device: ${audioTracks[0].label}.`);
+    }
+  
+    const servers = null;  // Allows for RTC server configuration.
+  
+    // Create peer connections and add behavior.
+    localPeerConnection = new RTCPeerConnection(servers);
+    console.log('Created local peer connection object localPeerConnection.');
+  
+    localPeerConnection.addEventListener('icecandidate', handleConnection);
+    localPeerConnection.addEventListener(
+      'iceconnectionstatechange', handleConnectionChange);
+  
+      
+    remotePeerConnection = new RTCPeerConnection(servers);
+    console.log('Created remote peer connection object remotePeerConnection.');
+  
+    remotePeerConnection.addEventListener('icecandidate', handleConnection);
+    remotePeerConnection.addEventListener(
+      'iceconnectionstatechange', handleConnectionChange);
+    remotePeerConnection.addEventListener('addstream', gotRemoteMediaStream);
+  
+    // Add local stream to connection and create offer to connect.
+    localPeerConnection.addStream(localStream);
+    console.log('Added local stream to localPeerConnection.');
+  
+    console.log('localPeerConnection createOffer start.');
+    localPeerConnection.createOffer(offerOptions)
+      .then(createdOffer).catch(setSessionDescriptionError);
+  }
+
+
+function gotRemoteMediaStream( event ) 
+{
     const mediaStream = event.stream;
     remoteVideo.srcObject = mediaStream;
     remoteStream = mediaStream;
     console.log('Remote peer connection received remote stream.');
 }
 
+startButton.addEventListener('click', startAction);
+callButton.addEventListener('click', callAction);
+hangupButton.addEventListener('click', hangupAction);
 
-// Add behavior for video streams.
 
-// Logs a message with the id and size of a video element.
-function logVideoLoaded(event) {
+
+localVideo.addEventListener('loadedmetadata', (event) =>  {
     const video = event.target;
-    console.log(`${video.id} videoWidth: ${video.videoWidth}px, ` +
-        `videoHeight: ${video.videoHeight}px.`);
-}
+    console.log(`loaded local metadata ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
+});
 
-// Logs a message with the id and size of a video element.
-// This event is fired when video begins streaming.
-function logResizedVideo(event) {
-    logVideoLoaded(event);
+remoteVideo.addEventListener('loadedmetadata', (event) =>  {
+    const video = event.target;
+    console.log(`loaded remote metadata ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
+});
 
-    if (startTime) {
-        const elapsedTime = window.performance.now() - startTime;
-        startTime = null;
-        console.log(`Setup time: ${elapsedTime.toFixed(3)}ms.`);
-    }
-}
+remoteVideo.addEventListener('onresize', (event) =>  {
+    const video = event.target;
+    console.log(`remote onresize ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
+});
 
-localVideo.addEventListener('loadedmetadata', logVideoLoaded);
-remoteVideo.addEventListener('loadedmetadata', logVideoLoaded);
-remoteVideo.addEventListener('onresize', logResizedVideo);
+
 
