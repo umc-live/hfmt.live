@@ -14,8 +14,7 @@ socket.on('message', (m) => {
 });
 
 const mediaStreamConstraints = {
-    video: true,
-    audio: true
+    video: true
 };
 
 let startTime = null;   
@@ -40,7 +39,7 @@ let videoDiv;
 
 function startAction() {
     startButton.disabled = true;
-    navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
+    navigator.mediaDevices.getUserMedia( mediaStreamConstraints )
         .then(_stream => {
             localVideo.srcObject = _stream; // set stream for local <video>
             localStream = _stream; // cache to sent to peers
@@ -161,8 +160,8 @@ function handleConnectionChange(event) {
     console.log(`ICE state: ${peerConnection.iceConnectionState}.`);
 }
 
-function joinRoom(isCaller) {
-    peerConnection = new RTCPeerConnection(peerConnectionConfig);
+function joinRoom( isCaller ) {
+    peerConnection = new RTCPeerConnection( peerConnectionConfig );
     peerConnection.onicecandidate = gotIceCandidate;
     peerConnection.ontrack = gotRemoteStream;
     peerConnection.oniceconnectionstatechange = handleConnectionChange;
