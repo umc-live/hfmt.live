@@ -22,8 +22,6 @@ let localStream;
 let remoteStream;
 let peerConnection;
 
-let isCaller = false;
-
 let peerConnectionConfig = {
     'iceServers': [
       {'urls': 'stun:stun.stunprotocol.org:3478'},
@@ -42,8 +40,10 @@ function gotLocalMediaStream(mediaStream)
 {
     localVideo.srcObject = mediaStream; // set stream 
     localStream = mediaStream;
+
     console.log('Received local stream.');
-    callButton.disabled = false;  // Enable call button.
+    
+    joinButton.disabled = false;  // Enable call button.
 }
 
 function handleLocalMediaStreamError(error) 
@@ -64,8 +64,7 @@ function gotMessageFromServer(message)
 {
     if(!peerConnection) 
     {
-        isCaller = false;
-        joinRoom();
+        joinRoom(false);
     }
         
     var signal = JSON.parse(message.data);
@@ -110,7 +109,7 @@ function gotMessageFromServer(message)
   
 
 
-function joinRoom()
+function joinRoom(isCaller)
 {
     peerConnection = new RTCPeerConnection(peerConnectionConfig);
     peerConnection.onicecandidate = gotIceCandidate;
@@ -131,7 +130,9 @@ window.addEventListener("load", function() {
     joinButton = document.getElementById('joinButton');
 
     startButton.addEventListener('click', startAction);
-    joinButton.addEventListener('click', joinRoom);
+    joinButton.addEventListener('click', ()=>{
+        joinRoom(true);
+    });
 
 
     localVideo.addEventListener('loadedmetadata', (event) =>  {
