@@ -133,7 +133,7 @@ function errorHandler(error) {
 function handleConnectionChange(event) {
     const peerConnection = event.target;
     console.log('ICE state change event: ', event);
-    console.log(`${getPeerName(peerConnection)} ICE state: ${peerConnection.iceConnectionState}.`);
+    console.log(`ICE state: ${peerConnection.iceConnectionState}.`);
 }
 
 function joinRoom(isCaller) {
