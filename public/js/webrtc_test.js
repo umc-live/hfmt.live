@@ -141,7 +141,9 @@ function gotRemoteStream( event )
 
     remoteVideo.srcObject = event.streams[0];
     remoteVideo.autoplay = true;
-    remoteVideo.playsinline = true;
+    remoteVideo.setAttribute('playsinline', true);
+
+    //remoteVideo.playsinline = true;
 
     videoDiv.appendChild( remoteVideo );
 
