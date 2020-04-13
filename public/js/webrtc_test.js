@@ -207,6 +207,20 @@ function setSessionDescriptionError(error) {
     setDescriptionSuccess(peerConnection, 'setRemoteDescription');
   }
 
+
+// Gets the "other" peer connection.
+function getOtherPeer(peerConnection) {
+    return (peerConnection === localPeerConnection) ?
+        remotePeerConnection : localPeerConnection;
+  }
+  
+  // Gets the name of a certain peer connection.
+  function getPeerName(peerConnection) {
+    return (peerConnection === localPeerConnection) ?
+        'localPeerConnection' : 'remotePeerConnection';
+  }
+  
+
 // Logs offer creation and sets peer connection session descriptions.
 function createdOffer(description) {
     console.log(`Offer from localPeerConnection:\n${description.sdp}`);
@@ -246,6 +260,8 @@ function createdOffer(description) {
       }).catch(setSessionDescriptionError);
   }
   
+
+
 
 function gotRemoteMediaStream( event ) 
 {
