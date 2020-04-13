@@ -34,12 +34,12 @@ app.get('/api/name', (req, res) => {
 //  res.json({ name });
 });
 
-//let curentSocketIds = [];
+let curentSocketIds = [];
 
 io.on('connection', (socket) => {
 
   console.log("New connection from " + socket.id);
- // curentSocketIds.push(socket.id);
+  curentSocketIds.push(socket.id);
 
   socket.on('heartbeat', (payload) => {
     payload.nodeName = name;
