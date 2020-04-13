@@ -1,4 +1,32 @@
+/*
+const configuration: RTCConfiguration = {
+    iceServers: [
+        {
+            urls: ["stun:u3.xirsys.com"]
+        }, {
+            username: "A9V03PuTW8N9A3K8aEFra1taQjecR5LHlhW9DrjvZj1SvoGtMyhkj3XJLrYzAQpdAAAAAF6IzZ10b2JpYXM=",
+            credential: "95ddd1a4-769f-11ea-a962-bea250b72c66",
+            urls: [
+                "turn:u3.xirsys.com:80?transport=udp",
+                "turn:u3.xirsys.com:3478?transport=udp",
+                "turn:u3.xirsys.com:80?transport=tcp",
+                "turn:u3.xirsys.com:3478?transport=tcp",
+                "turns:u3.xirsys.com:443?transport=tcp",
+                "turns:u3.xirsys.com:5349?transport=tcp"
+            ]
+        }
+    ],
+    iceCandidatePoolSize: 10,
+};
 
+export interface Connection {
+    connection: RTCPeerConnection,
+    remoteStream: MediaStream,
+    gainNode: IGainNode<IAudioContext>,
+    established: boolean,
+    remoteId: string
+}
+*/
 
 const mediaStreamConstraints = {
     video: true,
@@ -12,18 +40,15 @@ const offerOptions = {
 // Define initial start time of the call (defined as connection between peers).
 let startTime = null;
 
-// Define peer connections, streams and video elements.
-const localVideo = document.getElementById('localVideo');
-const remoteVideo = document.getElementById('remoteVideo');
-
 let localStream;
 let remoteStream;
 
 let localPeerConnection;
 let remotePeerConnection;
 
+const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
 
-// Define action buttons. 
 const startButton = document.getElementById('startButton');
 const callButton = document.getElementById('callButton');
 const hangupButton = document.getElementById('hangupButton');
