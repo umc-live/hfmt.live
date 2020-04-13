@@ -34,27 +34,18 @@ let startButton;
 let joinButton;
 
 
-function gotLocalMediaStream(mediaStream) 
-{
-    localVideo.srcObject = mediaStream; // set stream 
-    localStream = mediaStream;
-
-    console.log('Received local stream.');
-    
-    joinButton.disabled = false;  // Enable call button.
-}
-
-function handleLocalMediaStreamError(error) 
-{
-    console.log(`navigator.getUserMedia error: ${error.toString()}.`);
-}
-
 function startAction() 
 {
     startButton.disabled = true;
     navigator.mediaDevices.getUserMedia( mediaStreamConstraints )
-        .then( gotLocalMediaStream )
-        .catch( handleLocalMediaStreamError );
+        .then( _stream => {
+            localVideo.srcObject = _stream; // set stream for local <video>
+            localStream = _stream; // cache to sent to peers
+            joinButton.disabled = false;  // Enable call button.
+            console.log('Received local stream.');            
+        }).catch( error => 
+            console.log(`navigator.getUserMedia error: ${error.toString()}.`)
+        );
 
 }
 
