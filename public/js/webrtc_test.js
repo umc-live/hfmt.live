@@ -124,7 +124,7 @@ function gotMessageFromServer(message)
 
 function joinRoom(isCaller)
 {
-    peerConnection = new RTCPeerConnection(peerConnectionConfig);
+    peerConnection = new RTCPeerConnection( peerConnectionConfig );
     peerConnection.onicecandidate = gotIceCandidate;
     peerConnection.ontrack = gotRemoteStream;
     peerConnection.addStream( localStream );
