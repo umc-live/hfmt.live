@@ -121,7 +121,9 @@ function gotRemoteStream(event) {
     });
 
     remoteVideo.srcObject = event.streams[0];
-
+    remoteVideo.autoplay = true;
+    remoteVideo.playsinline = true;
+    //remoteVideo.id = ''
     videoDiv.appendChild(remoteVideo);
 
 }
