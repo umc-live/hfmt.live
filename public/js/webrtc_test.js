@@ -12,10 +12,11 @@ socket.on('message', (m) => {
 });
 
 const mediaStreamConstraints = {
-    video: true
+    video: true,
+    audio: true
 };
 
-let startTime = null;
+let startTime = null;   
 let localStream;
 let peerConnection;
 
