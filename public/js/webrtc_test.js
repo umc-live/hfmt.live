@@ -8,7 +8,7 @@ socket.on('connection', (event) => {
 });
 
 socket.on('message', (m) => { 
-    console.log('got message', m);
+   // console.log('got message', m);
     gotMessageFromServer(m);
 });
  
@@ -68,6 +68,7 @@ function gotMessageFromServer(message)
         
     var signal = JSON.parse(message);
   
+    console.log('got message', signal);
     // Ignore messages from ourself
     if(signal.uuid == uuid) return;
   
