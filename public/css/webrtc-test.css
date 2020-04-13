@@ -6,12 +6,12 @@
 
 
 #localVideo {
-    height: 100px;
-    width: auto;
+    height: auto;
+    width: 100px;
     position: absolute;
-    right: calc(100vw);
+    right: calc(100vw - 100px);
     top: 0px;
-    z-index: -1;
+    z-index: 10;
 }
 
 /*
