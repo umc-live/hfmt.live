@@ -104,9 +104,18 @@ function createdDescription(description) {
         }).catch(errorHandler);
 }
 
-function gotRemoteStream(event) {
-    console.log('got remote stream', event);
+async function getId( pc )
+{
+    const identity = await event.target.peerIdentity;
+    return identity;
+}
 
+function gotRemoteStream(event) {
+    console.log('got remote stream', event.target);
+/*
+    const identity = await pc.peerIdentity;
+    return identity;
+*/
     //  let fragment = document.createDocumentFragment();
     let remoteVideo = document.createElement('video');
 
@@ -123,8 +132,10 @@ function gotRemoteStream(event) {
     remoteVideo.srcObject = event.streams[0];
     remoteVideo.autoplay = true;
     remoteVideo.playsinline = true;
-    //remoteVideo.id = ''
-    videoDiv.appendChild(remoteVideo);
+
+    videoDiv.appendChild( remoteVideo );
+
+    remoteVideo.id = getId( event.target );
 
 }
 
@@ -143,7 +154,7 @@ function joinRoom(isCaller) {
     peerConnection.onicecandidate = gotIceCandidate;
     peerConnection.ontrack = gotRemoteStream;
     peerConnection.oniceconnectionstatechange = handleConnectionChange;
-    peerConnection.addStream(localStream);
+    peerConnection.addStream( localStream );
 
 
     if (isCaller) {
