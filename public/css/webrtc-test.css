@@ -11,13 +11,15 @@
     height: 100vh;
     top: 20px;
     z-index: -1;
+    position: absolute;
+
 }
 
 
 #localVideo {
     height: auto;
     width: 100px;
-    position: relative;
+    position: absolute;
     left: calc(50vw - 50px);
     z-index: 1;
 }
