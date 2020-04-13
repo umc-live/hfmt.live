@@ -17,8 +17,7 @@
 #localVideo {
     height: auto;
     width: 100px;
-    position: absolute;
-    top: 20px;
+    position: relative;
     left: calc(50vw - 50px);
     z-index: 1;
 }
