@@ -1,6 +1,8 @@
 const socket = io();
 
 let uuid = createUUID();
+console.log(`this uuid ${uuid}`);
+
 
 socket.on('connection', (event) => {
     console.log(event);
