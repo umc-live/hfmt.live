@@ -9,7 +9,7 @@ socket.on('connection', (event) => {
 });
 
 socket.on('message', (m) => {
-    // console.log('got message', m);
+    console.log('got message', socket.id);
     gotMessageFromServer(m);
 });
 
@@ -91,8 +91,8 @@ function gotMessageFromServer(message)
     }
     else if (signal.ice) 
     {
-        peerConnection.addIceCandidate(new RTCIceCandidate(signal.ice))
-            .catch(errorHandler);
+        peerConnection.addIceCandidate( new RTCIceCandidate(signal.ice) )
+            .catch( errorHandler );
     }
 }
 
@@ -181,8 +181,8 @@ function joinRoom( isCaller )
 
     if (isCaller) {
         peerConnection.createOffer()
-            .then(createdDescription)
-            .catch(errorHandler);
+            .then( createdDescription )
+            .catch( errorHandler );
     }
 
     joinButton.disabled = true;
