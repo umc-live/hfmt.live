@@ -47,7 +47,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('room', (data) => {
-    socket.broadcast(data); // forward to all
+    socket.broadcast.emit(data); // forward to all
   });
 
   socket.broadcast.emit('add-users', {
