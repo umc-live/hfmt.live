@@ -16,8 +16,8 @@
     height: auto;
     width: 100px;
     position: absolute;
-    right: 100vw;
-    top: 0px;
+    top: 5px;
+    left: calc(50vw - 50px);
     z-index: 1;
 }
 
