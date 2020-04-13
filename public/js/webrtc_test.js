@@ -17,7 +17,6 @@ const mediaStreamConstraints = {
 
 let startTime = null;
 let localStream;
-let remoteStream;
 let peerConnection;
 
 let peerConnectionConfig = {
@@ -33,6 +32,7 @@ let remoteVideo;
 let startButton;
 let joinButton;
 
+let videoDiv;
 
 function startAction() 
 {
@@ -112,7 +112,7 @@ function gotMessageFromServer(message)
   }
   
   function gotRemoteStream(event) {
-    console.log('got remote stream');
+    console.log('got remote stream', event);
     remoteVideo.srcObject = event.streams[0];
   }
   
@@ -129,7 +129,7 @@ function joinRoom(isCaller)
     peerConnection.ontrack = gotRemoteStream;
     peerConnection.addStream( localStream );
   
-    if(isCaller) 
+    if( isCaller ) 
     {
       peerConnection.createOffer()
         .then( createdDescription )
@@ -144,6 +144,8 @@ window.addEventListener("load", function() {
     remoteVideo = document.getElementById('remoteVideo');
     startButton = document.getElementById('startButton');
     joinButton = document.getElementById('joinButton');
+
+    videoDiv = document.getElementById('videos');
 
     startButton.addEventListener('click', startAction);
     joinButton.addEventListener('click', ()=>{
