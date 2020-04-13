@@ -136,7 +136,7 @@ function gotRemoteStream(event) {
     videoDiv.appendChild( remoteVideo );
 
     getId( event.target )
-        .then( name => { remoteVideo.id = name; })
+        .then( name => console.log('id test', name) )
         .catch(errorHandler);
 }
 
