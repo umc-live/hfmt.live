@@ -1,8 +1,11 @@
 #videos {
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
 }
 
 video {
-    object-fit: scale-down;
+    max-width: 100%;
+    height: auto;
+    overflow: hidden;
 }
