@@ -8,6 +8,8 @@
 #localVideo {
     height: 100px;
     width: auto;
+    position: absolute;
+    z-index: -1;
 }
 
 /*
