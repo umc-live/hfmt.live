@@ -47,6 +47,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('room', (data) => {
+    console.log('got room message', data);
     socket.broadcast.emit(data); // forward to all
   });
 

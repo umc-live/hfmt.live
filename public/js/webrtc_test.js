@@ -90,11 +90,17 @@ function gotMessageFromServer(message)
     }
   }
   
-  function createdDescription(description) {
+  function createdDescription(description) 
+  {
     console.log('got description');
   
     peerConnection.setLocalDescription(description).then(function() {
-      socket.emit('room', JSON.stringify({'sdp': peerConnection.localDescription, 'uuid': uuid}));
+      socket.emit('room', 
+            JSON.stringify({
+                'sdp': peerConnection.localDescription, 
+                'uuid': uuid
+            })
+        );
     }).catch(errorHandler);
   }
   
