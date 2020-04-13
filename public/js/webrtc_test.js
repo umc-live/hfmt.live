@@ -62,9 +62,9 @@ function gotMessageFromServer(message)
 {
 
     var signal = JSON.parse(message);
-    console.log('got message', signal);
+    //console.log('got message', signal);
 
-    if (!peerConnection) 
+    if ( !peerConnection ) 
     {
         joinRoom(false);
     }
@@ -80,6 +80,8 @@ function gotMessageFromServer(message)
                 // Only create answers in response to offers
                 if (signal.sdp.type == 'offer') 
                 {
+                    console.log('got offer', signal);
+
                     peerConnection.createAnswer()
                         .then( createdDescription )
                         .catch( errorHandler );
