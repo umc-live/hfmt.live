@@ -46,7 +46,7 @@ let joinButton;
 
 let videoDiv;
 
-function startAction() {
+async function startAction() {
     startButton.disabled = true;
     navigator.mediaDevices.getUserMedia( mediaStreamConstraints )
         .then(_stream => {
@@ -333,12 +333,12 @@ function processOffer( signal )
             let choice = confirm(`user ${signal.uuid} would like to connect with you, ok?`);
 
             if( choice )
-                startAction()
+                await startAction();
             else
                 return;
             
         }
-        
+
         let newConnection = setupNewConnection();
         newConnection.ontrack = (event) => {
             createVideoElement(event, signal.uuid);
