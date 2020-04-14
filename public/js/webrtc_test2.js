@@ -84,7 +84,7 @@ function gotMessageFromServer(message)
                 // Only create answers in response to offers
                 if (signal.sdp.type == 'offer') 
                 {
-                    console.log('got offer -->');
+                    console.log('got offer, sending answer -->');
 
                     peerConnection.createAnswer()
                         .then( createdDescription )
@@ -97,6 +97,11 @@ function gotMessageFromServer(message)
     {
         peerConnection.addIceCandidate( new RTCIceCandidate(signal.ice) )
             .catch( errorHandler );
+    }
+    else
+    {
+        console.log(`other signal? ${signal}`);
+        
     }
 }
 
@@ -113,7 +118,7 @@ function gotIceCandidate(event)
 }
 
 function createdDescription(description) {
-    console.log('got description');
+    console.log('sending description');
 
     peerConnection.setLocalDescription(description)
         .then(() => {
