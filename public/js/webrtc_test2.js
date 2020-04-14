@@ -251,6 +251,8 @@ function setupNewConnection()
 
 function sendLocalDescription( connection_, signalmsg_ )
 {
+    console.log('sendLocalDescription');
+    
     connection_.setLocalDescription( signalmsg_ ).then( () => {
         socket.emit('room',
             JSON.stringify({
@@ -346,6 +348,8 @@ function makeCall()
     if( !localStream )
         startAction();
 
+    console.log('makingCall');
+    
     let connection_ = setupNewConnection();
     peerConnections.set( uuid, connection_ ); // << log under our ID since we are making the call
 
