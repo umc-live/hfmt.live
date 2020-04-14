@@ -328,6 +328,17 @@ function processOffer( signal )
 {
     if( !peerConnections.has( signal.uuid ) )
     {
+        if( !localStream )
+        {
+            let choice = confirm(`user ${signal.uuid} would like to connect with you, ok?`);
+
+            if( choice )
+                startAction()
+            else
+                return;
+            
+        }
+        
         let newConnection = setupNewConnection();
         newConnection.ontrack = (event) => {
             createVideoElement(event, signal.uuid);
