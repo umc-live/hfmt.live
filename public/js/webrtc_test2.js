@@ -36,14 +36,12 @@ let peerConnectionConfig = {
 
 let startTime = null;   
 let localStream;
-let peerConnection;// s = {};
 
 let peerConnections = new Map();
 
 let localVideo;
 let startButton;
 let joinButton;
-
 let videoDiv;
 
 function startAction() {
@@ -60,106 +58,6 @@ function startAction() {
 
 }
 
-function gotMessageFromServer(message) 
-{
-    var signal = JSON.parse(message);
-
-    // ignore messages from ourselves (although I think socket.io deals with that anyway)
-    if (signal.uuid == uuid)
-        return;
-    
-    if ( !peerConnection ) 
-    {
-
-        console.log('no exsisting channel, creating but not making an offer')
-        joinRoom(false);
-    }
-    
-
-    if (signal.sdp) 
-    {
-        console.log(`creating new session description for type ${signal.sdp.type}`)
-
-
-        peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp) )
-            .then(() => {
-                // Only create answers in response to offers
-                if (signal.sdp.type == 'offer') 
-                {
-                    console.log('got offer, sending answer -->');
-
-                    peerConnection.createAnswer()
-                        .then( createdDescription )
-                        .catch( errorHandler );
-                }
-            }).catch(errorHandler);
-
-    }
-    else if (signal.ice) 
-    {
-        console.log(`ice signal? ${signal.uuid}`);
-
-        peerConnection.addIceCandidate( new RTCIceCandidate(signal.ice) )
-            .catch( errorHandler );
-    }
-    else
-    {
-        console.log(`other signal? ${signal}`);
-        
-    }
-}
-
-function gotIceCandidate(event) 
-{
-    if (event.candidate != null) {        
-        socket.emit('room',
-            JSON.stringify({
-                'ice': event.candidate,
-                'uuid': uuid
-            })
-        );
-    }
-}
-
-function createdDescription(description) {
-    console.log('sending description');
-
-    peerConnection.setLocalDescription(description)
-        .then(() => {
-            socket.emit('room',
-                JSON.stringify({
-                    'sdp': peerConnection.localDescription,
-                    'uuid': uuid
-                })
-            );
-        }).catch(errorHandler);
-}
-
-function gotRemoteStream( event ) 
-{
-    console.log('got remote stream', event.target);
-
-    //  let fragment = document.createDocumentFragment();
-    let remoteVideo = document.createElement('video');
-
-    remoteVideo.addEventListener('loadedmetadata', (event) => {
-        const video = event.target;
-        console.log(`loaded remote metadata ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
-    });
-
-    remoteVideo.addEventListener('onresize', (event) => {
-        const video = event.target;
-        console.log(`remote onresize ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
-    });
-
-    remoteVideo.srcObject = event.streams[0];
-    remoteVideo.autoplay = true;
-    remoteVideo.setAttribute('playsinline', true);
-
-    videoDiv.appendChild( remoteVideo );
-
-}
-
 function errorHandler(error) {
     console.log(error);
 }
@@ -170,25 +68,6 @@ function handleConnectionChange(event) {
     console.log(`ICE state: ${peerConnection.iceConnectionState}.`);
 }
 
-
-function joinRoom( isCaller ) 
-{
-    console.log('joining room, is caller:', isCaller);
-    peerConnection = new RTCPeerConnection( peerConnectionConfig );
-    peerConnection.onicecandidate = gotIceCandidate;
-    peerConnection.ontrack = gotRemoteStream;
-    peerConnection.oniceconnectionstatechange = handleConnectionChange;
-    peerConnection.addStream( localStream );
-
-    if (isCaller) {
-        peerConnection.createOffer()
-            .then( createdDescription )
-            .catch( errorHandler );
-    }
-
-    joinButton.disabled = true;
-
-}
 
 // ------ new version
 
@@ -323,6 +202,24 @@ function processAnswer( signal )
     }
 }
 
+async function openCamera()
+{
+    startButton.disabled = true;
+    let promise = navigator.mediaDevices.getUserMedia( mediaStreamConstraints );
+
+    try {
+        let _stream = await promise;
+        localVideo.srcObject = _stream; // set stream for local <video>
+        localStream = _stream; // cache to sent to peers
+        joinButton.disabled = false;  // Enable call button.
+        console.log('Received local stream.');
+    }
+    catch(error)
+    {
+        console.log(`navigator.getUserMedia error: ${error.toString()}.`)
+    }
+}
+
 async function offerStreamCheck(signal) 
 {
     if( !localStream )
@@ -331,20 +228,7 @@ async function offerStreamCheck(signal)
 
         if( choice )
         {
-            startButton.disabled = true;
-            let promise = navigator.mediaDevices.getUserMedia( mediaStreamConstraints );
-
-            try {
-                let _stream = await promise;
-                localVideo.srcObject = _stream; // set stream for local <video>
-                localStream = _stream; // cache to sent to peers
-                joinButton.disabled = false;  // Enable call button.
-                console.log('Received local stream.');
-            }
-            catch(error)
-            {
-                console.log(`navigator.getUserMedia error: ${error.toString()}.`)
-            }
+            await openCamera();
         }
         else
             return;
