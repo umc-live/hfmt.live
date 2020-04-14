@@ -324,7 +324,7 @@ function processAnswer( signal )
 }
 
 
-function processOffer( signal )
+async function processOffer( signal )
 {
     if( !peerConnections.has( signal.uuid ) )
     {
