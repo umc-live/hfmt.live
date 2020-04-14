@@ -79,6 +79,7 @@ function gotMessageFromServer(message)
     {
         console.log(`creating new session description for type ${signal.sdp.type}`)
 
+
         peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp) )
             .then(() => {
                 // Only create answers in response to offers
@@ -95,6 +96,8 @@ function gotMessageFromServer(message)
     }
     else if (signal.ice) 
     {
+        console.log(`ice signal? ${signal}`);
+
         peerConnection.addIceCandidate( new RTCIceCandidate(signal.ice) )
             .catch( errorHandler );
     }
