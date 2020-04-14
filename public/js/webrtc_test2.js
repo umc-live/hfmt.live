@@ -1,26 +1,15 @@
-/**
- * note that in this example the peer connection is a local variable in the function
- * https://webrtc.org/getting-started/peer-connections#initiating_peer_connections
- * 
- * making a call
- * 1. make offer sending collected data about our system (localDescription)
- * 2.   
- * 
- */
 
 const socket = io();
 
 let uuid;
 
-socket.on('connect', (event) => {
-    uuid = socket.id;
-    console.log(`this unique id ${uuid}`);
-});
+let localStream;
+let peerConnections = new Map();
 
-socket.on('message', (m) => {
-    //gotMessageFromServer(m);
-    messageHandler(m)
-});
+let localVideo;
+let startButton;
+let joinButton;
+let videoDiv;
 
 const mediaStreamConstraints = {
     video: true //, audio: true
@@ -33,30 +22,14 @@ let peerConnectionConfig = {
     ]
 };
 
+socket.on('connect', (event) => {
+    uuid = socket.id;
+    console.log(`this unique id ${uuid}`);
+});
 
-let startTime = null;   
-let localStream;
-
-let peerConnections = new Map();
-
-let localVideo;
-let startButton;
-let joinButton;
-let videoDiv;
-
-function startAction() {
-    startButton.disabled = true;
-    navigator.mediaDevices.getUserMedia( mediaStreamConstraints )
-        .then(_stream => {
-            localVideo.srcObject = _stream; // set stream for local <video>
-            localStream = _stream; // cache to sent to peers
-            joinButton.disabled = false;  // Enable call button.
-            console.log('Received local stream.');
-        }).catch(error =>
-            console.log(`navigator.getUserMedia error: ${error.toString()}.`)
-        );
-
-}
+socket.on('message', (m) => {
+    messageHandler(m)
+});
 
 function errorHandler(error) {
     console.log(error);
@@ -67,10 +40,6 @@ function handleConnectionChange(event) {
     console.log('ICE state change event: ', event);
     console.log(`ICE state: ${peerConnection.iceConnectionState}.`);
 }
-
-
-// ------ new version
-
 
 function messageHandler(message) 
 {
@@ -170,22 +139,6 @@ function createVideoElement( event_, remoteId_ )
 
 }
 
-/*
-function createAndSendAnswer( connection_ )
-{
-    connection_.createAnswer().then( answer => {
-        sendLocalDescription( connection_, answer );
-    }).catch( errorHandler );
-}
-
-function createAndSendOffer( connection_ )
-{
-    connection_.createOffer().then( offer => {
-        sendLocalDescription( connection_, offer );
-    }).catch( errorHandler );
-}
-*/
-
 // if we get an answer we made the offer?
 function processAnswer( signal )
 {
@@ -242,7 +195,6 @@ async function processOffer( signal )
     if( !peerConnections.has( signal.uuid ) )
     {
         await offerStreamCheck(signal);
-        console.log('processOffer returned');
         
         let newConnection = setupNewConnection();
         newConnection.ontrack = (event) => {
@@ -292,22 +244,9 @@ window.addEventListener("load", function () {
         makeCall();
     });
 
-
     localVideo.addEventListener('loadedmetadata', (event) => {
         const video = event.target;
         console.log(`loaded local metadata ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
     });
 
 });
-
-
-
-// Taken from http://stackoverflow.com/a/105074/515584
-// Strictly speaking, it's not a real UUID, but it gets the job done here
-function createUUID() {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-    }
-
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
