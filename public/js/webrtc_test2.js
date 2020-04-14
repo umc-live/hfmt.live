@@ -255,9 +255,7 @@ function setupNewConnection()
 }
 
 function sendLocalDescription( connection_, signalmsg_ )
-{
-    console.log(`sendLocalDescription for type ${signalmsg_}`);
-    
+{    
     connection_.setLocalDescription( signalmsg_ ).then( () => {
         socket.emit('room',
             JSON.stringify({
@@ -339,7 +337,7 @@ function processOffer( signal )
             .then(() => {
                 newConnection.createAnswer()
                     .then( answer => {
-                        sendLocalDescription( connection_, answer );
+                        sendLocalDescription( newConnection, answer );
                     }).catch( errorHandler );
             }).catch(errorHandler);
 
@@ -359,6 +357,7 @@ function makeCall()
     peerConnections.set( uuid, connection_ ); // << log under our ID since we are making the call
 
     connection_.createOffer().then( offer => {
+        console.log(`sendLocalDescription for type offer`);
         sendLocalDescription( connection_, offer );
     }).catch( errorHandler );
 
