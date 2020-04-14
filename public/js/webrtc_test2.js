@@ -2,9 +2,9 @@
  * note that in this example the peer connection is a local variable in the function
  * https://webrtc.org/getting-started/peer-connections#initiating_peer_connections
  * 
- * 
+ * making a call
  * 1. make offer sending collected data about our system (localDescription)
- * 2. 
+ * 2.   
  * 
  */
 
@@ -214,18 +214,23 @@ function messageHandler(message)
     }
     else if (signal.ice) 
     {
-        console.log(`remote ice candidate ${signal.uuid}`);
-
-
-
-        peerConnection.addIceCandidate( new RTCIceCandidate(signal.ice) )
-            .catch( errorHandler );
+        processRemoteIceCandidate(signal);
     }
     else
     {
         console.log(`other signal? ${signal}`);
-        
     }
+}
+
+function processRemoteIceCandidate(signal)
+{
+    console.log(`remote ice candidate ${signal.uuid}`);
+
+    peerConnections.forEach( channel => {
+        channel.addIceCandidate( new RTCIceCandidate(signal.ice) )
+            .catch( errorHandler );
+    });
+
 }
 
 function gotLocalIceCandidate(event) 
