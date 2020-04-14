@@ -38,7 +38,8 @@ let peerConnectionConfig = {
 
 let startTime = null;   
 let localStream;
-let peerConnections = {};
+let peerConnection;// s = {};
+
 
 let localVideo;
 let remoteVideo;
