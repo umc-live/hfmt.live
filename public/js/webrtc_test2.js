@@ -46,7 +46,7 @@ let joinButton;
 
 let videoDiv;
 
-async function startAction() {
+function startAction() {
     startButton.disabled = true;
     navigator.mediaDevices.getUserMedia( mediaStreamConstraints )
         .then(_stream => {
@@ -323,22 +323,43 @@ function processAnswer( signal )
     }
 }
 
+async function offerStreamCheck() 
+{
+    if( !localStream )
+    {
+        let choice = confirm(`user ${signal.uuid} would like to connect with you, ok?`);
 
-async function processOffer( signal )
+        if( choice )
+        {
+            startButton.disabled = true;
+            let promise = navigator.mediaDevices.getUserMedia( mediaStreamConstraints );
+
+            try {
+                let _stream = await promise;
+                localVideo.srcObject = _stream; // set stream for local <video>
+                localStream = _stream; // cache to sent to peers
+                joinButton.disabled = false;  // Enable call button.
+                console.log('Received local stream.');
+            }
+            catch(error)
+            {
+                console.log(`navigator.getUserMedia error: ${error.toString()}.`)
+            }
+        }
+        else
+            return;
+        
+    }
+
+}
+
+function processOffer( signal )
 {
     if( !peerConnections.has( signal.uuid ) )
     {
-        if( !localStream )
-        {
-            let choice = confirm(`user ${signal.uuid} would like to connect with you, ok?`);
-
-            if( choice )
-                await startAction();
-            else
-                return;
-            
-        }
-
+        await offerStreamCheck();
+        console.log('processOffer returned');
+        
         let newConnection = setupNewConnection();
         newConnection.ontrack = (event) => {
             createVideoElement(event, signal.uuid);
