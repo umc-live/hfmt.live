@@ -251,7 +251,7 @@ function setupNewConnection()
 
 function sendLocalDescription( connection_, signalmsg_ )
 {
-    console.log('sendLocalDescription');
+    console.log(`sendLocalDescription for type ${signalmsg_}`);
     
     connection_.setLocalDescription( signalmsg_ ).then( () => {
         socket.emit('room',
