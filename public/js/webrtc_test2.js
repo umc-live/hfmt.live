@@ -10,17 +10,14 @@
 
 const socket = io();
 
-let uuid = createUUID();
+let uuid;
 
 socket.on('connect', (event) => {
     uuid = socket.id;
     console.log(`this unique id ${uuid}`);
-
-//    console.log(event);
 });
 
 socket.on('message', (m) => {
-    console.log('got message', socket.id);
     gotMessageFromServer(m);
 });
 
@@ -40,9 +37,9 @@ let startTime = null;
 let localStream;
 let peerConnection;// s = {};
 
+let peerConnections = new Map();
 
 let localVideo;
-let remoteVideo;
 let startButton;
 let joinButton;
 
@@ -64,27 +61,30 @@ function startAction() {
 
 function gotMessageFromServer(message) 
 {
-
     var signal = JSON.parse(message);
-    //console.log('got message', signal);
-
-    if ( !peerConnection ) 
-    {
-        joinRoom(false);
-    }
 
     // ignore messages from ourselves (although I think socket.io deals with that anyway)
     if (signal.uuid == uuid)
         return;
+    
+    if ( !peerConnection ) 
+    {
+
+        console.log('no exsisting channel, creating but not making an offer')
+        joinRoom(false);
+    }
+    
 
     if (signal.sdp) 
     {
+        console.log(`creating new session description for type ${signal.sdp.type}`)
+
         peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp) )
             .then(() => {
                 // Only create answers in response to offers
                 if (signal.sdp.type == 'offer') 
                 {
-                    console.log('got offer', signal);
+                    console.log('got offer -->');
 
                     peerConnection.createAnswer()
                         .then( createdDescription )
@@ -218,6 +218,14 @@ function createAndSendOffer( connection_ )
     connection_.createOffer().then( offer => {
         sendLocalDescription( connection_, offer );
     }).catch( errorHandler );
+}
+
+function gotOffer( signal )
+{
+    if( !peerConnections.has( signal.uuid ) )
+    {
+        peerConnections.set( signal.uuid,  ) 
+    }
 }
 
 function createAndSendAnswer( connection_ )
