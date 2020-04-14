@@ -287,7 +287,7 @@ window.addEventListener("load", function () {
 
     videoDiv = document.getElementById('remoteVideos');
 
-    startButton.addEventListener('click', startAction);
+    startButton.addEventListener('click', openCamera);
     joinButton.addEventListener('click', () => {
         makeCall();
         //joinRoom(true);
