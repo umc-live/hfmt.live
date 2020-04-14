@@ -18,7 +18,8 @@ socket.on('connect', (event) => {
 });
 
 socket.on('message', (m) => {
-    gotMessageFromServer(m);
+    //gotMessageFromServer(m);
+    messageHandler(m)
 });
 
 const mediaStreamConstraints = {
@@ -364,8 +365,8 @@ window.addEventListener("load", function () {
 
     startButton.addEventListener('click', startAction);
     joinButton.addEventListener('click', () => {
-        //makeCall();
-        joinRoom(true);
+        makeCall();
+        //joinRoom(true);
     });
 
 
