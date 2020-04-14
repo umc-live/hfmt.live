@@ -10,10 +10,10 @@
 
 const socket = io();
 
-let uuid;
+let uuid = createUUID();
 
 socket.on('connection', (event) => {
-    uuid = socket.id;
+  //  uuid = socket.id;
     console.log(`this unique id ${uuid}`);
 
 //    console.log(event);
@@ -239,7 +239,7 @@ window.addEventListener("load", function () {
 
     startButton.addEventListener('click', startAction);
     joinButton.addEventListener('click', () => {
-        joinRoom(true, uuid);
+        joinRoom(true);
     });
 
 
