@@ -111,6 +111,8 @@ function gotMessageFromServer(message)
 function gotIceCandidate(event) 
 {
     if (event.candidate != null) {
+        console.log('gotIceCandidate ');
+        
         socket.emit('room',
             JSON.stringify({
                 'ice': event.candidate,
@@ -134,20 +136,10 @@ function createdDescription(description) {
         }).catch(errorHandler);
 }
 
-async function getId( pc )
-{
-    const identity = await event.target.peerIdentity;
-    return identity;
-}
-
 function gotRemoteStream( event ) 
 {
     console.log('got remote stream', event.target);
 
-/*
-    const identity = await pc.peerIdentity;
-    return identity;
-*/
     //  let fragment = document.createDocumentFragment();
     let remoteVideo = document.createElement('video');
 
