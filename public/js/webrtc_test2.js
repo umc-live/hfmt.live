@@ -1,3 +1,13 @@
+/**
+ * note that in this example the peer connection is a local variable in the function
+ * https://webrtc.org/getting-started/peer-connections#initiating_peer_connections
+ * 
+ * 
+ * 1. make offer sending collected data about our system (localDescription)
+ * 2. 
+ * 
+ */
+
 const socket = io();
 
 let uuid = socket.id; 
@@ -17,16 +27,17 @@ const mediaStreamConstraints = {
     video: true //, audio: true
 };
 
-let startTime = null;   
-let localStream;
-let peerConnection;
-
 let peerConnectionConfig = {
     'iceServers': [
         { 'urls': 'stun:stun.stunprotocol.org:3478' },
         { 'urls': 'stun:stun.l.google.com:19302' },
     ]
 };
+
+
+let startTime = null;   
+let localStream;
+let peerConnections = {};
 
 let localVideo;
 let remoteVideo;
@@ -177,6 +188,43 @@ function joinRoom( isCaller )
     joinButton.disabled = true;
 
 }
+
+function setupNewConnection()
+{
+    let newConnection = new RTCPeerConnection( peerConnectionConfig );
+    newConnection.onicecandidate = gotIceCandidate;
+    newConnection.ontrack = gotRemoteStream;
+    newConnection.oniceconnectionstatechange = handleConnectionChange;
+    newConnection.addStream( localStream );
+    return newConnection;
+}
+
+function sendLocalDescription( connection_, signalmsg_ )
+{
+    connection_.setLocalDescription( signalmsg_ ).then( () => {
+        socket.emit('room',
+            JSON.stringify({
+                'sdp': connection_.localDescription,
+                'uuid': uuid
+            })
+        );
+    }).catch( errorHandler ); 
+}
+
+function createAndSendOffer( connection_ )
+{
+    connection_.createOffer().then( offer => {
+        sendLocalDescription( connection_, offer );
+    }).catch( errorHandler );
+}
+
+function createAndSendAnswer( connection_ )
+{
+    connection_.createAnswer().then( answer => {
+        sendLocalDescription( connection_, answer );
+    }).catch( errorHandler );
+}
+
 
 
 window.addEventListener("load", function () {
