@@ -10,12 +10,13 @@
 
 const socket = io();
 
-let uuid = socket.id; 
-console.log(`this uuid ${uuid}`);
-
+let uuid;
 
 socket.on('connection', (event) => {
-    console.log(event);
+    uuid = socket.id;
+    console.log(`this unique id ${uuid}`);
+
+//    console.log(event);
 });
 
 socket.on('message', (m) => {
