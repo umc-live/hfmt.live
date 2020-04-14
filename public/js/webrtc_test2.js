@@ -265,7 +265,7 @@ async function processOffer( signal )
 function makeCall()
 {
     if( !localStream )
-        startAction();
+        openCamera();
 
     console.log('makingCall');
     
@@ -290,7 +290,6 @@ window.addEventListener("load", function () {
     startButton.addEventListener('click', openCamera);
     joinButton.addEventListener('click', () => {
         makeCall();
-        //joinRoom(true);
     });
 
 
