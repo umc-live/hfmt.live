@@ -1,4 +1,10 @@
 
+/**
+ * to do: 
+ * probably we should always store connection channels by the remote id
+ *  in the case of an offer, we need to handle it a little differently
+ */
+
 const socket = io();
 
 let uuid;
@@ -39,6 +45,11 @@ function handleConnectionChange(event) {
     const peerConnection = event.target;
     console.log('ICE state change event: ', event);
     console.log(`ICE state: ${peerConnection.iceConnectionState}.`);
+
+    if( peerConnection.iceConnectionState == 'disconnected' )
+    {
+        // remove video element
+    }
 }
 
 function messageHandler(message) 
