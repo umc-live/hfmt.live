@@ -323,7 +323,7 @@ function processAnswer( signal )
     }
 }
 
-async function offerStreamCheck() 
+async function offerStreamCheck(signal) 
 {
     if( !localStream )
     {
@@ -353,11 +353,11 @@ async function offerStreamCheck()
 
 }
 
-function processOffer( signal )
+async function processOffer( signal )
 {
     if( !peerConnections.has( signal.uuid ) )
     {
-        await offerStreamCheck();
+        await offerStreamCheck(signal);
         console.log('processOffer returned');
         
         let newConnection = setupNewConnection();
