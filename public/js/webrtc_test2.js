@@ -18,7 +18,8 @@ let joinButton;
 let videoDiv;
 
 const mediaStreamConstraints = {
-    video: true //, audio: true
+    video: true//, 
+   // audio: true
 };
 
 let peerConnectionConfig = {
