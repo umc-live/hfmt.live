@@ -5,9 +5,10 @@
  *  in the case of an offer, we need to handle it a little differently
  */
 
-import socket from 'socket.io-client';
-import 'webrtc-adapter';
 
+import 'webrtc-adapter';
+import io from 'socket.io-client';
+const socket = io()
 
 //const socket = io();
 
