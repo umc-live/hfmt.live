@@ -5,7 +5,12 @@
  *  in the case of an offer, we need to handle it a little differently
  */
 
+import io from 'socket.io-client';
+import 'webrtc-adapter';
+
+
 const socket = io();
+
 
 let uuid;
 
