@@ -1,25 +1,26 @@
+
+/**
+ * to do: 
+ * probably we should always store connection channels by the remote id
+ *  in the case of an offer, we need to handle it a little differently
+ */
+
 const socket = io();
 
-let uuid = socket.id; 
-console.log(`this uuid ${uuid}`);
+let uuid;
 
+let localStream;
+let peerConnections = new Map();
 
-socket.on('connection', (event) => {
-    console.log(event);
-});
-
-socket.on('message', (m) => {
-    console.log('got message', socket.id);
-    gotMessageFromServer(m);
-});
+let localVideo;
+let startButton;
+let joinButton;
+let videoDiv;
 
 const mediaStreamConstraints = {
-    video: true //, audio: true
+    video: true//, 
+   // audio: true
 };
-
-let startTime = null;   
-let localStream;
-let peerConnection;
 
 let peerConnectionConfig = {
     'iceServers': [
@@ -28,125 +29,14 @@ let peerConnectionConfig = {
     ]
 };
 
-let localVideo;
-let remoteVideo;
-let startButton;
-let joinButton;
+socket.on('connect', (event) => {
+    uuid = socket.id;
+    console.log(`this unique id ${uuid}`);
+});
 
-let videoDiv;
-
-function startAction() {
-    startButton.disabled = true;
-    navigator.mediaDevices.getUserMedia( mediaStreamConstraints )
-        .then(_stream => {
-            localVideo.srcObject = _stream; // set stream for local <video>
-            localStream = _stream; // cache to sent to peers
-            joinButton.disabled = false;  // Enable call button.
-            console.log('Received local stream.');
-        }).catch(error =>
-            console.log(`navigator.getUserMedia error: ${error.toString()}.`)
-        );
-
-}
-
-function gotMessageFromServer(message) 
-{
-
-    var signal = JSON.parse(message);
-    //console.log('got message', signal);
-
-    if ( !peerConnection ) 
-    {
-        joinRoom(false);
-    }
-
-    // ignore messages from ourselves (although I think socket.io deals with that anyway)
-    if (signal.uuid == uuid)
-        return;
-
-    if (signal.sdp) 
-    {
-        peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp) )
-            .then(() => {
-                // Only create answers in response to offers
-                if (signal.sdp.type == 'offer') 
-                {
-                    console.log('got offer', signal);
-
-                    peerConnection.createAnswer()
-                        .then( createdDescription )
-                        .catch( errorHandler );
-                }
-            }).catch(errorHandler);
-
-    }
-    else if (signal.ice) 
-    {
-        peerConnection.addIceCandidate( new RTCIceCandidate(signal.ice) )
-            .catch( errorHandler );
-    }
-}
-
-function gotIceCandidate(event) 
-{
-    if (event.candidate != null) {
-        socket.emit('room',
-            JSON.stringify({
-                'ice': event.candidate,
-                'uuid': uuid
-            })
-        );
-    }
-}
-
-function createdDescription(description) {
-    console.log('got description');
-
-    peerConnection.setLocalDescription(description)
-        .then(() => {
-            socket.emit('room',
-                JSON.stringify({
-                    'sdp': peerConnection.localDescription,
-                    'uuid': uuid
-                })
-            );
-        }).catch(errorHandler);
-}
-
-async function getId( pc )
-{
-    const identity = await event.target.peerIdentity;
-    return identity;
-}
-
-function gotRemoteStream( event ) 
-{
-    console.log('got remote stream', event.target);
-
-/*
-    const identity = await pc.peerIdentity;
-    return identity;
-*/
-    //  let fragment = document.createDocumentFragment();
-    let remoteVideo = document.createElement('video');
-
-    remoteVideo.addEventListener('loadedmetadata', (event) => {
-        const video = event.target;
-        console.log(`loaded remote metadata ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
-    });
-
-    remoteVideo.addEventListener('onresize', (event) => {
-        const video = event.target;
-        console.log(`remote onresize ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
-    });
-
-    remoteVideo.srcObject = event.streams[0];
-    remoteVideo.autoplay = true;
-    remoteVideo.setAttribute('playsinline', true);
-
-    videoDiv.appendChild( remoteVideo );
-
-}
+socket.on('message', (m) => {
+    messageHandler(m)
+});
 
 function errorHandler(error) {
     console.log(error);
@@ -156,28 +46,202 @@ function handleConnectionChange(event) {
     const peerConnection = event.target;
     console.log('ICE state change event: ', event);
     console.log(`ICE state: ${peerConnection.iceConnectionState}.`);
+
+    if( peerConnection.iceConnectionState == 'disconnected' )
+    {
+        // remove video element
+    }
+}
+
+function messageHandler(message) 
+{
+    var signal = JSON.parse(message);
+
+    // ignore messages from ourselves (although I think socket.io deals with that anyway)
+    if (signal.uuid == uuid)
+        return;
+   
+    if (signal.sdp) 
+    {
+        if( signal.sdp.type == 'offer' )
+        {
+            processOffer(signal);
+        }
+        else if( signal.sdp.type == 'answer')
+        {
+            processAnswer(signal);
+        }
+    }
+    else if (signal.ice) 
+    {
+        processRemoteIceCandidate(signal);
+    }
+    else
+    {
+        console.log(`other signal? ${signal}`);
+    }
+}
+
+function processRemoteIceCandidate(signal)
+{
+    console.log(`remote ice candidate ${signal.uuid}`);
+
+    peerConnections.forEach( channel => {
+        channel.addIceCandidate( new RTCIceCandidate(signal.ice) )
+            .catch( errorHandler );
+    });
+
+}
+
+function gotLocalIceCandidate(event) 
+{
+    if (event.candidate != null) {        
+        socket.emit('room',
+            JSON.stringify({
+                'ice': event.candidate,
+                'uuid': uuid
+            })
+        );
+    }
+}
+
+function setupNewConnection()
+{
+    let newConnection = new RTCPeerConnection( peerConnectionConfig );
+    newConnection.onicecandidate = gotLocalIceCandidate;
+    newConnection.oniceconnectionstatechange = handleConnectionChange;
+    newConnection.addStream( localStream ); //<< should make sure the camera is on first...
+    return newConnection;
+}
+
+function sendLocalDescription( connection_, signalmsg_ )
+{    
+    connection_.setLocalDescription( signalmsg_ ).then( () => {
+        socket.emit('room',
+            JSON.stringify({
+                'sdp': connection_.localDescription,
+                'uuid': uuid
+            })
+        );
+    }).catch( errorHandler ); 
 }
 
 
-function joinRoom( isCaller ) 
+function createVideoElement( event_, remoteId_ )
 {
-    console.log('joining room, is caller:', isCaller);
-    peerConnection = new RTCPeerConnection( peerConnectionConfig );
-    peerConnection.onicecandidate = gotIceCandidate;
-    peerConnection.ontrack = gotRemoteStream;
-    peerConnection.oniceconnectionstatechange = handleConnectionChange;
-    peerConnection.addStream( localStream );
+    console.log('got remote stream', event_.target);
+    let remoteVideo = document.createElement('video');
 
-    if (isCaller) {
-        peerConnection.createOffer()
-            .then( createdDescription )
-            .catch( errorHandler );
+    remoteVideo.addEventListener('loadedmetadata', (e) => {
+        const video = e.target;
+        console.log(`loaded remote metadata ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
+    });
+
+    remoteVideo.addEventListener('onresize', (e) => {
+        const video = e.target;
+        console.log(`remote onresize ${video.id} videoWidth: ${video.videoWidth}px, videoHeight: ${video.videoHeight}px.`);
+    });
+
+    remoteVideo.srcObject = event_.streams[0];
+    remoteVideo.autoplay = true;
+    remoteVideo.setAttribute('playsinline', true);
+    remoteVideo.id = remoteId_;
+
+    videoDiv.appendChild( remoteVideo );
+
+}
+
+// if we get an answer we made the offer?
+function processAnswer( signal )
+{
+    if( peerConnections.has( uuid ) )
+    {
+        let ourOfferedConnection = peerConnections.get(uuid);
+        ourOfferedConnection.ontrack = (event) => {
+            createVideoElement(event, signal.uuid);
+        };
+
+        ourOfferedConnection.setRemoteDescription( new RTCSessionDescription(signal.sdp) )
+           .catch(errorHandler);
+
+    }
+}
+
+async function openCamera()
+{
+    startButton.disabled = true;
+    let promise = navigator.mediaDevices.getUserMedia( mediaStreamConstraints );
+
+    try {
+        let _stream = await promise;
+        localVideo.srcObject = _stream; // set stream for local <video>
+        localStream = _stream; // cache to sent to peers
+        joinButton.disabled = false;  // Enable call button.
+        console.log('Received local stream.');
+    }
+    catch(error)
+    {
+        console.log(`navigator.getUserMedia error: ${error.toString()}.`)
+    }
+}
+
+async function offerStreamCheck(signal) 
+{
+    if( !localStream )
+    {
+        let choice = confirm(`user ${signal.uuid} would like to connect with you, ok?`);
+
+        if( choice )
+        {
+            await openCamera();
+        }
+        else
+            return;
+        
     }
 
-    joinButton.disabled = true;
-
 }
 
+async function processOffer( signal )
+{
+    if( !peerConnections.has( signal.uuid ) )
+    {
+        await offerStreamCheck(signal);
+        
+        let newConnection = setupNewConnection();
+        newConnection.ontrack = (event) => {
+            createVideoElement(event, signal.uuid);
+        };
+
+        newConnection.setRemoteDescription( new RTCSessionDescription(signal.sdp) )
+            .then(() => {
+                newConnection.createAnswer()
+                    .then( answer => {
+                        sendLocalDescription( newConnection, answer );
+                    }).catch( errorHandler );
+            }).catch(errorHandler);
+
+        peerConnections.set( signal.uuid, newConnection ); 
+    }
+}
+
+
+function makeCall()
+{
+    if( !localStream )
+        openCamera();
+
+    console.log('makingCall');
+    
+    let connection_ = setupNewConnection();
+    peerConnections.set( uuid, connection_ ); // << log under our ID since we are making the call
+
+    connection_.createOffer().then( offer => {
+        console.log(`sendLocalDescription for type offer`);
+        sendLocalDescription( connection_, offer );
+    }).catch( errorHandler );
+
+}
 
 window.addEventListener("load", function () {
     localVideo = document.getElementById('localVideo');
@@ -187,11 +251,10 @@ window.addEventListener("load", function () {
 
     videoDiv = document.getElementById('remoteVideos');
 
-    startButton.addEventListener('click', startAction);
+    startButton.addEventListener('click', openCamera);
     joinButton.addEventListener('click', () => {
-        joinRoom(true, uuid);
+        makeCall();
     });
-
 
     localVideo.addEventListener('loadedmetadata', (event) => {
         const video = event.target;
@@ -199,15 +262,3 @@ window.addEventListener("load", function () {
     });
 
 });
-
-
-
-// Taken from http://stackoverflow.com/a/105074/515584
-// Strictly speaking, it's not a real UUID, but it gets the job done here
-function createUUID() {
-    function s4() {
-        return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-    }
-
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-}
