@@ -20,7 +20,6 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 
-
 let mediasoupRouter;
 let worker;
 
