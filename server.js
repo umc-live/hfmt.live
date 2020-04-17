@@ -1,10 +1,4 @@
-/*
-// maybe use the args from pm2 later to run multiple servers in parallel
-// currently not used
-const parseArgs = require('minimist');
-const args = parseArgs(process.argv.slice(2));
-const { name = 'default', port = '8080'} = args;
-*/
+
 'use strict';
 
 const http  = require('http');
@@ -13,9 +7,19 @@ const socketio = require('socket.io');
 const mediasoup = require('mediasoup');
 const soupconfig = require('./mediasoup.config');
 
+/*
+  maybe use the args from pm2 later to run multiple servers in parallel
+  currently not used
+*/
+const parseArgs = require('minimist');
+const args = parseArgs(process.argv.slice(2));
+const { name = 'default', port = '8080'} = args;
+
 const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
+
+
 
 let mediasoupRouter;
 let worker;
