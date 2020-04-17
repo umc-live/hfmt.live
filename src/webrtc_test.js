@@ -5,6 +5,7 @@
  *  in the case of an offer, we need to handle it a little differently
  */
 
+'use strict';
 
 import 'webrtc-adapter';
 import io from 'socket.io-client';
@@ -102,7 +103,7 @@ function processRemoteIceCandidate(signal)
 function gotLocalIceCandidate(event) 
 {
     if (event.candidate != null) {        
-        socket.emit('room',
+        socket.emit('webrtc-room',
             JSON.stringify({
                 'ice': event.candidate,
                 'uuid': uuid
@@ -123,7 +124,7 @@ function setupNewConnection()
 function sendLocalDescription( connection_, signalmsg_ )
 {    
     connection_.setLocalDescription( signalmsg_ ).then( () => {
-        socket.emit('room',
+        socket.emit('webrtc-room',
             JSON.stringify({
                 'sdp': connection_.localDescription,
                 'uuid': uuid

@@ -1,18 +1,105 @@
+/*
+// maybe use the args from pm2 later to run multiple servers in parallel
+// currently not used
+const parseArgs = require('minimist');
+const args = parseArgs(process.argv.slice(2));
+const { name = 'default', port = '8080'} = args;
+*/
 'use strict';
 
 const http  = require('http');
 const express = require('express');
 const socketio = require('socket.io');
-
-const parseArgs = require('minimist');
-
-const args = parseArgs(process.argv.slice(2));
-const { name = 'default', port = '8080'} = args;
+const mediasoup = require('mediasoup');
+const soupconfig = require('./mediasoup.config');
 
 const app = express();
 const server = http.createServer(app);
-
 const io = socketio(server);
+
+let mediasoupRouter;
+let worker;
+
+
+async function runMediasoupWorker() {
+  worker = await mediasoup.createWorker( soupconfig.worker );
+
+  worker.on('died', () => {
+    console.error('mediasoup worker died, exiting in 2 seconds... [pid:%d]', worker.pid);
+    setTimeout(() => process.exit(1), 2000);
+  });
+
+  mediasoupRouter = await worker.createRouter( soupconfig.router.mediaCodecs );
+}
+
+
+async function createWebRtcTransport() {
+  
+  const { webRtcTransport } = soupconfig.webRtcTransport;
+  const transport = await mediasoupRouter.createWebRtcTransport( webRtcTransport );
+
+  if ( webRtcTransport.maxIncomingBitrate ) 
+  {
+    try 
+    {
+      await transport.setMaxIncomingBitrate(maxIncomingBitrate);
+    } 
+    catch (error) 
+    {}
+
+  }
+
+  return {
+    transport,
+    params: {
+      id: transport.id,
+      iceParameters: transport.iceParameters,
+      iceCandidates: transport.iceCandidates,
+      dtlsParameters: transport.dtlsParameters
+    }
+  };
+}
+
+
+async function createConsumer( producer, rtpCapabilities ) 
+{
+  if ( !mediasoupRouter.canConsume({ producerId: producer.id, rtpCapabilities }) ) 
+  {
+    console.error('can not consume');
+    return;
+  }
+
+  try 
+  {
+
+    consumer = await consumerTransport.consume({
+      producerId: producer.id,
+      rtpCapabilities,
+      paused: producer.kind === 'video',
+    });
+
+  } 
+  catch (error) 
+  {
+  
+    console.error('consume failed', error);
+    return;
+  }
+
+  if (consumer.type === 'simulcast') {
+    await consumer.setPreferredLayers({ spatialLayer: 2, temporalLayer: 2 });
+  }
+
+  return {
+    producerId: producer.id,
+    id: consumer.id,
+    kind: consumer.kind,
+    rtpParameters: consumer.rtpParameters,
+    type: consumer.type,
+    producerPaused: consumer.producerPaused
+  };
+}
+
 
 io.on('connection', (socket) => {
 
@@ -23,7 +110,7 @@ io.on('connection', (socket) => {
     socket.emit('heartbeat', payload);
   });
 
-  socket.on('room', (data) => {
+  socket.on('webrtc-room', (data) => {
     socket.broadcast.emit('message', data); // forward to all
   });
 
@@ -31,6 +118,8 @@ io.on('connection', (socket) => {
 });
 
 server.listen(3001, '0.0.0.0');
+
+runMediasoupWorker();
 
 
 /*
