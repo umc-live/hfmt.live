@@ -14,13 +14,13 @@ module.exports = [
         entry: './src/webrtc_test.js',
         output: {
             filename: 'webrtc_test.bundle.js',
-            path: path.resolve(__dirname, 'dist/webrtc-test'),
+            path: path.resolve(__dirname, 'public/webrtc-test/js'),
         }
     },
     {
         entry: './src/mediasoup_test.js',
         output: {
             filename: 'medisoup_test.bundle.js',
-            path: path.resolve(__dirname, 'dist/mediasoup-test'),
+            path: path.resolve(__dirname, 'public/mediasoup-test/js'),
         }
     }]
