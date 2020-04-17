@@ -28,11 +28,13 @@ async function loadDevice(routerRtpCapabilities)
 
 
 socket.on('connect', () => {
+    console.log('connected, and requesting getRouterRtpCapabilities');
+
     socket.emit('getRouterRtpCapabilities');
 
 });
 
-socket.on('routerRtpCapabilities', (data) => {
+socket.on('routerRtpCapabilities', async (data) => {
     await loadDevice( data );
 
     console.log('loaded mediasoup device!');
