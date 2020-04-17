@@ -118,6 +118,11 @@ io.on('connection', (socket) => {
   });
 
 
+  socket.on('getRouterRtpCapabilities', (data) => {
+    socket.emit('routerRtpCapabilities', mediasoupRouter.rtpCapabilities);
+  });
+
+
 });
 
 server.listen(3001, '0.0.0.0');

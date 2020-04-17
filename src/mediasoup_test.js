@@ -8,12 +8,33 @@ const hostname = window.location.hostname;
 let device;
 let producer;
 
+async function loadDevice(routerRtpCapabilities) 
+{
+    try 
+    {
+      device = new mediasoup.Device();
+    } 
+    catch (error) 
+    {
+      if (error.name === 'UnsupportedError') 
+      {
+        console.error('browser not supported');
+      }
+    }
 
-socket.on('connect', async () => {
+    await device.load({ routerRtpCapabilities });
+  }
+  
 
 
+socket.on('connect', () => {
+    socket.emit('getRouterRtpCapabilities');
 
-    const data = await socket.request('getRouterRtpCapabilities');
-    await loadDevice(data);
 });
 
+socket.on('routerRtpCapabilities', (data) => {
+    await loadDevice( data );
+
+    console.log('loaded mediasoup device!');
+    
+});
