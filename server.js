@@ -40,8 +40,9 @@ async function runMediasoupWorker()
     setTimeout(() => process.exit(1), 2000);
   });
 
-  mediasoupRouter = await worker.createRouter( soupconfig.router.mediaCodecs );
-  console.log(`created ${mediasoupRouter},  params ${soupconfig.router.mediaCodecs}` );
+  const mediaCodecs = soupconfig.router.mediaCodecs;
+  mediasoupRouter = await worker.createRouter({ mediaCodecs });
+  console.log(`created ${JSON.stringify(mediasoupRouter.rtpCapabilities)},  params ${JSON.stringify(soupconfig.router.mediaCodecs)}` );
   
 }
 
