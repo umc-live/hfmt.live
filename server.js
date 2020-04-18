@@ -25,7 +25,7 @@ let mediasoupRouter;
 let worker;
 
 // log all of this per client eventually
-let producer;
+let producer;// = { id: 'default' };
 let consumer;
 let producerTransport;
 let consumerTransport;
@@ -180,7 +180,15 @@ io.on('connection', (socket) => {
   });
 
   socket.on('consume', async (data, callback) => {
-    callback(await createConsumer(producer, data.rtpCapabilities));
+    try
+    {
+      callback(await createConsumer(producer, data.rtpCapabilities))
+    }
+    catch(err)
+    {
+      console.error('consume error', err);
+      callback({ error: err.message });
+    }
   });
 
   socket.on('resume', async (data, callback) => {
