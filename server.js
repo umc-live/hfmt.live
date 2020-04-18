@@ -1,3 +1,4 @@
+// currently using the examples found online, but probably we don't want to await in the main server loop here
 
 'use strict';
 
@@ -22,6 +23,12 @@ const io = socketio(server);
 
 let mediasoupRouter;
 let worker;
+
+// log all of this per client eventually
+let producer;
+let consumer;
+let producerTransport;
+let consumerTransport;
 
 
 async function runMediasoupWorker() {
@@ -120,26 +127,65 @@ io.on('connection', (socket) => {
   socket.on('getRouterRtpCapabilities', (data, callback) => {
     callback( mediasoupRouter.rtpCapabilities );
   });
-/*
-  socket.on('getRouterRtpCapabilities', (data) => {
-    socket.emit('routerRtpCapabilities', mediasoupRouter.rtpCapabilities);
-  });
-*/
 
   socket.on('createProducerTransport', async (data, callback) => {
-    try {
+    try 
+    {
       const { transport, params } = await createWebRtcTransport();
       producerTransport = transport;
-      socket.emit('producerTransportParams', params);
-    } catch (err) {
+      callback(params);
+    } 
+    catch (err) 
+    {
       console.error(err);
-      // send error?
+      callback({ error: err.message });
     }
   });
 
+  socket.on('createConsumerTransport', async (data, callback) => {
+    try 
+    {
+      const { transport, params } = await createWebRtcTransport();
+      consumerTransport = transport;
+      callback(params);
+    } 
+    catch (err) 
+    {
+      console.error(err);
+      callback({ error: err.message });
+    }
+  });
 
+  socket.on('connectProducerTransport', async (data, callback) => {
+    await producerTransport.connect({ dtlsParameters: data.dtlsParameters });
+    callback();
+  });
+
+  socket.on('connectConsumerTransport', async (data, callback) => {
+    await consumerTransport.connect({ dtlsParameters: data.dtlsParameters });
+    callback();
+  });
+
+  socket.on('produce', async (data, callback) => {
+    const {kind, rtpParameters} = data;
+    producer = await producerTransport.produce({ kind, rtpParameters });
+    callback({ id: producer.id });
+
+    // inform clients about new producer
+    socket.broadcast.emit('newProducer');
+  });
+
+  socket.on('consume', async (data, callback) => {
+    callback(await createConsumer(producer, data.rtpCapabilities));
+  });
+
+  socket.on('resume', async (data, callback) => {
+    await consumer.resume();
+    callback();
+  });
 
 });
+
 
 server.listen(3001, '0.0.0.0');
 
