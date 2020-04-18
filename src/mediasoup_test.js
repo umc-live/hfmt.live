@@ -1,7 +1,14 @@
 
 import * as mediasoupClient from "mediasoup-client";
 import io from 'socket.io-client';
+
 const socket = io()
+
+socket.request = (type, data = {}) => {
+    return new Promise((resolve) => {
+      socket.emit(type, data, resolve);
+    });
+};
 
 const hostname = window.location.hostname;
 
@@ -12,7 +19,7 @@ async function loadDevice(routerRtpCapabilities)
 {
     try 
     {
-      device = new mediasoup.Device();
+      device = new mediasoupClient.Device();
     } 
     catch (error) 
     {
@@ -23,20 +30,38 @@ async function loadDevice(routerRtpCapabilities)
     }
 
     await device.load({ routerRtpCapabilities });
-  }
-  
-
+}
 
 socket.on('connect', () => {
+    // init call
+    socket.emit('getRouterRtpCapabilities', {});
     console.log('connected, and requesting getRouterRtpCapabilities');
-
-    socket.emit('getRouterRtpCapabilities');
-
 });
 
+// init response
 socket.on('routerRtpCapabilities', async (data) => {
     await loadDevice( data );
-
-    console.log('loaded mediasoup device!');
-    
+    console.log('loaded mediasoup device!', data);
 });
+
+
+// call
+function startSendTransport() 
+{
+   socket.emit('createProducerTransport', {
+      forceTcp: false,
+      rtpCapabilities: device.rtpCapabilities,
+    });
+}
+// response
+socket.on('producerTransportParams', (data) => {
+
+    const transport = device.createSendTransport(data);
+    transport.on('connect', async ( { dtlsParameters }, callback, errback) => {
+      socket.request('connectProducerTransport', { dtlsParameters })
+        .then(callback)
+        .catch(errback);
+    });
+
+});
+

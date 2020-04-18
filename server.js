@@ -117,10 +117,26 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message', data); // forward to all
   });
 
-
+  socket.on('getRouterRtpCapabilities', (data, callback) => {
+    callback( mediasoupRouter.rtpCapabilities );
+  });
+/*
   socket.on('getRouterRtpCapabilities', (data) => {
     socket.emit('routerRtpCapabilities', mediasoupRouter.rtpCapabilities);
   });
+*/
+
+  socket.on('createProducerTransport', async (data, callback) => {
+    try {
+      const { transport, params } = await createWebRtcTransport();
+      producerTransport = transport;
+      socket.emit('producerTransportParams', params);
+    } catch (err) {
+      console.error(err);
+      // send error?
+    }
+  });
+
 
 
 });
