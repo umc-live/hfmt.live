@@ -45,7 +45,9 @@ async function runMediasoupWorker() {
 
 async function createWebRtcTransport() {
   
-  const { webRtcTransport } = soupconfig.webRtcTransport;
+  const { webRtcTransport } = soupconfig;
+  console.log('webRtcTransport', webRtcTransport);
+
   const transport = await mediasoupRouter.createWebRtcTransport( webRtcTransport );
 
   if ( webRtcTransport.maxIncomingBitrate ) 
