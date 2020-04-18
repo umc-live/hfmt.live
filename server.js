@@ -31,7 +31,8 @@ let producerTransport;
 let consumerTransport;
 
 
-async function runMediasoupWorker() {
+async function runMediasoupWorker() 
+{
   worker = await mediasoup.createWorker( soupconfig.worker );
 
   worker.on('died', () => {
@@ -43,11 +44,12 @@ async function runMediasoupWorker() {
 }
 
 
-async function createWebRtcTransport() {
+async function createWebRtcTransport() 
+{
   
   const { webRtcTransport } = soupconfig;
   console.log('webRtcTransport', webRtcTransport);
-
+  
   const transport = await mediasoupRouter.createWebRtcTransport( webRtcTransport );
 
   if ( webRtcTransport.maxIncomingBitrate ) 

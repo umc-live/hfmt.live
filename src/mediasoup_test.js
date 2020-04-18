@@ -42,7 +42,10 @@ async function connectToSoup() {
 }
 
 
-async function publish(e) {
+async function publish(e)
+{
+
+    let isWebcam = true;
     const data = await socket.request('createProducerTransport', {
         forceTcp: false,
         rtpCapabilities: device.rtpCapabilities,
@@ -109,7 +112,8 @@ async function publish(e) {
 
 
     let stream;
-    try {
+    try 
+    {
 
         stream = await getUserMedia(isWebcam);
 
@@ -130,7 +134,7 @@ async function publish(e) {
 
     }
     catch (err) {
-        $txtPublish.innerHTML = 'failed';
+        console.log('failed', err);
     }
 
 }
