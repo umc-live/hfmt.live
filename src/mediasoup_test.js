@@ -12,7 +12,7 @@ async function loadDevice(routerRtpCapabilities)
 {
     try 
     {
-      device = new mediasoup.Device();
+      device = new mediasoupClient.Device();
     } 
     catch (error) 
     {
