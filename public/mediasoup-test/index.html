@@ -19,18 +19,22 @@
     <div id="log"></div>
 
     <div id="videos">
-        <video id="localVideo" autoplay muted playsinline></video>
-        <video id="remoteVideo" autoplay muted playsinline></video>
+        <video id="localVideo" controls autoplay muted playsinline></video>
+        <video id="remoteVideo" conntrols autoplay muted playsinline></video>
   <!--     <div id='remoteVideos'></div> -->
     </div>
 
     <div class="ui">
-        <button id="startButton">Start Video</button>
-        <button id="btn_subscribe">Subscribe</button>
         <button id="btn_connect">Connect</button>
+        <button id="startButton">Start Webcam</button>
+        <button id="btn_screen">Share Screen</button>
+        <button id="btn_subscribe">Subscribe</button>
 
     </div>
 
+    <script>
+          window.localStorage.setItem('debug', 'mediasoup-client:*');
+    </script>
     <script src="js/medisoup_test.bundle.js"></script>
 </body>
 
