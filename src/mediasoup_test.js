@@ -95,7 +95,7 @@ async function publish(e)
 
             case 'connected':
                 console.log('produce connected');
-                
+                localVideo.srcObject = stream; 
                 /*
               document.querySelector('#local_video').srcObject = stream;
               $txtPublish.innerHTML = 'published';

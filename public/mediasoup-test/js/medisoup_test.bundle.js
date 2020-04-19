@@ -9853,6 +9853,8 @@ async function publish(e)
     const transport = device.createSendTransport(data);
 
     transport.on('connect', async ({ dtlsParameters }, callback, errback) => {
+        console.log('connecting transport');
+        
         socket.request('connectProducerTransport', { dtlsParameters })
             .then(callback)
             .catch(errback);
@@ -9882,6 +9884,8 @@ async function publish(e)
                 break;
 
             case 'connected':
+                console.log('produce connected');
+                localVideo.srcObject = stream; 
                 /*
               document.querySelector('#local_video').srcObject = stream;
               $txtPublish.innerHTML = 'published';
@@ -9891,6 +9895,7 @@ async function publish(e)
                 break;
 
             case 'failed':
+                console.log('produce failed connection');
                 transport.close();
                 /*
                 $txtPublish.innerHTML = 'failed';
@@ -9913,14 +9918,15 @@ async function publish(e)
         const track = stream.getVideoTracks()[0];
         const params = { track };
 
-        if (0 )//$chkSimulcast.checked) 
-	{}
+        if (0)//$chkSimulcast.checked) 
+	    {}
         producer = await transport.produce(params);
 
     }
     catch (err) {
         console.log('failed', err);
     }
+
     console.log(`-- exit`);
 
 }
