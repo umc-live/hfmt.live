@@ -51,7 +51,7 @@ async function createWebRtcTransport()
 {
   
   const { webRtcTransport } = soupconfig;
-  console.log('webRtcTransport', webRtcTransport);
+// console.log('webRtcTransport', webRtcTransport);
   
   const transport = await mediasoupRouter.createWebRtcTransport( webRtcTransport );
 
@@ -108,7 +108,7 @@ async function createConsumer( producer, rtpCapabilities )
   }
 
 
-  console.log(`consumer ${createConsumer}`);
+  console.log(`consumer ${consumer}`);
   
 
   return {
@@ -121,6 +121,53 @@ async function createConsumer( producer, rtpCapabilities )
   };
 }
 
+
+async function cosumerTransportAddProducer( _consumerTransport, _producer, _rtpCapabilities ) 
+{
+  if ( !mediasoupRouter.canConsume({ producerId: _producer.id, _rtpCapabilities }) ) 
+  {
+    console.error('can not consume');
+    return;
+  }
+
+  try 
+  {
+
+    let newComsumer = await _consumerTransport.consume({
+      producerId: _producer.id,
+      _rtpCapabilities,
+      paused: _producer.kind === 'video',
+    });
+
+    if ( newComsumer.type === 'simulcast') {
+      await newComsumer.setPreferredLayers({ spatialLayer: 2, temporalLayer: 2 });
+    }
+  
+  
+    console.log(`consumer ${newComsumer}`);
+
+    return newComsumer;
+  } 
+  catch (error) 
+  {
+  
+    console.error('consume failed', error);
+    return;
+  }
+
+
+  
+
+  return {
+    producerId: _producer.id,
+    id: consumer.id,
+    kind: consumer.kind,
+    rtpParameters: consumer.rtpParameters,
+    type: consumer.type,
+    producerPaused: consumer.producerPaused
+  };
+
+}
 
 
 
@@ -201,6 +248,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('resume', async (data, callback) => {
+    console.log('socket resume');
     await consumer.resume();
     callback();
   });
