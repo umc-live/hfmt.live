@@ -63,6 +63,8 @@ async function publish(e)
     const transport = device.createSendTransport(data);
 
     transport.on('connect', async ({ dtlsParameters }, callback, errback) => {
+        console.log('connecting transport');
+        
         socket.request('connectProducerTransport', { dtlsParameters })
             .then(callback)
             .catch(errback);
@@ -126,8 +128,8 @@ async function publish(e)
         const track = stream.getVideoTracks()[0];
         const params = { track };
 
-        if (0) 
-        {
+        if (0)//$chkSimulcast.checked) 
+	    {
             params.encodings = [
                 { maxBitrate: 100000 },
                 { maxBitrate: 300000 },

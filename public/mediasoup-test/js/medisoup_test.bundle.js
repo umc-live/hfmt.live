@@ -9913,22 +9913,15 @@ async function publish(e)
         const track = stream.getVideoTracks()[0];
         const params = { track };
 
-        if ($chkSimulcast.checked) {
-            params.encodings = [
-                { maxBitrate: 100000 },
-                { maxBitrate: 300000 },
-                { maxBitrate: 900000 },
-            ];
-            params.codecOptions = {
-                videoGoogleStartBitrate: 1000
-            };
-        }
+        if (0 )//$chkSimulcast.checked) 
+	{}
         producer = await transport.produce(params);
 
     }
     catch (err) {
         console.log('failed', err);
     }
+    console.log(`-- exit`);
 
 }
 
