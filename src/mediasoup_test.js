@@ -97,8 +97,8 @@ async function publish(e)
                 break;
 
             case 'connected':
-                console.log('produce connectionstatechange connected');
-               localVideo.srcObject = stream;
+                document.querySelector('#localVideo').srcObject = stream;
+                console.log('produce connectionstatechange connected', stream);
 
                 /*
               document.querySelector('#local_video').srcObject = stream;
@@ -129,6 +129,8 @@ async function publish(e)
 
         stream = await getUserMedia(isWebcam);
 
+        console.log('got stream');
+        
         const track = stream.getVideoTracks()[0];
         const params = { track };
 
