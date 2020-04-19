@@ -107,6 +107,10 @@ async function createConsumer( producer, rtpCapabilities )
     await consumer.setPreferredLayers({ spatialLayer: 2, temporalLayer: 2 });
   }
 
+
+  console.log(`consumer ${createConsumer}`);
+  
+
   return {
     producerId: producer.id,
     id: consumer.id,
@@ -116,6 +120,8 @@ async function createConsumer( producer, rtpCapabilities )
     producerPaused: consumer.producerPaused
   };
 }
+
+
 
 
 io.on('connection', (socket) => {
