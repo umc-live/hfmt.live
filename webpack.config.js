@@ -22,5 +22,8 @@ module.exports = [
         output: {
             filename: 'medisoup_test.bundle.js',
             path: path.resolve(__dirname, 'public/mediasoup-test/js'),
-        }
+        },
+        optimization: {
+            minimize: false
+        },
     }]
