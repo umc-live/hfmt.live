@@ -275,7 +275,7 @@ connectButton.addEventListener('click', connectToSoup);
 let startButton = document.getElementById('startButton');
 startButton.addEventListener('click', publish);
 
-let subscribeButton = document.getElementById('startButton');
+let subscribeButton = document.getElementById('btn_subscribe');
 subscribeButton.addEventListener('click', subscribe);
 
 //$btnScreen.addEventListener('click', publish);
