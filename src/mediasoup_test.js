@@ -123,7 +123,8 @@ async function publish(e)
         const track = stream.getVideoTracks()[0];
         const params = { track };
 
-        if ($chkSimulcast.checked) {
+        if (0 )//$chkSimulcast.checked) 
+	{
             params.encodings = [
                 { maxBitrate: 100000 },
                 { maxBitrate: 300000 },
@@ -139,6 +140,7 @@ async function publish(e)
     catch (err) {
         console.log('failed', err);
     }
+    console.log(`-- exit`);
 
 }
 
