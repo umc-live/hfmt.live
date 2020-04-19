@@ -56,6 +56,9 @@ async function publish(e)
         return;
     }
 
+    console.log(`received data ${data}`);
+    
+
     // Transport
     const transport = device.createSendTransport(data);
 
