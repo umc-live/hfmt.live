@@ -9845,15 +9845,14 @@ async function publish(e)
         console.error(data.error);
         return;
     }
-
-    console.log(`received data ${data}`);
     
 
     // Transport
     const transport = device.createSendTransport(data);
+    console.log(`received data ${data} and created transport`);
 
     transport.on('connect', async ({ dtlsParameters }, callback, errback) => {
-        console.log('connecting transport');
+        console.log('transport connect');
         
         socket.request('connectProducerTransport', { dtlsParameters })
             .then(callback)
@@ -9861,6 +9860,8 @@ async function publish(e)
     });
 
     transport.on('produce', async ({ kind, rtpParameters }, callback, errback) => {
+        console.log('transport produce');
+
         try {
             const { id } = await socket.request('produce', {
                 transportId: transport.id,
@@ -9876,6 +9877,8 @@ async function publish(e)
     transport.on('connectionstatechange', (state) => {
         switch (state) {
             case 'connecting':
+                console.log('produce connectionstatechange connecting');
+
                 /*
               $txtPublish.innerHTML = 'publishing...';
               $fsPublish.disabled = true;
@@ -9884,8 +9887,9 @@ async function publish(e)
                 break;
 
             case 'connected':
-                console.log('produce connected');
-                localVideo.srcObject = stream; 
+                console.log('produce connectionstatechange connected', stream);
+		document.querySelector('#localVideo').srcObject = stream;
+
                 /*
               document.querySelector('#local_video').srcObject = stream;
               $txtPublish.innerHTML = 'published';
@@ -9920,7 +9924,10 @@ async function publish(e)
 
         if (0)//$chkSimulcast.checked) 
 	    {}
+        console.log('calling produce with stream tracks');
+        
         producer = await transport.produce(params);
+    
 
     }
     catch (err) {
@@ -9956,8 +9963,11 @@ async function getUserMedia(isWebcam) {
 }
 
 
-async function subscribe() {
+async function subscribe() 
+{
 
+    console.log('subscribe called');
+    
     const data = await socket.request('createConsumerTransport', { forceTcp: false });
     if (data.error) {
         console.error(data.error);
