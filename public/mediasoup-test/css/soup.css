@@ -1,0 +1,29 @@
+.ui {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
+    height: 20px;
+}
+
+#videos {
+    width: 100vw;
+    height: 100vh;
+    top: 20px;
+    z-index: -1;
+    position: absolute;
+
+}
+
+#localVideo {
+    height: auto;
+    width: 100px;
+    position: absolute;
+    left: calc(50vw - 50px);
+    z-index: 1;
+}
+
+video {
+    width: 300px;
+    height: auto;
+}
