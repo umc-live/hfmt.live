@@ -238,6 +238,7 @@ async function sendCameraStreams() {
   */
     //$('#stop-streams').style.display = 'initial';
     showCameraInfo();
+    $('#localVideo').srcObject = localCam.getVideoTracks()[0];
 }
 
 
