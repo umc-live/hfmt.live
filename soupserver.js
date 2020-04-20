@@ -367,7 +367,6 @@ io.on('connection', (socket) => {
       // and create a data structure to track the client-relevant state
       // of this consumer
       console.log(`saving consumer.id ${consumer.id} in ${room.consumers}`);
-      
       room.consumers.set(consumer.id, consumer);
       console.log(`post saving consumer.id ${consumer.id}`);
 
