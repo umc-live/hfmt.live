@@ -86,7 +86,7 @@ async function joinRoom()
 async function sendCameraStreams() 
 {
     log('send camera streams');
-    $('#send-camera').style.display = 'none';
+    //$('#send-camera').style.display = 'none';
   
     // make sure we've joined the room and started our camera. these
     // functions don't do anything if they've already been called this
@@ -132,7 +132,7 @@ async function sendCameraStreams()
       }
     }
   
-    $('#stop-streams').style.display = 'initial';
+    //$('#stop-streams').style.display = 'initial';
     showCameraInfo();
   }
   

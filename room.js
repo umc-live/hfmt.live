@@ -47,7 +47,7 @@ class Room {
                 dataConsumers : new Map()
             }
         });
-        return this.clients.get(id);
+        return this.peers.get(id);
     }
 
     announcePeer( id )
