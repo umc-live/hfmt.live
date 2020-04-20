@@ -426,6 +426,13 @@ function addVideoAudio(consumer, peerId)
       return;
     }
 
+    const tag = consumer.appData.mediaTag+'-'+peerId;
+    if( $('#'+tag) )
+    {
+        log('already have tag');
+        return;
+    }
+    
     let el = document.createElement(consumer.kind);
     // set some attributes on our audio and video elements to make
     // mobile Safari happy. note that for audio to play you need to be
@@ -444,7 +451,7 @@ function addVideoAudio(consumer, peerId)
     $(`#videos`).appendChild(el);
     el.srcObject = new MediaStream([ consumer.track.clone() ]);
     el.consumer = consumer;
-    el.id = peerId;
+    el.id = consumer.appData.mediaTag+'-'+peerId;
 
     /*
     // let's "yield" and return before playing, rather than awaiting on
