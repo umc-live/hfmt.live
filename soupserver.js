@@ -304,7 +304,6 @@ io.on('connection', (socket) => {
               value.appData.peerId === mediaPeerId )
           {
             producer = value;
-            console.log('found producer:', producer.id);
             break;
           }
       }

@@ -33,6 +33,10 @@ let device,
 // consumers are links to peers, stored by id
 // the consumers are links to the media streams, produced by the transport
 
+async function sleep(ms) {
+    return new Promise((r) => setTimeout(() => r(), ms));
+  }
+  
 
 socket.request = (type, data = {}) => {
     return new Promise((resolve) => {
@@ -332,9 +336,14 @@ async function createTransport(direction) {
         // for this simple sample code, assume that transports being
         // closed is an error (we never close these transports except when
         // we leave the room)
-        if (state === 'closed' || state === 'failed' || state === 'disconnected') {
+        if (state === 'closed' || state === 'failed' || state === 'disconnected') 
+        {
             log('transport closed ... leaving the room and resetting');
             leaveRoom();
+        }
+        else if( state == 'connected')
+        {
+
         }
     });
 
@@ -453,3 +462,4 @@ window.addEventListener('load', () => {
     $('#startButton').addEventListener('click', sendCameraStreams);
     //    window.addEventListener('beforeunload', () => socket.emit('leave', { peerId }));
 })
+
