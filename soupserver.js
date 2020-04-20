@@ -60,15 +60,15 @@ async function startMediasoup()
   _audioLevelObserver.on('volumes', (volumes) => {
     const { producer, volume } = volumes[0];
     log('audio-level volumes event', producer.appData.peerId, volume);
-    roomState.activeSpeaker.producerId = producer.id;
-    roomState.activeSpeaker.volume = volume;
-    roomState.activeSpeaker.peerId = producer.appData.peerId;
+    room.activeSpeaker.producerId = producer.id;
+    room.activeSpeaker.volume = volume;
+    room.activeSpeaker.peerId = producer.appData.peerId;
   });
   _audioLevelObserver.on('silence', () => {
     log('audio-level silence event');
-    roomState.activeSpeaker.producerId = null;
-    roomState.activeSpeaker.volume = null;
-    roomState.activeSpeaker.peerId = null;
+    room.activeSpeaker.producerId = null;
+    room.activeSpeaker.volume = null;
+    room.activeSpeaker.peerId = null;
   });
 
  return { _worker, _router, _audioLevelObserver }; //, 
@@ -121,13 +121,13 @@ async function closeProducer(producer) {
   try {
     await producer.close();
 
-    // remove this producer from our roomState.producers list
-    roomState.producers = roomState.producers
+    // remove this producer from our room.producers list
+    room.producers = room.producers
       .filter((p) => p.id !== producer.id);
 
-    // remove this track's info from our roomState...mediaTag bookkeeping
-    if (roomState.peers[producer.appData.peerId]) {
-      delete (roomState.peers[producer.appData.peerId]
+    // remove this track's info from our room...mediaTag bookkeeping
+    if (room.peers[producer.appData.peerId]) {
+      delete (room.peers[producer.appData.peerId]
               .media[producer.appData.mediaTag]);
     }
   } catch (e) {
@@ -139,12 +139,12 @@ async function closeConsumer(consumer) {
   log('closing consumer', consumer.id, consumer.appData);
   await consumer.close();
 
-  // remove this consumer from our roomState.consumers list
-  roomState.consumers = roomState.consumers.filter((c) => c.id !== consumer.id);
+  // remove this consumer from our room.consumers list
+  room.consumers = room.consumers.filter((c) => c.id !== consumer.id);
 
-  // remove layer info from from our roomState...consumerLayers bookkeeping
-  if (roomState.peers[consumer.appData.peerId]) {
-    delete roomState.peers[consumer.appData.peerId].consumerLayers[consumer.id];
+  // remove layer info from from our room...consumerLayers bookkeeping
+  if (room.peers[consumer.appData.peerId]) {
+    delete room.peers[consumer.appData.peerId].consumerLayers[consumer.id];
   }
 }
 
@@ -221,7 +221,7 @@ io.on('connection', (socket) => {
     try {
       let { transportId, kind, rtpParameters,
             paused=false, appData } = data;
-          transport = roomState.transports[transportId];
+          transport = room.transports[transportId];
   
       if (!transport) {
         err(`send-track: server-side transport ${transportId} not found`);
