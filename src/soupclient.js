@@ -52,9 +52,9 @@ socket.on('connect', () => {
 
 async function updateStreamConsumers()
 {
-    const { peerIds } = await socket.request('sync');
+    const data = await socket.request('sync');
 
-    console.log('sync got', peerIds);
+    console.log('sync got', data);
     // update consumer Map in case of new or missing peers    
 
 }
