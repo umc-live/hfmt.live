@@ -59,8 +59,10 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
 {
 //    const data = await socket.request('sync-peer-request');
 
+    console.log(typeof(peersInfo), peersInfo );
 
-  peersInfo.forEach(peer =>{
+  for (let peer of peersInfo) 
+  {
     if (peer.id === socketID){
         console.log('skip our own stream?');
       continue;
@@ -74,7 +76,7 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
         .appendChild(makeTrackControlEl(peer.id, mediaTag, info));
         */
     }
-  });
+  }
 
 }
 
