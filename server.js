@@ -44,8 +44,8 @@ async function startMediasoup()
     setTimeout(() => process.exit(1), 2000);
   });
 
-  const mediaCodecs = soupconfig.router.mediaCodecs;
-  const _router = await worker.createRouter({ mediaCodecs });
+  const { mediaCodecs } = soupconfig.router.mediaCodecs;
+  const _router = await _worker.createRouter({ mediaCodecs });
  
   console.log(`created router with rtpCapabilities: ${JSON.stringify(_router.rtpCapabilities)}`);
   
@@ -77,14 +77,14 @@ async function main()
 {
   console.log('starting mediasoup');
   ( { worker, router, audioLevelObserver } = await startMediasoup() );
-
+/*
   await new Promise((resolve) => {
     server.listen(3001, '0.0.0.0', () => {
       console.log(`started server, routing from nginx on port 3001`);
       resolve();
     });
   });
-
+*/
 }
 
 
@@ -297,7 +297,7 @@ io.on('connection', (socket) => {
 });
 
 
-
+server.listen(3001, '0.0.0.0');
 main();
 
 
