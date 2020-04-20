@@ -351,8 +351,8 @@ async function createTransport(direction) {
 }
 
 function findConsumerForTrack(peerId, mediaTag) {
-    return consumers.find((c) => (c.appData.peerId === peerId &&
-        c.appData.mediaTag === mediaTag));
+    return consumers.find((c) => (c._appData.peerId === peerId &&
+        c._appData.mediaTag === mediaTag));
 }
 
 // note: only subscribe if we don't already have a consumer!
