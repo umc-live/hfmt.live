@@ -139,7 +139,7 @@ io.on('connection', (socket) => {
   });
 
 
-  socket.on('connect-transport', (data, callback) => {
+  socket.on('connect-transport', async (data, callback) => {
     try {
       let { peerId, transportId, dtlsParameters } = data;
 
