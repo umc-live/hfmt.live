@@ -122,10 +122,12 @@ async function closeProducer(producer) {
   try {
     await producer.close();
 
+    room.producers.delete(producer.id);
+    /*
     // remove this producer from our room.producers list
     room.producers = room.producers
       .filter((p) => p.id !== producer.id);
-
+  */
     // remove this track's info from our room...mediaTag bookkeeping
     if (room.peers[producer.appData.peerId]) {
       delete (room.peers[producer.appData.peerId]
@@ -140,8 +142,10 @@ async function closeConsumer(consumer) {
   log('closing consumer', consumer.id, consumer.appData);
   await consumer.close();
 
+  room.consumers.delete(consumer.id);
+
   // remove this consumer from our room.consumers list
-  room.consumers = room.consumers.filter((c) => c.id !== consumer.id);
+//  room.consumers = room.consumers.filter((c) => c.id !== consumer.id);
 
   // remove layer info from from our room...consumerLayers bookkeeping
   if (room.peers[consumer.appData.peerId]) {
@@ -361,7 +365,12 @@ io.on('connection', (socket) => {
       // stick this consumer in our list of consumers to keep track of,
       // and create a data structure to track the client-relevant state
       // of this consumer
+      console.log(`saving consumer.id ${consumer.id}`);
+      
       room.consumers.set(consumer.id, consumer);
+      console.log(`saving consumer.id ${consumer.id}`);
+
+      
       room.peers.get(peerId).consumerLayers[consumer.id] = {
         currentLayer: null,
         clientSelectedLayer: null
