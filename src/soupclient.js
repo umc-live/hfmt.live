@@ -443,6 +443,7 @@ function addVideoAudio(consumer, peerId)
       .catch((e) => {
         log(e);
       });
+      */
   }
   
   function removeVideoAudio(consumer) {
