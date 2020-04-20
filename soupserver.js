@@ -163,16 +163,15 @@ io.on('connection', (socket) => {
     socket.emit('heartbeat', payload);
   });
 
-  socket.on('sync', (data, callback) => {
+  socket.on('sync-peers-request', (data, callback) => {
     callback( {peerIds: room.getIds() } );
   });
 
   socket.on('join-as-new-peer', (data, callback) => {
     room.addPeer(peerId, socket);
-    socket.broadcast.emit('new-peer');
+    socket.broadcast.emit('new-peers');
     callback( { routerRtpCapabilities: router.rtpCapabilities });
   });
-
 
   socket.on('connect-transport', async (data, callback) => {
     try {
@@ -196,7 +195,6 @@ io.on('connection', (socket) => {
       callback({ error: e });
     }
   });
-
 
 
   socket.on('create-transport', async (data, callback) => {
@@ -261,6 +259,110 @@ io.on('connection', (socket) => {
     } catch (e) {
     }
   });
+
+  socket.on('recv-track', async (data, callback) => {
+    try {
+      let { mediaPeerId, mediaTag, rtpCapabilities } = data;
+    
+      let producer;
+
+      for (let value of room.producers.values() ) 
+      {
+          if (value.appData.mediaTag === mediaTag && 
+              value.appData.peerId === mediaPeerId )
+          {
+            producer = value;
+            break;
+          }
+      }
+      
+      if (!producer) {
+        let msg = 'server-side producer for ' +
+                    `${mediaPeerId}:${mediaTag} not found`;
+        err('recv-track: ' + msg);
+        callback({ error: msg });
+        return;
+      }
+  
+      if (!router.canConsume({ producerId: producer.id, rtpCapabilities }) ) 
+      {
+        let msg = `client cannot consume ${mediaPeerId}:${mediaTag}`;
+        err(`recv-track: ${peerId} ${msg}`);
+        callback({ error: msg });
+        return;
+      }
+  
+      let transport;
+
+      for (let value of room.transports.values() ) 
+      {
+          if (value.appData.peerId === peerId && 
+              value.appData.clientDirection === 'recv' )
+          {
+            transport = value;
+            break;
+          }
+      }
+
+      if (!transport) 
+      {
+        let msg = `server-side recv transport for ${peerId} not found`;
+        err('recv-track: ' + msg);
+        callback({ error: msg });
+        return;
+      }
+  
+      let consumer = await transport.consume({
+        producerId: producer.id,
+        rtpCapabilities,
+        paused: true, // see note above about always starting paused
+        appData: { peerId, mediaPeerId, mediaTag }
+      });
+  
+      // need both 'transportclose' and 'producerclose' event handlers,
+      // to make sure we close and clean up consumers in all
+      // circumstances
+      consumer.on('transportclose', () => {
+        log(`consumer's transport closed`, consumer.id);
+        closeConsumer(consumer);
+      });
+      consumer.on('producerclose', () => {
+        log(`consumer's producer closed`, consumer.id);
+        closeConsumer(consumer);
+      });
+  
+      // stick this consumer in our list of consumers to keep track of,
+      // and create a data structure to track the client-relevant state
+      // of this consumer
+      room.consumers.set(consumer.id, consumer);
+      room.peers[peerId].consumerLayers[consumer.id] = {
+        currentLayer: null,
+        clientSelectedLayer: null
+      };
+  
+      // update above data structure when layer changes.
+      consumer.on('layerschange', (layers) => {
+        log(`consumer layerschange ${mediaPeerId}->${peerId}`, mediaTag, layers);
+        if (room.peers[peerId] && room.peers[peerId].consumerLayers[consumer.id]) 
+        {
+            room.peers[peerId].consumerLayers[consumer.id].currentLayer = layers && layers.spatialLayer;
+        }
+      });
+  
+      callback({
+        producerId: producer.id,
+        id: consumer.id,
+        kind: consumer.kind,
+        rtpParameters: consumer.rtpParameters,
+        type: consumer.type,
+        producerPaused: consumer.producerPaused
+      });
+    } catch (e) {
+      console.error('error in /signaling/recv-track', e);
+      callback({ error: e });
+    }
+  });
+  
 
   socket.on('leave', async (data, callback) => {
     try {
