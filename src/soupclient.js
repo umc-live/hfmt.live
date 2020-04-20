@@ -432,7 +432,7 @@ function addVideoAudio(consumer, peerId)
         log('already have tag');
         return;
     }
-    
+
     let el = document.createElement(consumer.kind);
     // set some attributes on our audio and video elements to make
     // mobile Safari happy. note that for audio to play you need to be
@@ -447,6 +447,7 @@ function addVideoAudio(consumer, peerId)
 
     el.setAttribute('playsinline', true);
     el.setAttribute('autoplay', true);
+    el.setAttribute('controls', true);
 
     $(`#videos`).appendChild(el);
     el.srcObject = new MediaStream([ consumer.track.clone() ]);
