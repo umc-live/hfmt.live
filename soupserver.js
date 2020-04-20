@@ -23,6 +23,7 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 const log = console.log;
+const err = console.error;
 
 let worker, router, room, audioLevelObserver;
 
