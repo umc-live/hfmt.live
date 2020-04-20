@@ -30,7 +30,7 @@ module.exports = [
         entry: './src/soupclient.js',
         output: {
             filename: 'soupclient.bundle.js',
-            path: path.resolve(__dirname, 'public/mediasoup-test/js'),
+            path: path.resolve(__dirname, 'public/soup/js'),
         },
         optimization: {
             minimize: false
