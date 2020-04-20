@@ -457,6 +457,56 @@ function addVideoAudio(consumer) {
     `;
   }
 
+
+  async function pauseConsumer(consumer) {
+    if (consumer) {
+      log('pause consumer', consumer.appData.peerId, consumer.appData.mediaTag);
+      try {
+        await socket.request('pause-consumer', { consumerId: consumer.id });
+        await consumer.pause();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+  
+  async function resumeConsumer(consumer) {
+    if (consumer) {
+      log('resume consumer', consumer.appData.peerId, consumer.appData.mediaTag);
+      try {
+        await socket.request('resume-consumer', { consumerId: consumer.id });
+        await consumer.resume();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+  
+  async function pauseProducer(producer) {
+    if (producer) {
+      log('pause producer', producer.appData.mediaTag);
+      try {
+        await socket.request('pause-producer', { producerId: producer.id });
+        await producer.pause();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+  
+  export async function resumeProducer(producer) {
+    if (producer) {
+      log('resume producer', producer.appData.mediaTag);
+      try {
+        await socket.request('resume-producer', { producerId: producer.id });
+        await producer.resume();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+  
+
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', joinRoom);
     $('#startButton').addEventListener('click', sendCameraStreams);

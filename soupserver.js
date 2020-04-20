@@ -399,6 +399,28 @@ io.on('connection', (socket) => {
     }
   });
   
+  socket.on('resume-consumer', async (data, callback) => {
+    try {
+      let { consumerId } = data,
+          consumer = room.consumers.get(consumerId);
+  
+      if (!consumer) {
+        err(`pause-consumer: server-side consumer ${consumerId} not found`);
+        callback({ error: `server-side consumer ${consumerId} not found` });
+        return;
+      }
+  
+      log('resume-consumer', consumer.appData);
+  
+      await consumer.resume();
+  
+      callback({ resumed: true });
+    } catch (e) {
+      console.error('error in /signaling/resume-consumer', e);
+      callback({ error: e });
+    }
+  });
+  
 
   socket.on('leave', async (data, callback) => {
     try {
