@@ -22,6 +22,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+const log = console.log;
 
 let worker, router, room, audioLevelObserver;
 
