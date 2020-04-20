@@ -401,14 +401,13 @@ async function subscribeToTrack(peerId, mediaTag) {
     consumers.push(consumer);
 
     // ui
-    await addVideoAudio(consumer, peerId);
+    await addVideoAudio(consumer);
 
 }
 
 
 
-function addVideoAudio(consumer, 
-    ) 
+function addVideoAudio(consumer) 
 {
     if (!(consumer && consumer.track)) 
     {
@@ -433,7 +432,7 @@ function addVideoAudio(consumer,
     $(`#videos`).appendChild(el);
     el.srcObject = new MediaStream([ consumer.track.clone() ]);
     el.consumer = consumer;
-    el.id = peerId;
+    el.id = consumer.producerId;
 
     /*
     // let's "yield" and return before playing, rather than awaiting on
@@ -444,7 +443,6 @@ function addVideoAudio(consumer,
       .catch((e) => {
         log(e);
       });
-      */
   }
   
   function removeVideoAudio(consumer) {
