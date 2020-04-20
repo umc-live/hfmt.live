@@ -184,6 +184,7 @@ io.on('connection', (socket) => {
     }
   });
 
+});
 
 main();
 
