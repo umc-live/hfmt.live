@@ -111,9 +111,8 @@ io.on('connection', (socket) => {
 
     socket.on('join-as-new-peer', (data, callback) => {
       room.addPeer(socket.id, socket);
-//      socket.broadcast.emit('new-')
- //   	console.log(JSON.stringify(router.rtpCapabilities, null, 2));
-	callback( { routerRtpCapabilities: router.rtpCapabilities });
+      socket.broadcast.emit('new-peer');
+      callback( { routerRtpCapabilities: router.rtpCapabilities });
     });
 
     socket.on('sync', (data, callback) => {
