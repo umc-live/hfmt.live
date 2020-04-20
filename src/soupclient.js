@@ -47,6 +47,7 @@ socket.on('connect', () => {
 socket.on('sync-peers', (data) => {
     lastPollSyncData = data;
     console.log('sync-peers got', data);
+    updateStreamConsumers();
 });
 
 function sortPeers(peers) {
