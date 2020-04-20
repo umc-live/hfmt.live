@@ -365,12 +365,12 @@ io.on('connection', (socket) => {
       // stick this consumer in our list of consumers to keep track of,
       // and create a data structure to track the client-relevant state
       // of this consumer
-      console.log(`saving consumer.id ${consumer.id}`);
+      console.log(`saving consumer.id ${consumer.id} in ${room.consumers}`);
       
       room.consumers.set(consumer.id, consumer);
-      console.log(`saving consumer.id ${consumer.id}`);
+      console.log(`post saving consumer.id ${consumer.id}`);
 
-      
+
       room.peers.get(peerId).consumerLayers[consumer.id] = {
         currentLayer: null,
         clientSelectedLayer: null
