@@ -72,7 +72,7 @@ async function joinRoom()
         const { routerRtpCapabilities } = await socket.request('join-as-new-peer');
         await device.load({ routerRtpCapabilities });
 
-        console.log('loaded mediasoup device!', data);
+        console.log('loaded mediasoup device!', routerRtpCapabilities);
 
         updateStreamConsumers();
     }
