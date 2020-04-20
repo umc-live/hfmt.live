@@ -55,28 +55,26 @@ function sortPeers(peers) {
       .sort((a,b) => (a.joinTs>b.joinTs) ? 1 : ((b.joinTs>a.joinTs) ? -1 : 0));
   }
 
-async function updateStreamConsumers(peersInfo = lastPollSyncData) 
-{
-//    const data = await socket.request('sync-peer-request');
+async function updateStreamConsumers(peersInfo = lastPollSyncData) {
+    //    const data = await socket.request('sync-peer-request');
 
-    console.log(typeof(peersInfo), peersInfo );
+    if (!Array.isArray(peersInfo))
+        peersInfo = [peersInfo];
 
-  for (let peer of peersInfo) 
-  {
-    if (peer.id === socketID){
-        console.log('skip our own stream?');
-      continue;
+    for (let peer of peersInfo) {
+        if (peer.id === socketID) {
+            console.log('skip our own stream?');
+            continue;
+        }
+
+        for (let [mediaTag, info] of Object.entries(peer.media)) {
+            console.log(peer.id, mediaTag, info);
+
+            /*  $('#available-tracks')
+                .appendChild(makeTrackControlEl(peer.id, mediaTag, info));
+                */
+        }
     }
-    
-    for (let [mediaTag, info] of Object.entries(peer.media)) 
-    {
-        console.log(peer.id, mediaTag, info);
-        
-    /*  $('#available-tracks')
-        .appendChild(makeTrackControlEl(peer.id, mediaTag, info));
-        */
-    }
-  }
 
 }
 
