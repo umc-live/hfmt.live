@@ -260,6 +260,8 @@ io.on('connection', (socket) => {
 
       callback({ id: producer.id });
     } catch (e) {
+      console.log('send error', e);
+      
     }
   });
 
