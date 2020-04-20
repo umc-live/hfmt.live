@@ -324,5 +324,5 @@ async function createTransport(direction) {
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', joinRoom);
     $('#startButton').addEventListener('click', sendCameraStreams);
-    window.addEventListener('beforeunload', () => socket.emit('leave', { peerId }));
+//    window.addEventListener('beforeunload', () => socket.emit('leave', { peerId }));
 })
