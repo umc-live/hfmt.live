@@ -258,7 +258,7 @@ io.on('connection', (socket) => {
       {
         console.log('no peer id!', peerId);
       }
-      
+    
       room.peers[peerId].media[appData.mediaTag] = {
         paused,
         encodings: rtpParameters.encodings

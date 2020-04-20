@@ -249,7 +249,7 @@ async function createTransport(direction) {
             dtlsParameters
         });
         if (error) {
-            err('error connecting transport', direction, error);
+            log('error connecting transport', direction, error);
             errback();
             return;
         }
@@ -290,7 +290,7 @@ async function createTransport(direction) {
                 appData
             });
             if (error) {
-                err('error setting up server-side producer', error);
+                log('error setting up server-side producer', error);
                 errback();
                 return;
             }
@@ -333,7 +333,7 @@ async function subscribeToTrack(peerId, mediaTag) {
     // method
     let consumer = findConsumerForTrack(peerId, mediaTag);
     if (consumer) {
-        err('already have consumer for track', peerId, mediaTag)
+        log('already have consumer for track', peerId, mediaTag)
         return;
     };
 
@@ -394,7 +394,7 @@ function addVideoAudio(consumer) {
     el.play()
       .then(()=>{})
       .catch((e) => {
-        err(e);
+        log(e);
       });
   }
   

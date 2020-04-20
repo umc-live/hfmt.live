@@ -29,6 +29,7 @@ class Room {
         this.peers.set(id, 
         {
             id: id,
+            media: {},
             socket: socket,
             data :
             {
@@ -54,7 +55,7 @@ class Room {
     async removePeer(_id)
     {
       console.log('removing peer');
-      
+
       this.transports.forEach(async (t, key) => {
         if( t.appData.peerId == _id )
         {
