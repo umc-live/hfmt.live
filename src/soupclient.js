@@ -81,6 +81,82 @@ async function joinRoom()
 }
 
 
+async function startCamera() {
+    if (localCam) {
+      return;
+    }
+
+    log('start camera');
+
+    try {
+      localCam = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
+      });
+    } catch (e) {
+      console.error('start camera error', e);
+    }
+  }
+  
+
+//
+// encodings for outgoing video
+//
+
+// just two resolutions, for now, as chrome 75 seems to ignore more
+// than two encodings
+//
+const CAM_VIDEO_SIMULCAST_ENCODINGS =
+[
+  { maxBitrate:  96000, scaleResolutionDownBy: 4 },
+  { maxBitrate: 680000, scaleResolutionDownBy: 1 },
+];
+
+function camEncodings() {
+  return CAM_VIDEO_SIMULCAST_ENCODINGS;
+}
+
+// how do we limit bandwidth for screen share streams?
+//
+function screenshareEncodings() {
+  null;
+}
+
+
+export async function getCurrentDeviceId() {
+    if (!camVideoProducer) {
+      return null;
+    }
+    let deviceId = camVideoProducer.track.getSettings().deviceId;
+    if (deviceId) {
+      return deviceId;
+    }
+    // Firefox doesn't have deviceId in MediaTrackSettings object
+    let track = localCam && localCam.getVideoTracks()[0];
+    if (!track) {
+      return null;
+    }
+    let devices = await navigator.mediaDevices.enumerateDevices(),
+        deviceInfo = devices.find((d) => d.label.startsWith(track.label));
+    return deviceInfo.deviceId;
+  }
+  
+
+async function showCameraInfo() {
+    let deviceId = await getCurrentDeviceId(),
+        infoEl = $('#camera-info');
+    if (!deviceId) {
+      infoEl.innerHTML = '';
+      return;
+    }
+    let devices = await navigator.mediaDevices.enumerateDevices(),
+        deviceInfo = devices.find((d) => d.deviceId === deviceId);
+    infoEl.innerHTML = `
+        ${ deviceInfo.label }
+        <button onclick="Client.cycleCamera()">switch camera</button>
+    `;
+  }
+  
 
 async function sendCameraStreams() 
 {
@@ -110,6 +186,7 @@ async function sendCameraStreams()
       encodings: camEncodings(),
       appData: { mediaTag: 'cam-video' }
     });
+    /*
     if (getCamPausedState()) {
       try {
         await camVideoProducer.pause();
@@ -117,12 +194,13 @@ async function sendCameraStreams()
         console.error(e);
       }
     }
-  
+  */
     // same thing for audio, but we can use our already-created
     camAudioProducer = await sendTransport.produce({
       track: localCam.getAudioTracks()[0],
       appData: { mediaTag: 'cam-audio' }
     });
+    /*
     if (getMicPausedState()) {
       try {
         camAudioProducer.pause();
@@ -130,7 +208,7 @@ async function sendCameraStreams()
         console.error(e);
       }
     }
-  
+  */
     //$('#stop-streams').style.display = 'initial';
     showCameraInfo();
   }
