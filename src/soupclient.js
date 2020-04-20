@@ -59,19 +59,24 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
 {
 //    const data = await socket.request('sync-peer-request');
 
-console.log(peersInfo);
-/*
-  for (let peer of sortedPeers) {
-    if (peer.id === myPeerId) {
+
+  for (let peer of peersInfo) 
+  {
+    if (peer.id === socketID){
+        console.log('skip our own stream?');
       continue;
     }
-    for (let [mediaTag, info] of Object.entries(peer.media)) {
-      $('#available-tracks')
+    
+    for (let [mediaTag, info] of Object.entries(peer.media)) 
+    {
+        console.log(peer.id, mediaTag, info);
+        
+    /*  $('#available-tracks')
         .appendChild(makeTrackControlEl(peer.id, mediaTag, info));
+        */
     }
   }
-    // update consumer Map in case of new or missing peers    
-*/
+
 }
 
 async function joinRoom() {
