@@ -59,6 +59,8 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
 {
 //    const data = await socket.request('sync-peer-request');
 
+console.log(peersInfo);
+/*
   for (let peer of sortedPeers) {
     if (peer.id === myPeerId) {
       continue;
@@ -69,7 +71,7 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
     }
   }
     // update consumer Map in case of new or missing peers    
-
+*/
 }
 
 async function joinRoom() {
