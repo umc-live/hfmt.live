@@ -353,6 +353,8 @@ async function createTransport(direction) {
 function findConsumerForTrack(peerId, mediaTag) {
     for( const c of consumers )
     {
+        log('consumer peer id', c.appData.peerId );
+        
         if ( c.appData.peerId === peerId &&
             c.appData.mediaTag === mediaTag )    
         {
@@ -378,7 +380,7 @@ async function subscribeToTrack(peerId, mediaTag) {
         return;
     };
 
-    log(`consumer not found for ${peerId}, ${consumers}`);
+    //log(`consumer not found for ${peerId}, ${consumers}`);
     // ask the server to create a server-side consumer object and send
     // us back the info we need to create a client-side consumer
     let consumerParameters = await socket.request('recv-track', {
