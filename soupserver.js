@@ -74,6 +74,25 @@ async function startMediasoup()
 
 }
 
+async function createWebRtcTransport({ peerId, direction }) {
+  const {
+    listenIps,
+    initialAvailableOutgoingBitrate
+  } = soupconfig.webRtcTransport;
+
+  const transport = await router.createWebRtcTransport({
+    listenIps: listenIps,
+    enableUdp: true,
+    enableTcp: true,
+    preferUdp: true,
+    initialAvailableOutgoingBitrate: initialAvailableOutgoingBitrate,
+    appData: { peerId, clientDirection: direction }
+  });
+
+  return transport;
+}
+
+
 async function main()
 {
   console.log('starting mediasoup');
@@ -102,22 +121,75 @@ console.log(`created router with rtpCapabilities: ${JSON.stringify(router.rtpCap
 
 io.on('connection', (socket) => {
 
-    console.log("New connection from " + socket.id);
-  
-    socket.on('heartbeat', (payload) => {
-      payload.nodeName = name;
-      socket.emit('heartbeat', payload);
-    });
+  console.log("New connection from " + socket.id);
 
-    socket.on('join-as-new-peer', (data, callback) => {
-      room.addPeer(socket.id, socket);
-      socket.broadcast.emit('new-peer');
-      callback( { routerRtpCapabilities: router.rtpCapabilities });
-    });
+  socket.on('heartbeat', (payload) => {
+    payload.nodeName = name;
+    socket.emit('heartbeat', payload);
+  });
 
-    socket.on('sync', (data, callback) => {
-      callback( {peerIds: room.getIds() } );
-    });
+  socket.on('sync', (data, callback) => {
+    callback( {peerIds: room.getIds() } );
+  });
+
+  socket.on('join-as-new-peer', (data, callback) => {
+    room.addPeer(socket.id, socket);
+    socket.broadcast.emit('new-peer');
+    callback( { routerRtpCapabilities: router.rtpCapabilities });
+  });
+
+
+  socket.on('connect-transport', (data, callback) => {
+
+  });
+
+
+
+  socket.on('create-transport', async (data, callback) => {
+    try {
+      let { peerId, direction } = data;
+      log('create-transport', peerId, direction);
+
+      let transport = await createWebRtcTransport({ peerId, direction });
+      roomState.transports[transport.id] = transport;
+
+      let { id, iceParameters, iceCandidates, dtlsParameters } = transport;
+      
+      callback({
+        transportOptions: { id, iceParameters, iceCandidates, dtlsParameters }
+      });
+
+    } catch (e) {
+      console.error('error in /signaling/create-transport', e);
+      callback({ error: e });
+    }
+  });
+
+// --> /signaling/connect-transport
+//
+// called from inside a client's `transport.on('connect')` event
+// handler.
+//
+expressApp.post('/signaling/connect-transport', async (req, res) => {
+  try {
+    let { peerId, transportId, dtlsParameters } = req.body,
+        transport = roomState.transports[transportId];
+
+    if (!transport) {
+      err(`connect-transport: server-side transport ${transportId} not found`);
+      res.send({ error: `server-side transport ${transportId} not found` });
+      return;
+    }
+
+    log('connect-transport', peerId, transport.appData);
+
+    await transport.connect({ dtlsParameters });
+    res.send({ connected: true });
+  } catch (e) {
+    console.error('error in /signaling/connect-transport', e);
+    res.send({ error: e });
+  }
+});
 
 });  
 

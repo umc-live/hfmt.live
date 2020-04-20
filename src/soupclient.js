@@ -222,15 +222,27 @@ async function createTransport(direction) {
   
     // ask the server to create a server-side transport object and send
     // us back the info we need to create a client-side transport
-    let transport,
-        { transportOptions } = await socket.request('create-transport', { direction });
+    let transport;
+    const data = await socket.request('create-transport', { direction });
+    if( data.error )
+    {
+        log('failed to create trasport on server', data.error);
+        return;
+    }
+
+    let { transportOptions } = data;
     log ('transport options', transportOptions);
   
-    if (direction === 'recv') {
+    if (direction === 'recv') 
+    {
       transport = await device.createRecvTransport(transportOptions);
-    } else if (direction === 'send') {
+    } 
+    else if (direction === 'send') 
+    {
       transport = await device.createSendTransport(transportOptions);
-    } else {
+    } 
+    else 
+    {
       throw new Error(`bad transport 'direction': ${direction}`);
     }
   
@@ -238,6 +250,7 @@ async function createTransport(direction) {
     // start flowing for the first time. send dtlsParameters to the
     // server, then call callback() on success or errback() on failure.
     transport.on('connect', async ({ dtlsParameters }, callback, errback) => {
+      
       log('transport connect event', direction);
       let { error } = await socket.request('connect-transport', {
         transportId: transportOptions.id,
