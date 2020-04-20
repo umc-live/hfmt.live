@@ -47,14 +47,14 @@ async function startMediasoup()
   });
 
   const mediaCodecs = soupconfig.router.mediaCodecs;
-  const _router = await worker.createRouter({ mediaCodecs });
+  const _router = await _worker.createRouter({ mediaCodecs });
  
   console.log(`created router with rtpCapabilities: ${JSON.stringify(_router.rtpCapabilities)}`);
   
 
     // audioLevelObserver for signaling active speaker
   //
-  const _audioLevelObserver = await router.createAudioLevelObserver({
+  const _audioLevelObserver = await _router.createAudioLevelObserver({
 		interval: 800
 	});
   _audioLevelObserver.on('volumes', (volumes) => {
