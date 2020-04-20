@@ -67,13 +67,19 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData) {
             continue;
         }
 
-        for (let [mediaTag, info] of Object.entries(peer.media)) {
-            console.log(peer.id, mediaTag, info);
+        const media = Object.entries(peer.media);
 
-            /*  $('#available-tracks')
-                .appendChild(makeTrackControlEl(peer.id, mediaTag, info));
-                */
+        if( media.length )
+        {
+            for (let [mediaTag, info] of media) {
+                console.log(peer.id, mediaTag, info);
+    
+                /*  $('#available-tracks')
+                    .appendChild(makeTrackControlEl(peer.id, mediaTag, info));
+                    */
+            }
         }
+      
     }
 
 }
