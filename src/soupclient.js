@@ -13,7 +13,6 @@ const $ = document.querySelector.bind(document);
 
 $('#btn_connect').addEventListener('click', joinRoom);
 $('#startButton').addEventListener('click', sendCameraStreams);
-$('#btn_subscribe').addEventListener('click', joinRoom);
 
 const socket = io()
 
