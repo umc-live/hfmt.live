@@ -42,16 +42,15 @@ async function startMediasoup()
   });
 
   _worker.on('died', () => {
-    console.error('mediasoup worker died, exiting in 2 seconds... [pid:%d]', worker.pid);
+    console.error('mediasoup worker died, exiting in 2 seconds... [pid:%d]', _worker.pid);
     setTimeout(() => process.exit(1), 2000);
   });
 
   const mediaCodecs = soupconfig.router.mediaCodecs;
   const _router = await _worker.createRouter({ mediaCodecs });
  
-  console.log(`created router with rtpCapabilities: ${JSON.stringify(_router.rtpCapabilities)}`);
-  
-
+//  console.log(`created router with rtpCapabilities: ${JSON.stringify(_router.rtpCapabilities, null, 2)}`);
+ 
     // audioLevelObserver for signaling active speaker
   //
   const _audioLevelObserver = await _router.createAudioLevelObserver({
@@ -78,7 +77,13 @@ async function startMediasoup()
 async function main()
 {
   console.log('starting mediasoup');
-  ( { worker, router, audioLevelObserver } = await startMediasoup() );
+  let soup = await startMediasoup();
+
+	worker = soup._worker;
+	router = soup._router;
+	audioLevelObserver = soup._audioLevelObserver;
+
+console.log(`created router with rtpCapabilities: ${JSON.stringify(router.rtpCapabilities, null, 2)}`);
 
   await new Promise((resolve) => {
     server.listen(3001, '0.0.0.0', () => {
