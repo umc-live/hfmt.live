@@ -140,7 +140,26 @@ io.on('connection', (socket) => {
 
 
   socket.on('connect-transport', (data, callback) => {
+    try {
+      let { peerId, transportId, dtlsParameters } = data;
 
+      let transport = room.transports[transportId];
+  
+      if (!transport) 
+      {
+        err(`connect-transport: server-side transport ${transportId} not found`);
+        callback({ error: `server-side transport ${transportId} not found` });
+        return;
+      }
+  
+      log('connect-transport', peerId, transport.appData);
+  
+      await transport.connect({ dtlsParameters });
+      res.send({ connected: true });
+    } catch (e) {
+      console.error('error in /signaling/connect-transport', e);
+      res.send({ error: e });
+    }
   });
 
 
@@ -151,7 +170,7 @@ io.on('connection', (socket) => {
       log('create-transport', peerId, direction);
 
       let transport = await createWebRtcTransport({ peerId, direction });
-      roomState.transports[transport.id] = transport;
+      room.transports[transport.id] = transport;
 
       let { id, iceParameters, iceCandidates, dtlsParameters } = transport;
       
@@ -164,35 +183,6 @@ io.on('connection', (socket) => {
       callback({ error: e });
     }
   });
-
-// --> /signaling/connect-transport
-//
-// called from inside a client's `transport.on('connect')` event
-// handler.
-//
-expressApp.post('/signaling/connect-transport', async (req, res) => {
-  try {
-    let { peerId, transportId, dtlsParameters } = req.body,
-        transport = roomState.transports[transportId];
-
-    if (!transport) {
-      err(`connect-transport: server-side transport ${transportId} not found`);
-      res.send({ error: `server-side transport ${transportId} not found` });
-      return;
-    }
-
-    log('connect-transport', peerId, transport.appData);
-
-    await transport.connect({ dtlsParameters });
-    res.send({ connected: true });
-  } catch (e) {
-    console.error('error in /signaling/connect-transport', e);
-    res.send({ error: e });
-  }
-});
-
-});  
-
 
 
 main();
