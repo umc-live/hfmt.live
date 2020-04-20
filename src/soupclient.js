@@ -353,6 +353,8 @@ async function createTransport(direction) {
 function findConsumerForTrack(peerId, mediaTag) {
     for( const c of consumers )
     {
+        log('consumer peer id', c.appData.peerId );
+        
         if ( c.appData.peerId === peerId &&
             c.appData.mediaTag === mediaTag )    
         {
