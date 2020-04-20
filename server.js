@@ -21,7 +21,8 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 
-let worker, router, audioLevelObserver;
+let mediasoupRouter;
+let worker;
 
 // log all of this per client eventually
 let producer;// = { id: 'default' };
@@ -30,61 +31,19 @@ let producerTransport;
 let consumerTransport;
 
 
-async function startMediasoup() 
+async function runMediasoupWorker() 
 {
-  let _worker = await mediasoup.createWorker({
-    logLevel: soupconfig.worker.logLevel,
-    logTags: soupconfig.worker.logTags,
-    rtcMinPort: soupconfig.worker.rtcMinPort,
-    rtcMaxPort: soupconfig.worker.rtcMaxPort,
-  });
+  worker = await mediasoup.createWorker( soupconfig.worker );
 
-  _worker.on('died', () => {
+  worker.on('died', () => {
     console.error('mediasoup worker died, exiting in 2 seconds... [pid:%d]', worker.pid);
     setTimeout(() => process.exit(1), 2000);
   });
 
   const mediaCodecs = soupconfig.router.mediaCodecs;
-  const _router = await _worker.createRouter({ mediaCodecs });
- 
-  console.log(`created router with rtpCapabilities: ${JSON.stringify(_router.rtpCapabilities)}`);
+  mediasoupRouter = await worker.createRouter({ mediaCodecs });
+  console.log(`created ${JSON.stringify(mediasoupRouter.rtpCapabilities)},  params ${JSON.stringify(soupconfig.router.mediaCodecs)}` );
   
-
-    // audioLevelObserver for signaling active speaker
-  //
-  const _audioLevelObserver = await _router.createAudioLevelObserver({
-		interval: 800
-	});
-  _audioLevelObserver.on('volumes', (volumes) => {
-    const { producer, volume } = volumes[0];
-    log('audio-level volumes event', producer.appData.peerId, volume);
-    roomState.activeSpeaker.producerId = producer.id;
-    roomState.activeSpeaker.volume = volume;
-    roomState.activeSpeaker.peerId = producer.appData.peerId;
-  });
-  _audioLevelObserver.on('silence', () => {
-    log('audio-level silence event');
-    roomState.activeSpeaker.producerId = null;
-    roomState.activeSpeaker.volume = null;
-    roomState.activeSpeaker.peerId = null;
-  });
-
- return { _worker, _router, _audioLevelObserver }; //, 
-
-}
-
-async function main()
-{
-  console.log('starting mediasoup');
-  ( { worker, router, audioLevelObserver } = await startMediasoup() );
-/*
-  await new Promise((resolve) => {
-    server.listen(3001, '0.0.0.0', () => {
-      console.log(`started server, routing from nginx on port 3001`);
-      resolve();
-    });
-  });
-*/
 }
 
 
@@ -94,7 +53,7 @@ async function createWebRtcTransport()
   const { webRtcTransport } = soupconfig;
 // console.log('webRtcTransport', webRtcTransport);
   
-  const transport = await router.createWebRtcTransport( webRtcTransport );
+  const transport = await mediasoupRouter.createWebRtcTransport( webRtcTransport );
 
   if ( webRtcTransport.maxIncomingBitrate ) 
   {
@@ -121,7 +80,7 @@ async function createWebRtcTransport()
 
 async function createConsumer( producer, rtpCapabilities ) 
 {
-  if ( !router.canConsume({ producerId: producer.id, rtpCapabilities }) ) 
+  if ( !mediasoupRouter.canConsume({ producerId: producer.id, rtpCapabilities }) ) 
   {
     console.error('can not consume');
     return;
@@ -149,7 +108,8 @@ async function createConsumer( producer, rtpCapabilities )
   }
 
 
-  console.log(`consumer ${JSON.stringify(consumer, null, 2)}`); 
+  console.log(`consumer ${consumer}`);
+  
 
   return {
     producerId: producer.id,
@@ -164,7 +124,7 @@ async function createConsumer( producer, rtpCapabilities )
 
 async function cosumerTransportAddProducer( _consumerTransport, _producer, _rtpCapabilities ) 
 {
-  if ( !router.canConsume({ producerId: _producer.id, _rtpCapabilities }) ) 
+  if ( !mediasoupRouter.canConsume({ producerId: _producer.id, _rtpCapabilities }) ) 
   {
     console.error('can not consume');
     return;
@@ -225,7 +185,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('getRouterRtpCapabilities', (data, callback) => {
-    callback( router.rtpCapabilities );
+    callback( mediasoupRouter.rtpCapabilities );
   });
 
   socket.on('createProducerTransport', async (data, callback) => {
@@ -297,7 +257,8 @@ io.on('connection', (socket) => {
 
 
 server.listen(3001, '0.0.0.0');
-main();
+
+runMediasoupWorker();
 
 
 /*
