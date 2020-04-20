@@ -143,7 +143,7 @@ async function closeConsumer(consumer) {
   log('closing consumer', consumer.id, consumer.appData);
   await consumer.close();
 
-  room.consumers.delete(consumer.id);
+  //room.consumers.delete(consumer.id);
 
   // remove this consumer from our room.consumers list
 //  room.consumers = room.consumers.filter((c) => c.id !== consumer.id);
