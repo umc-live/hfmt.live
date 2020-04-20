@@ -238,7 +238,10 @@ async function sendCameraStreams() {
   */
     //$('#stop-streams').style.display = 'initial';
     showCameraInfo();
-    $('#localVideo').srcObject = localCam.getVideoTracks()[0];
+    let display = $('#localVideo');
+    display.srcObject = localCam;
+    display.setAttribute('muted', true);
+    
 }
 
 
