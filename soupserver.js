@@ -257,11 +257,10 @@ io.on('connection', (socket) => {
   
       console.log('sending track', room.peers[peerId].media[appData.mediaTag]);
       
-
       callback({ id: producer.id });
     } catch (e) {
       console.log('send error', e);
-      
+      callback({ error: e });
     }
   });
 
