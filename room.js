@@ -53,7 +53,7 @@ class Room {
 
     async removePeer(_id)
     {
-      this.transports.forEach((t, key) => {
+      this.transports.forEach(async (t, key) => {
         if( t.appData.peerId == _id )
         {
           await t.close();
