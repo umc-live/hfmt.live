@@ -155,6 +155,7 @@ async function closeConsumer(consumer) {
 io.on('connection', (socket) => {
 
   let peerId = socket.id;
+  room.addPeer(peerId, socket);
 
   console.log("New connection from " + socket.id);
 
@@ -168,8 +169,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join-as-new-peer', (data, callback) => {
-    room.addPeer(peerId, socket);
-    socket.broadcast.emit('new-peers');
+    socket.broadcast.emit('new-peer'); // << not implemented
     callback( { routerRtpCapabilities: router.rtpCapabilities });
   });
 
@@ -224,7 +224,7 @@ io.on('connection', (socket) => {
             rtpParameters,
             paused=false, 
             appData } = data;
-            
+
       let transport = room.transports[transportId];
   
       if (!transport) {
@@ -254,6 +254,11 @@ io.on('connection', (socket) => {
       }
   
       room.producers.set(producer.id, producer);
+      if( !room.peers.has(peerId) )
+      {
+        console.log('no peer id!', peerId);
+      }
+      
       room.peers[peerId].media[appData.mediaTag] = {
         paused,
         encodings: rtpParameters.encodings
