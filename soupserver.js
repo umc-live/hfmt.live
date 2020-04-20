@@ -59,13 +59,13 @@ async function startMediasoup()
 	});
   _audioLevelObserver.on('volumes', (volumes) => {
     const { producer, volume } = volumes[0];
-    log('audio-level volumes event', producer.appData.peerId, volume);
+    //log('audio-level volumes event', producer.appData.peerId, volume);
     room.activeSpeaker.producerId = producer.id;
     room.activeSpeaker.volume = volume;
     room.activeSpeaker.peerId = producer.appData.peerId;
   });
   _audioLevelObserver.on('silence', () => {
-    log('audio-level silence event');
+    //log('audio-level silence event');
     room.activeSpeaker.producerId = null;
     room.activeSpeaker.volume = null;
     room.activeSpeaker.peerId = null;
