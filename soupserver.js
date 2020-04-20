@@ -122,6 +122,8 @@ console.log(`created router with rtpCapabilities: ${JSON.stringify(router.rtpCap
 
 io.on('connection', (socket) => {
 
+  let peerId = socket.id;
+
   console.log("New connection from " + socket.id);
 
   socket.on('heartbeat', (payload) => {
@@ -134,7 +136,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join-as-new-peer', (data, callback) => {
-    room.addPeer(socket.id, socket);
+    room.addPeer(peerId, socket);
     socket.broadcast.emit('new-peer');
     callback( { routerRtpCapabilities: router.rtpCapabilities });
   });
@@ -142,7 +144,7 @@ io.on('connection', (socket) => {
 
   socket.on('connect-transport', async (data, callback) => {
     try {
-      let { peerId, transportId, dtlsParameters } = data;
+      let { transportId, dtlsParameters } = data;
 
       let transport = room.transports[transportId];
   
@@ -167,7 +169,7 @@ io.on('connection', (socket) => {
 
   socket.on('create-transport', async (data, callback) => {
     try {
-      let { peerId, direction } = data;
+      let { direction } = data;
       log('create-transport', peerId, direction);
 
       let transport = await createWebRtcTransport({ peerId, direction });
