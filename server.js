@@ -42,7 +42,7 @@ async function runMediasoupWorker()
 
   const mediaCodecs = soupconfig.router.mediaCodecs;
   mediasoupRouter = await worker.createRouter({ mediaCodecs });
-  console.log(`created ${JSON.stringify(mediasoupRouter.rtpCapabilities)},  params ${JSON.stringify(soupconfig.router.mediaCodecs)}` );
+//  console.log(`created ${JSON.stringify(mediasoupRouter.rtpCapabilities, null, 2)}, ` );
   
 }
 
@@ -108,8 +108,7 @@ async function createConsumer( producer, rtpCapabilities )
   }
 
 
-  console.log(`consumer ${createConsumer}`);
-  
+  console.log(`consumer ${JSON.stringify(consumer, null, 2)}`); 
 
   return {
     producerId: producer.id,
