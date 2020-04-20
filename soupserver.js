@@ -156,10 +156,10 @@ io.on('connection', (socket) => {
       log('connect-transport', peerId, transport.appData);
   
       await transport.connect({ dtlsParameters });
-      res.send({ connected: true });
+      callback({ connected: true });
     } catch (e) {
       console.error('error in /signaling/connect-transport', e);
-      res.send({ error: e });
+      callback({ error: e });
     }
   });
 
