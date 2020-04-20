@@ -87,8 +87,10 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
         if( Object.keys(peer.media).length > 0 )
         {
             for (let [mediaTag, info] of Object.entries(peer.media)) {
-                console.log(peer.id, mediaTag, info);
+                console.log('available-track', peer.id, mediaTag, info);
     
+                await subscribeToTrack(peer.id, mediaTag);
+
                 /*  $('#available-tracks')
                     .appendChild(makeTrackControlEl(peer.id, mediaTag, info));
                     */
