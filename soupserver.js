@@ -174,12 +174,11 @@ io.on('connection', (socket) => {
   socket.on('join-as-new-peer', (data, callback) => {
     const obj = Object.fromEntries(room.peers);
     console.log('map to obj', obj);
-    
-    /*
+
     socket.broadcast.emit('sync-peers', {
         peers: obj
     }); // << not implemented
-    */
+    
     callback( { routerRtpCapabilities: router.rtpCapabilities });
   });
 
