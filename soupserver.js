@@ -172,7 +172,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join-as-new-peer', (data, callback) => {
-    io.broadcast.emit('sync-peers', {
+    socket.broadcast.emit('sync-peers', {
         peers: room.peers 
     }); // << not implemented
     callback( { routerRtpCapabilities: router.rtpCapabilities });
