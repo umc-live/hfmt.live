@@ -255,6 +255,9 @@ io.on('connection', (socket) => {
         encodings: rtpParameters.encodings
       };
   
+      console.log('sending track', room.peers[peerId].media[appData.mediaTag]);
+      
+
       callback({ id: producer.id });
     } catch (e) {
     }
