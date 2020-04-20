@@ -219,9 +219,13 @@ io.on('connection', (socket) => {
 
   socket.on('send-track', async (data, callback) => {
     try {
-      let { transportId, kind, rtpParameters,
-            paused=false, appData } = data;
-          transport = room.transports[transportId];
+      let { transportId, 
+            kind, 
+            rtpParameters,
+            paused=false, 
+            appData } = data;
+            
+      let transport = room.transports[transportId];
   
       if (!transport) {
         err(`send-track: server-side transport ${transportId} not found`);
