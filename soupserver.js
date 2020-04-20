@@ -259,12 +259,12 @@ io.on('connection', (socket) => {
         console.log('no peer id!', peerId);
       }
     
-      room.peers[peerId].media[appData.mediaTag] = {
+      room.peers.get(peerId).media[appData.mediaTag] = {
         paused,
         encodings: rtpParameters.encodings
       };
   
-      console.log('sending track', room.peers[peerId].media[appData.mediaTag]);
+      console.log('sending track', room.peers.get(peerId).media[appData.mediaTag]);
       
       callback({ id: producer.id });
     } catch (e) {
@@ -348,7 +348,7 @@ io.on('connection', (socket) => {
       // and create a data structure to track the client-relevant state
       // of this consumer
       room.consumers.set(consumer.id, consumer);
-      room.peers[peerId].consumerLayers[consumer.id] = {
+      room.peers.get(peerId).consumerLayers[consumer.id] = {
         currentLayer: null,
         clientSelectedLayer: null
       };
@@ -356,9 +356,9 @@ io.on('connection', (socket) => {
       // update above data structure when layer changes.
       consumer.on('layerschange', (layers) => {
         log(`consumer layerschange ${mediaPeerId}->${peerId}`, mediaTag, layers);
-        if (room.peers[peerId] && room.peers[peerId].consumerLayers[consumer.id]) 
+        if (room.peers.get(peerId) && room.peers.get(peerId).consumerLayers[consumer.id]) 
         {
-            room.peers[peerId].consumerLayers[consumer.id].currentLayer = layers && layers.spatialLayer;
+            room.peers.get(peerId).consumerLayers[consumer.id].currentLayer = layers && layers.spatialLayer;
         }
       });
   
