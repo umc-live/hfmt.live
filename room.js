@@ -50,6 +50,20 @@ class Room {
         return this.peers.get(id);
     }
 
+
+    async removePeer(_id)
+    {
+      this.transports.forEach((t, key) => {
+        if( t.appData.peerId == _id )
+        {
+          await t.close();
+          this.transports.delete(key);
+        }
+      });
+
+      this.peers.delete(_id);
+    }
+
     announcePeer( id )
     {
         if( this.peers.has(id) )
@@ -61,6 +75,7 @@ class Room {
             });
         }
     }
+
 
 
     async updatePeerStats() 

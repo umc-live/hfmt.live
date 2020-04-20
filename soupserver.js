@@ -116,6 +116,38 @@ console.log(`created router with rtpCapabilities: ${JSON.stringify(router.rtpCap
 
 }
 
+async function closeProducer(producer) {
+  log('closing producer', producer.id, producer.appData);
+  try {
+    await producer.close();
+
+    // remove this producer from our roomState.producers list
+    roomState.producers = roomState.producers
+      .filter((p) => p.id !== producer.id);
+
+    // remove this track's info from our roomState...mediaTag bookkeeping
+    if (roomState.peers[producer.appData.peerId]) {
+      delete (roomState.peers[producer.appData.peerId]
+              .media[producer.appData.mediaTag]);
+    }
+  } catch (e) {
+    err(e);
+  }
+}
+
+async function closeConsumer(consumer) {
+  log('closing consumer', consumer.id, consumer.appData);
+  await consumer.close();
+
+  // remove this consumer from our roomState.consumers list
+  roomState.consumers = roomState.consumers.filter((c) => c.id !== consumer.id);
+
+  // remove layer info from from our roomState...consumerLayers bookkeeping
+  if (roomState.peers[consumer.appData.peerId]) {
+    delete roomState.peers[consumer.appData.peerId].consumerLayers[consumer.id];
+  }
+}
+
 // consider using socket.io rooms:
 // https://socket.io/docs/rooms-and-namespaces/
 
@@ -227,6 +259,19 @@ io.on('connection', (socket) => {
   
       callback({ id: producer.id });
     } catch (e) {
+    }
+  });
+
+  socket.on('leave', async (data, callback) => {
+    try {
+      let { peerId } = data;
+      log('leave', peerId);
+  
+      await room.removePeer(peerId);
+      callback({ left: true });
+    } catch (e) {
+      console.error('error in /signaling/leave', e);
+      callback({ error: e });
     }
   });
 

@@ -10,10 +10,6 @@ const log = console.log;
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
 
-
-$('#btn_connect').addEventListener('click', joinRoom);
-$('#startButton').addEventListener('click', sendCameraStreams);
-
 const socket = io()
 
 let socketID;
@@ -324,3 +320,8 @@ async function createTransport(direction) {
     return transport;
   }
   
+
+
+$('#btn_connect').addEventListener('click', joinRoom);
+$('#startButton').addEventListener('click', sendCameraStreams);
+window.addEventListener('unload', () => socket.emit('leave', {peerId}));
