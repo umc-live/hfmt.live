@@ -114,6 +114,7 @@ console.log(`created router with rtpCapabilities: ${JSON.stringify(router.rtpCap
   });
 
   room = new Room();
+  console.log(`new roomn with consumers ${room.consumers}`);
 
 }
 
