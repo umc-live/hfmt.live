@@ -56,22 +56,24 @@ function sortPeers(peers) {
       .sort((a,b) => (a.joinTs>b.joinTs) ? 1 : ((b.joinTs>a.joinTs) ? -1 : 0));
   }
 
-async function updateStreamConsumers(peersInfo = lastPollSyncData) {
+async function updateStreamConsumers(peersInfo = lastPollSyncData) 
+{
     //    const data = await socket.request('sync-peer-request');
 
-	    console.log('peersInfo', peersInfo);
+    console.log('peersInfo', peersInfo);
 
+    const peerArray = peersInfo.peers;
 
-    if (!Array.isArray(peersInfo)){
-	if( Object.keys(peersInfo).length === 0 )
-	    return;
-	  
-	     peersInfo = [peersInfo];
-
+    if (!Array.isArray(peerArray))
+    {
+	    if( Object.keys(peerArray).length === 0 ){
+            return;
+        }
+        peerArray = [peepeerArraysInfo];        
     }
 
 
-    for (let peer of peersInfo) {
+    for (let peer of peerArray) {
         if (peer.id === socketID) {
             console.log('skip our own stream?');
             continue;
