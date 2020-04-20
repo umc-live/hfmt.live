@@ -11,9 +11,9 @@ const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
 
 
-$('btn_connect').addEventListener('click', connectToSoup);
-$('startButton').addEventListener('click', sendCameraStreams);
-$('btn_subscribe').addEventListener('click', joinRoom);
+$('#btn_connect').addEventListener('click', connectToSoup);
+$('#startButton').addEventListener('click', sendCameraStreams);
+$('#btn_subscribe').addEventListener('click', joinRoom);
 
 const socket = io()
 
