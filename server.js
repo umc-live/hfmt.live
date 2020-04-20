@@ -149,8 +149,7 @@ async function createConsumer( producer, rtpCapabilities )
   }
 
 
-  console.log(`consumer ${consumer}`);
-  
+  console.log(`consumer ${JSON.stringify(consumer, null, 2)}`); 
 
   return {
     producerId: producer.id,
