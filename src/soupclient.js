@@ -271,15 +271,22 @@ async function createTransport(direction) {
       transport.on('produce', async ({ kind, rtpParameters, appData },
                                      callback, errback) => {
         log('transport produce event', appData.mediaTag);
+
+
         // we may want to start out paused (if the checkboxes in the ui
         // aren't checked, for each media type. not very clean code, here
         // but, you know, this isn't a real application.)
         let paused = false;
-        if (appData.mediaTag === 'cam-video') {
+        /*
+        if (appData.mediaTag === 'cam-video') 
+        {
           paused = getCamPausedState();
-        } else if (appData.mediaTag === 'cam-audio') {
+        }
+        else if (appData.mediaTag === 'cam-audio') 
+        {
           paused = getMicPausedState();
         }
+        */
         // tell the server what it needs to know from us in order to set
         // up a server-side producer object, and get back a
         // producer.id. call callback() on success or errback() on

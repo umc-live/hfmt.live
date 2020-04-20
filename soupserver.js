@@ -187,6 +187,49 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('send-track', async (data, callback) => {
+    try {
+      let { transportId, kind, rtpParameters,
+            paused=false, appData } = data;
+          transport = roomState.transports[transportId];
+  
+      if (!transport) {
+        err(`send-track: server-side transport ${transportId} not found`);
+        callback({ error: `server-side transport ${transportId} not found`});
+        return;
+      }
+  
+      let producer = await transport.produce({
+        kind,
+        rtpParameters,
+        paused,
+        appData: { ...appData, peerId, transportId }
+      });
+  
+      // if our associated transport closes, close ourself, too
+      producer.on('transportclose', () => {
+        log('producer\'s transport closed', producer.id);
+        closeProducer(producer);
+      });
+  
+      // monitor audio level of this producer. we call addProducer() here,
+      // but we don't ever need to call removeProducer() because the core
+      // AudioLevelObserver code automatically removes closed producers
+      if (producer.kind === 'audio') {
+        audioLevelObserver.addProducer({ producerId: producer.id });
+      }
+  
+      room.producers.set(producer.id, producer);
+      room.peers[peerId].media[appData.mediaTag] = {
+        paused,
+        encodings: rtpParameters.encodings
+      };
+  
+      callback({ id: producer.id });
+    } catch (e) {
+    }
+  });
+
 });
 
 main();
