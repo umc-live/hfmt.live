@@ -67,11 +67,9 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData) {
             continue;
         }
 
-        const media = Object.entries(peer.media);
-
-        if( media.length )
+        if( Object.keys(peer.media).length > 0 )
         {
-            for (let [mediaTag, info] of media) {
+            for (let [mediaTag, info] of Object.entries(peer.media)) {
                 console.log(peer.id, mediaTag, info);
     
                 /*  $('#available-tracks')
