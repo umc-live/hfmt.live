@@ -15,7 +15,7 @@ class Room {
         this.stats = new Map();
         this.transports = new Map();
         this.producers = new Map();
-        this.consumers - new Map();
+        this.consumers = new Map();
 
     };
 
