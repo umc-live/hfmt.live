@@ -193,7 +193,7 @@ io.on('connection', (socket) => {
     try {
       let { transportId, dtlsParameters } = data;
 
-      let transport = room.transports[transportId];
+      let transport = room.transports.get(transportId);
   
       if (!transport) 
       {
@@ -219,7 +219,7 @@ io.on('connection', (socket) => {
       log('create-transport', peerId, direction);
 
       let transport = await createWebRtcTransport({ peerId, direction });
-      room.transports[transport.id] = transport;
+      room.transports.set(transport.id, transport);
 
       let { id, iceParameters, iceCandidates, dtlsParameters } = transport;
       
@@ -241,7 +241,7 @@ io.on('connection', (socket) => {
             paused=false, 
             appData } = data;
 
-      let transport = room.transports[transportId];
+      let transport = room.transports.get(transportId);
   
       if (!transport) {
         err(`send-track: server-side transport ${transportId} not found`);
@@ -280,8 +280,6 @@ io.on('connection', (socket) => {
       console.log('sending track', room.peers.get(peerId).media[appData.mediaTag]);
       
       callback({ id: producer.id });
-
-      socket
 
     } catch (e) {
       console.log('send error', e);
