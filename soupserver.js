@@ -165,11 +165,16 @@ io.on('connection', (socket) => {
   });
 
   socket.on('sync-peers-request', (data, callback) => {
-    callback( {peerIds: room.getIds() } );
+    callback({ 
+      peerIds: room.getIds(), 
+      peers: room.peers 
+    });
   });
 
   socket.on('join-as-new-peer', (data, callback) => {
-    socket.broadcast.emit('new-peer'); // << not implemented
+    io.broadcast.emit('sync-peers', {
+        peers: room.peers 
+    }); // << not implemented
     callback( { routerRtpCapabilities: router.rtpCapabilities });
   });
 
@@ -254,11 +259,7 @@ io.on('connection', (socket) => {
       }
   
       room.producers.set(producer.id, producer);
-      if( !room.peers.has(peerId) )
-      {
-        console.log('no peer id!', peerId);
-      }
-    
+
       room.peers.get(peerId).media[appData.mediaTag] = {
         paused,
         encodings: rtpParameters.encodings

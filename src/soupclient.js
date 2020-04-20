@@ -281,7 +281,6 @@ async function createTransport(direction) {
             // up a server-side producer object, and get back a
             // producer.id. call callback() on success or errback() on
             // failure.
-            console.log('sending-track?');
             let { error, id } = await socket.request('send-track', {
                 transportId: transportOptions.id,
                 kind,
