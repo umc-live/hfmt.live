@@ -401,29 +401,41 @@ async function subscribeToTrack(peerId, mediaTag) {
     consumers.push(consumer);
 
     // ui
-    await addVideoAudio(consumer);
-    updatePeersDisplay();
+    await addVideoAudio(consumer, peerId);
+
 }
 
 
 
-function addVideoAudio(consumer) {
-    if (!(consumer && consumer.track)) {
+function addVideoAudio(consumer, 
+    ) 
+{
+    if (!(consumer && consumer.track)) 
+    {
       return;
     }
+
     let el = document.createElement(consumer.kind);
     // set some attributes on our audio and video elements to make
     // mobile Safari happy. note that for audio to play you need to be
     // capturing from the mic/camera
+    /*
     if (consumer.kind === 'video') {
       el.setAttribute('playsinline', true);
     } else {
       el.setAttribute('playsinline', true);
       el.setAttribute('autoplay', true);
-    }
-    $(`#remote-${consumer.kind}`).appendChild(el);
+    }*/
+
+    el.setAttribute('playsinline', true);
+    el.setAttribute('autoplay', true);
+
+    $(`#videos`).appendChild(el);
     el.srcObject = new MediaStream([ consumer.track.clone() ]);
     el.consumer = consumer;
+    el.id = peerId;
+
+    /*
     // let's "yield" and return before playing, rather than awaiting on
     // play() succeeding. play() will not succeed on a producer-paused
     // track until the producer unpauses.
@@ -432,6 +444,7 @@ function addVideoAudio(consumer) {
       .catch((e) => {
         log(e);
       });
+      */
   }
   
   function removeVideoAudio(consumer) {
