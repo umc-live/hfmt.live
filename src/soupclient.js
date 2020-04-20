@@ -401,13 +401,13 @@ async function subscribeToTrack(peerId, mediaTag) {
     consumers.push(consumer);
 
     // ui
-    await addVideoAudio(consumer);
+    await addVideoAudio(consumer, peerId);
 
 }
 
 
 
-function addVideoAudio(consumer) 
+function addVideoAudio(consumer, peerId) 
 {
     if (!(consumer && consumer.track)) 
     {
@@ -432,7 +432,7 @@ function addVideoAudio(consumer)
     $(`#videos`).appendChild(el);
     el.srcObject = new MediaStream([ consumer.track.clone() ]);
     el.consumer = consumer;
-    el.id = consumer.producerId;
+    el.id = peerId;
 
     /*
     // let's "yield" and return before playing, rather than awaiting on
