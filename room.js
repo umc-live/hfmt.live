@@ -24,13 +24,12 @@ class Room {
       return [...this.peers.keys()];
     }
 
-    addPeer (id, socket, displayName = "", device={}, rtpCapabilities={})
+    addPeer (id, displayName = "", device={}, rtpCapabilities={})
     {
         this.peers.set(id, 
         {
             id: id,
             media: {},
-            socket: socket,
             data :
             {
                 displayName: displayName,

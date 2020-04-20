@@ -155,7 +155,7 @@ async function closeConsumer(consumer) {
 io.on('connection', (socket) => {
 
   let peerId = socket.id;
-  room.addPeer(peerId, socket);
+  room.addPeer(peerId);
 
   console.log("New connection from " + socket.id);
 
