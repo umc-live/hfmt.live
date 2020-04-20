@@ -153,6 +153,18 @@ async function closeConsumer(consumer) {
 // https://socket.io/docs/rooms-and-namespaces/
 
 
+function broadcastPeersToAll()
+{
+  /*
+  const obj = Array.from( room.peers.values() );
+    console.log('map to obj', obj);
+*/
+  io.emit('sync-peers', {
+      peers: Array.from( room.peers.values() )
+   }); 
+    
+}
+
 io.on('connection', (socket) => {
 
   let peerId = socket.id;
@@ -173,13 +185,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join-as-new-peer', (data, callback) => {
-    const obj = Array.from( room.peers.values() );
-    console.log('map to obj', obj);
-
-    socket.broadcast.emit('sync-peers', {
-        peers: obj
-    }); // << not implemented
-    
+    broadcastPeersToAll();
     callback( { routerRtpCapabilities: router.rtpCapabilities });
   });
 
@@ -269,10 +275,14 @@ io.on('connection', (socket) => {
         paused,
         encodings: rtpParameters.encodings
       };
-  
+      broadcastPeersToAll();
+
       console.log('sending track', room.peers.get(peerId).media[appData.mediaTag]);
       
       callback({ id: producer.id });
+
+      socket
+
     } catch (e) {
       console.log('send error', e);
       callback({ error: e });
