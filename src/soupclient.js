@@ -62,6 +62,9 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
 
     console.log('peersInfo', peersInfo);
 
+    if( !peersInfo )
+        return;
+        
     const peerArray = peersInfo.peers;
 
     if (!Array.isArray(peerArray))
