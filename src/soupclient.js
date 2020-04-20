@@ -3,7 +3,7 @@
 import * as mediasoup from "mediasoup-client";
 import io from 'socket.io-client';
 
-import deepEqual from 'deep-equal';
+//import deepEqual from 'deep-equal';
 
 const log = console.log;
 
