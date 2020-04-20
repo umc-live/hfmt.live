@@ -260,10 +260,8 @@ async function createTransport(direction) {
         // sending transports will emit a produce event when a new track
         // needs to be set up to start sending. the producer's appData is
         // passed as a parameter
-        transport.on('produce', async ({ kind, rtpParameters, appData },
-            callback, errback) => {
+        transport.on('produce', async ({ kind, rtpParameters, appData }, callback, errback) => {
             log('transport produce event', appData.mediaTag);
-
 
             // we may want to start out paused (if the checkboxes in the ui
             // aren't checked, for each media type. not very clean code, here
@@ -283,6 +281,7 @@ async function createTransport(direction) {
             // up a server-side producer object, and get back a
             // producer.id. call callback() on success or errback() on
             // failure.
+            console.log('sending-track?');
             let { error, id } = await socket.request('send-track', {
                 transportId: transportOptions.id,
                 kind,
