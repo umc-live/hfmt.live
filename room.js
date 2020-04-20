@@ -21,7 +21,7 @@ class Room {
 
     getIds()
     {
-      return this.peers.keys();
+      return [...this.peers.keys()];
     }
 
     addPeer (id, socket, displayName = "", device={}, rtpCapabilities={})
