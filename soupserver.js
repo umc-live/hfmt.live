@@ -172,7 +172,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join-as-new-peer', (data, callback) => {
-    const obj = Object.fromEntries(room.peers);
+    const obj = Array.from( room.peers.values() );
     console.log('map to obj', obj);
 
     socket.broadcast.emit('sync-peers', {

@@ -29,7 +29,7 @@ class Room {
         this.peers.set(id, 
         {
             id: id,
-            media: {},
+            media: {}/*,
             data :
             {
                 displayName: displayName,
@@ -45,7 +45,7 @@ class Room {
                 consumers     : new Map(),
                 dataProducers : new Map(),
                 dataConsumers : new Map()
-            }
+            }*/
         });
         return this.peers.get(id);
     }
