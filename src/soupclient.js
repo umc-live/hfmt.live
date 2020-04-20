@@ -58,11 +58,13 @@ function sortPeers(peers) {
 async function updateStreamConsumers(peersInfo = lastPollSyncData) {
     //    const data = await socket.request('sync-peer-request');
 
-    if( peersInfo === {} )
+    if( peersInfo === {} || peersInfo === [{}] )
         return;
-        
+
     if (!Array.isArray(peersInfo))
         peersInfo = [peersInfo];
+
+        console.log('peersInfo', peersInfo);
 
     for (let peer of peersInfo) {
         if (peer.id === socketID) {
