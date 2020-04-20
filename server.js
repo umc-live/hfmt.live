@@ -77,14 +77,14 @@ async function main()
 {
   console.log('starting mediasoup');
   ( { worker, router, audioLevelObserver } = await startMediasoup() );
-
+/*
   await new Promise((resolve) => {
     server.listen(3001, '0.0.0.0', () => {
       console.log(`started server, routing from nginx on port 3001`);
       resolve();
     });
   });
-
+*/
 }
 
 
@@ -296,7 +296,7 @@ io.on('connection', (socket) => {
 });
 
 
-
+server.listen(3001, '0.0.0.0');
 main();
 
 
