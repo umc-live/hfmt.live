@@ -67,6 +67,8 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData) {
             continue;
         }
 
+        console.log('peer', peer);
+        
         if( Object.keys(peer.media).length > 0 )
         {
             for (let [mediaTag, info] of Object.entries(peer.media)) {
