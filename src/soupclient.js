@@ -371,8 +371,6 @@ async function subscribeToTrack(peerId, mediaTag) {
         rtpCapabilities: device.rtpCapabilities
     });
     log('consumer parameters', consumerParameters);
-    return;
-
     
     consumer = await recvTransport.consume({
         ...consumerParameters,

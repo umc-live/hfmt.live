@@ -29,6 +29,8 @@ class Room {
         this.peers.set(id, 
         {
             id: id,
+            consumerLayers: {},
+            stats: {},
             media: {}/*,
             data :
             {
