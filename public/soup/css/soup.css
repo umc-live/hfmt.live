@@ -15,19 +15,17 @@
 
 }
 
-#local-cam-div {
-    height: auto;
-    width: 100px;
-    position: absolute;
-    left: calc(50vw - 50px);
-    z-index: 1;
+#camera-info {
+   float: bottom;
+
 }
 
 #localVideo {
     height: auto;
     width: 100px;
     position: absolute;
-    left: calc(50vw - 50px);
+    top: 20px;
+    left: calc(100vw - 150px);
     z-index: 1;
 }
 

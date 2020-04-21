@@ -559,11 +559,16 @@ function addVideoAudio(consumer, peerId)
   
   async function showCameraInfo() 
   {
-    let deviceId = await getCurrentVideoDeviceId();
-    let audioDeviceId = await getCurrentAudioDeviceId();
+
+
+//    let deviceId = await getCurrentVideoDeviceId();
+//    let audioDeviceId = await getCurrentAudioDeviceId();
 
     let infoEl = $('#camera-info');
 
+    infoEl.innerHTML = `${camVideoProducer.track.label}<br>${camAudioProducer.track.label}`
+
+    /*
     if (!deviceId) {
       infoEl.innerHTML = '';
       return;
@@ -587,6 +592,7 @@ function addVideoAudio(consumer, peerId)
 
     infoEl.innerHTML = videoLabel+'<br>'+audioLabel;
     //`${ deviceInfo.label } <button onclick="Client.cycleCamera()">switch camera</button>`;
+    */
   }
 
 
