@@ -450,8 +450,8 @@ io.on('connection', (socket) => {
 
   socket.on("disconnect", () => {
 
-    io.broadcast('remove-peer', {
-      peer: room.get(peerId)
+    io.emit('remove-peer', {
+      removePeerId: room.get(peerId)
     });
     
     room.removePeer(peerId);
