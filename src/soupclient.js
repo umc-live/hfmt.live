@@ -231,7 +231,7 @@ async function sendCameraStreams()
     // paused as appropriate, too.
     camVideoProducer = await sendTransport.produce({
         track: localCam.getVideoTracks()[0],
-        encodings: camEncodings(),
+        //encodings: camEncodings(),
         appData: { mediaTag: 'cam-video' }
     });
     /*
@@ -261,7 +261,7 @@ async function sendCameraStreams()
     showCameraInfo();
     let display = $('#localVideo');
     display.srcObject = localCam;
-    display.setAttribute('muted', true);
+  //  display.setAttribute('muted', true);
     
 }
 
