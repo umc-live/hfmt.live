@@ -435,7 +435,7 @@ io.on('connection', (socket) => {
     {
       
       io.emit('remove-peer', {
-        removePeerId: room.get(peerId)
+        removePeerId: peerId
       });
 
       await room.removePeer(peerId);
@@ -451,7 +451,7 @@ io.on('connection', (socket) => {
   socket.on("disconnect", () => {
 
     io.emit('remove-peer', {
-      removePeerId: room.get(peerId)
+      removePeerId: peerId
     });
     
     room.removePeer(peerId);
