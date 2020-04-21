@@ -127,7 +127,9 @@ async function joinRoom()
         device = new mediasoup.Device();
 
         const { routerRtpCapabilities } = await socket.request('join-as-new-peer');
+        
         await device.load({ routerRtpCapabilities });
+        console.log('loaded mediasoup device!', routerRtpCapabilities);
 
         joined = true;
 
@@ -135,8 +137,6 @@ async function joinRoom()
         {
           recvTransport = await createTransport('recv');
         }
-
-        console.log('loaded mediasoup device!', routerRtpCapabilities);
 
         lastPollSyncData = await socket.request('sync-peers-request');
         updateStreamConsumers();
