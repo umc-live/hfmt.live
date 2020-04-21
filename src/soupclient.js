@@ -157,6 +157,12 @@ async function startCamera()
 
 //    log('start camera');
 
+  if (!device.canProduce('audio'))
+  {
+    console.log('enableMic() | cannot produce audio');
+    return;
+  }
+
     try 
     {
         localCam = await navigator.mediaDevices.getUserMedia({
