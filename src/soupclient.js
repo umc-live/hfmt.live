@@ -75,6 +75,9 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
 {
     //    const data = await socket.request('sync-peer-request');
 
+    if( !joined )
+      return;
+      
     console.log('peersInfo', peersInfo);
 
     if( !peersInfo.hasOwnProperty('peers') )
