@@ -143,7 +143,7 @@ async function closeConsumer(consumer) {
   log('closing consumer', consumer.id, consumer.appData);
   await consumer.close();
 
-  //room.consumers.delete(consumer.id);
+  room.consumers.delete(consumer.id);
 
   // remove this consumer from our room.consumers list
 //  room.consumers = room.consumers.filter((c) => c.id !== consumer.id);
@@ -433,9 +433,11 @@ io.on('connection', (socket) => {
   socket.on('leave', async (data, callback) => {
     try 
     {
-      let { peerId } = data;
-      log('leave', peerId);
-  
+      
+      io.broadcast('remove-peer', {
+        peer: peerId
+      });
+
       await room.removePeer(peerId);
       callback({ left: true });
     } 
@@ -447,7 +449,12 @@ io.on('connection', (socket) => {
   });
 
   socket.on("disconnect", () => {
-    room.removePeer(socket.id);
+
+    io.broadcast('remove-peer', {
+      peer: room.get(peerId)
+    });
+    
+    room.removePeer(peerId);
   });
 
 });

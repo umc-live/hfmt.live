@@ -65,6 +65,13 @@ socket.on('sync-peers', (data) => {
     updateStreamConsumers();
 });
 
+
+// need notification of new tracks too... 
+
+socket.on('remove-peer', (data)=>{
+  // notification of removal
+});
+
 function sortPeers(peers) {
     return  Object.entries(peers)
       .map(([id, info]) => ({id, joinTs: info.joinTs, media: { ...info.media }}))
@@ -649,9 +656,46 @@ async function addVideoAudio(consumer, peerId)
   }
   
 
+
+async function leaveRoom() 
+{
+  
+  if (!joined) {
+    return;
+  }
+
+  // close everything on the server-side (transports, producers, consumers)
+  let { error } = await socket.request('leave');
+  if (error) {
+    err(error);
+  }
+
+  // closing the transports closes all producers and consumers. we
+  // don't need to do anything beyond closing the transports, except
+  // to set all our local variables to their initial states
+  try {
+    recvTransport && await recvTransport.close();
+    sendTransport && await sendTransport.close();
+  } catch (e) {
+    console.error(e);
+  }
+
+  recvTransport = null;
+  sendTransport = null;
+  camVideoProducer = null;
+  camAudioProducer = null;
+  screenVideoProducer = null;
+  screenAudioProducer = null;
+  localCam = null;
+  localScreen = null;
+  lastPollSyncData = {};
+  consumers = [];
+  joined = false;
+}
+
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', joinRoom);
     $('#startButton').addEventListener('click', sendCameraStreams);
-    //    window.addEventListener('beforeunload', () => socket.emit('leave', { peerId }));
+    window.addEventListener('unload', leaveRoom);
 })
 
