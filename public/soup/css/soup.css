@@ -16,8 +16,10 @@
 }
 
 #camera-info {
-   float: bottom;
-
+   position: absolute;
+   top: calc(100vh - 25px);
+   width: auto;
+   font-family: Arial, Helvetica, sans-serif;
 }
 
 #localVideo {

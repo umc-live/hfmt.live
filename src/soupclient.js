@@ -488,7 +488,6 @@ async function subscribeToTrack(peerId, mediaTag)
     // keep track of all our consumers
     consumers.push(consumer);
 
-    // ui
     await addVideoAudio(consumer, peerId);
 
 }
@@ -537,6 +536,7 @@ function addVideoAudio(consumer, peerId)
     el.play()
         .catch( (error) => log( 'elememt failed to play:', error, el) );
 
+    el.consumer = consumer;
     // let's "yield" and return before playing, rather than awaiting on
     // play() succeeding. play() will not succeed on a producer-paused
     // track until the producer unpauses.
@@ -566,7 +566,7 @@ function addVideoAudio(consumer, peerId)
 
     let infoEl = $('#camera-info');
 
-    infoEl.innerHTML = `${camVideoProducer.track.label}<br>${camAudioProducer.track.label}`
+    infoEl.innerHTML = `${camVideoProducer.track.label} -- ${camAudioProducer.track.label}`
 
     /*
     if (!deviceId) {
