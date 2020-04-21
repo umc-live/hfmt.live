@@ -77,7 +77,7 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
 
     if( !joined )
       return;
-      
+
     console.log('peersInfo', peersInfo);
 
     if( !peersInfo.hasOwnProperty('peers') )
@@ -494,8 +494,9 @@ function addVideoAudio(consumer, peerId)
 
     //const stream = new MediaStream();
     //stream.addTrack(consumer.track);
+    // el.srcObject = stream;
+
     el.srcObject = new MediaStream([ consumer.track.clone() ]);
-    el.srcObject = stream;
     el.play()
         .catch( (error) => log( 'elememt failed to play:', error, el) );
 
