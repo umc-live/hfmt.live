@@ -523,7 +523,7 @@ function addVideoAudio(consumer, peerId)
 
     el.setAttribute('playsinline', true);
     el.setAttribute('autoplay', true);
-    el.setAttribute('controls', true);
+    //el.setAttribute('controls', true);
 
     $(`#videos`).appendChild(el);
 
