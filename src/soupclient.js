@@ -4,6 +4,8 @@
  * probably better to sync on load and then just handle changes of peer streams,
  * rather than updating everything every time
  * 
+ * also, probably better to create the receive transport when the user joins the room
+ * 
  * audio seems not to work
  */
 
@@ -122,6 +124,11 @@ async function joinRoom() {
 
         const { routerRtpCapabilities } = await socket.request('join-as-new-peer');
         await device.load({ routerRtpCapabilities });
+
+        if (!recvTransport) 
+        {
+          recvTransport = await createTransport('recv');
+        }
 
 //        console.log('loaded mediasoup device!', routerRtpCapabilities);
 
@@ -425,7 +432,8 @@ async function subscribeToTrack(peerId, mediaTag)
     // the server-side consumer will be started in paused state. wait
     // until we're connected, then send a resume request to the server
     // to get our first keyframe and start displaying video
-    while (recvTransport.connectionState !== 'connected') {
+    while (recvTransport.connectionState !== 'connected') 
+    {
         log('  transport connstate', recvTransport.connectionState);
         await sleep(100);
     }
@@ -497,19 +505,19 @@ function addVideoAudio(consumer, peerId)
     });
   }
   
-  async function showCameraInfo() {
+  async function showCameraInfo() 
+  {
     let deviceId = await getCurrentDeviceId(),
         infoEl = $('#camera-info');
     if (!deviceId) {
       infoEl.innerHTML = '';
       return;
     }
-    let devices = await navigator.mediaDevices.enumerateDevices(),
-        deviceInfo = devices.find((d) => d.deviceId === deviceId);
-    infoEl.innerHTML = `
-        ${ deviceInfo.label }
-        <button onclick="Client.cycleCamera()">switch camera</button>
-    `;
+    let devices = await navigator.mediaDevices.enumerateDevices();
+    let deviceInfo = devices.find((d) => d.deviceId === deviceId);
+
+    infoEl.innerHTML = deviceInfo.label;
+    //`${ deviceInfo.label } <button onclick="Client.cycleCamera()">switch camera</button>`;
   }
 
 

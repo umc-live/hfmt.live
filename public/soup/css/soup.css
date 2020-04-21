@@ -15,6 +15,14 @@
 
 }
 
+#local-cam-div {
+    height: auto;
+    width: 100px;
+    position: absolute;
+    left: calc(50vw - 50px);
+    z-index: 1;
+}
+
 #localVideo {
     height: auto;
     width: 100px;
