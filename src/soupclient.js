@@ -201,15 +201,38 @@ function screenshareEncodings() {
     null;
 }
 
+async function getCurrentAudioDeviceId()
+{
+  if (!camAudioProducer) {
+    return null;
+  }
+  let deviceId = camAudioProducer.track.getSettings().deviceId;
+  if (deviceId) 
+  {
+    console.log('got device id from camVideoProducer');
+    return deviceId;
+  }
+  // Firefox doesn't have deviceId in MediaTrackSettings object
+  let track = localCam && localCam.getAudioTracks()[0];
+  if (!track) {
+      return null;
+  }
+  let devices = await navigator.mediaDevices.enumerateDevices(),
+      deviceInfo = devices.find((d) => d.label.startsWith(track.label));
+  return deviceInfo.deviceId;
+}
 
-export async function getCurrentDeviceId() 
+
+async function getCurrentVideoDeviceId() 
 {
     if (!camVideoProducer) {
         return null;
     }
     let deviceId = camVideoProducer.track.getSettings().deviceId;
-    if (deviceId) {
-        return deviceId;
+    if (deviceId) 
+    {
+      console.log('got device id from camVideoProducer');
+      return deviceId;
     }
     // Firefox doesn't have deviceId in MediaTrackSettings object
     let track = localCam && localCam.getVideoTracks()[0];
@@ -536,19 +559,33 @@ function addVideoAudio(consumer, peerId)
   
   async function showCameraInfo() 
   {
-    let deviceId = await getCurrentDeviceId(),
-        infoEl = $('#camera-info');
+    let deviceId = await getCurrentVideoDeviceId();
+    let audioDeviceId = await getCurrentAudioDeviceId();
+
+    let infoEl = $('#camera-info');
+
     if (!deviceId) {
       infoEl.innerHTML = '';
       return;
     }
+
     let devices = await navigator.mediaDevices.enumerateDevices();
 
     console.log('device list', devices);
 
     let deviceInfo = devices.find((d) => d.deviceId === deviceId);
 
-    infoEl.innerHTML = deviceInfo.label;
+    let audioLabel, videoLabel;
+
+    for(const d of devices)
+    {
+      if( d.deviceId == deviceId )
+        videoLabel = d.label;
+      else if( d.deviceId == audioDeviceId )
+        audioLabel = d.label;
+    }
+
+    infoEl.innerHTML = videoLabel+'<br>'+audioLabel;
     //`${ deviceInfo.label } <button onclick="Client.cycleCamera()">switch camera</button>`;
   }
 
