@@ -125,6 +125,8 @@ async function joinRoom() {
         const { routerRtpCapabilities } = await socket.request('join-as-new-peer');
         await device.load({ routerRtpCapabilities });
 
+        joined = true;
+        
         if (!recvTransport) 
         {
           recvTransport = await createTransport('recv');
@@ -133,6 +135,8 @@ async function joinRoom() {
 //        console.log('loaded mediasoup device!', routerRtpCapabilities);
 
         updateStreamConsumers();
+
+        
     }
     catch (error) 
     {
@@ -231,7 +235,7 @@ async function sendCameraStreams()
     // paused as appropriate, too.
     camVideoProducer = await sendTransport.produce({
         track: localCam.getVideoTracks()[0],
-        //encodings: camEncodings(),
+        encodings: camEncodings(),
         appData: { mediaTag: 'cam-video' }
     });
     /*
@@ -434,7 +438,7 @@ async function subscribeToTrack(peerId, mediaTag)
     // to get our first keyframe and start displaying video
     while (recvTransport.connectionState !== 'connected') 
     {
-        log('  transport connstate', recvTransport.connectionState);
+        log(' sleeping while transport connstate', recvTransport.connectionState);
         await sleep(100);
     }
     // okay, we're ready. let's ask the peer to send us media
