@@ -1,3 +1,12 @@
+/**
+ * to do:
+ * clean up and re-organize a bit
+ * probably better to sync on load and then just handle changes of peer streams,
+ * rather than updating everything every time
+ * 
+ * audio seems not to work
+ */
+
 'use strict';
 
 import * as mediasoup from "mediasoup-client";
@@ -74,15 +83,17 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
     if (!Array.isArray(peerArray))
     {
 	    if( Object.keys(peerArray).length === 0 ){
-            return;
-        }
-        peerArray = [peepeerArraysInfo];        
+        return;
+      }
+      peerArray = [peepeerArraysInfo];
+
     }
 
-
-    for (let peer of peerArray) {
-        if (peer.id === socketID) {
-            console.log('skip our own stream?');
+    for (let peer of peerArray) 
+    {
+        if (peer.id === socketID) 
+        {
+//            console.log('skip our own stream');
             continue;
         }
 
@@ -90,14 +101,10 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
         
         if( Object.keys(peer.media).length > 0 )
         {
-            for (let [mediaTag, info] of Object.entries(peer.media)) {
-                console.log('available-track', peer.id, mediaTag, info);
-    
+            for (let [mediaTag, info] of Object.entries(peer.media)) 
+            {    
                 await subscribeToTrack(peer.id, mediaTag);
-
-                /*  $('#available-tracks')
-                    .appendChild(makeTrackControlEl(peer.id, mediaTag, info));
-                    */
+      //          console.log('available-track', peer.id, mediaTag, info);
             }
         }
       
@@ -106,39 +113,43 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
 }
 
 async function joinRoom() {
-    if (joined) {
+    if (joined) 
         return;
-    }
 
-    try {
+    try 
+    {
         device = new mediasoup.Device();
 
         const { routerRtpCapabilities } = await socket.request('join-as-new-peer');
         await device.load({ routerRtpCapabilities });
 
-        console.log('loaded mediasoup device!', routerRtpCapabilities);
+//        console.log('loaded mediasoup device!', routerRtpCapabilities);
 
         updateStreamConsumers();
     }
-    catch (error) {
+    catch (error) 
+    {
         console.error(`load errer ${error}`);
     }
 }
 
 
-async function startCamera() {
-    if (localCam) {
+async function startCamera() 
+{
+    if (localCam)
         return;
-    }
 
-    log('start camera');
+//    log('start camera');
 
-    try {
+    try 
+    {
         localCam = await navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true
         });
-    } catch (e) {
+    } 
+    catch (e) 
+    {
         console.error('start camera error', e);
     }
 }
@@ -168,7 +179,8 @@ function screenshareEncodings() {
 }
 
 
-export async function getCurrentDeviceId() {
+export async function getCurrentDeviceId() 
+{
     if (!camVideoProducer) {
         return null;
     }
@@ -186,8 +198,9 @@ export async function getCurrentDeviceId() {
     return deviceInfo.deviceId;
 }
 
-async function sendCameraStreams() {
-    log('send camera streams');
+async function sendCameraStreams() 
+{
+//    log('send camera streams');
     //$('#send-camera').style.display = 'none';
 
     // make sure we've joined the room and started our camera. these
@@ -197,7 +210,8 @@ async function sendCameraStreams() {
     await startCamera();
 
     // create a transport for outgoing media, if we don't already have one
-    if (!sendTransport) {
+    if (!sendTransport) 
+    {
         sendTransport = await createTransport('send');
     }
 
@@ -248,14 +262,16 @@ async function sendCameraStreams() {
 // utility function to create a transport and hook up signaling logic
 // appropriate to the transport's direction
 //
-async function createTransport(direction) {
-    log(`create ${direction} transport`);
+async function createTransport(direction) 
+{
+//    log(`create ${direction} transport`);
 
     // ask the server to create a server-side transport object and send
     // us back the info we need to create a client-side transport
     let transport;
     const data = await socket.request('create-transport', { direction });
-    if (data.error) {
+    if (data.error) 
+    {
         log('failed to create trasport on server', data.error);
         return;
     }
@@ -263,13 +279,16 @@ async function createTransport(direction) {
     let { transportOptions } = data;
     log('transport options', transportOptions);
 
-    if (direction === 'recv') {
+    if (direction === 'recv') 
+    {
         transport = await device.createRecvTransport(transportOptions);
     }
-    else if (direction === 'send') {
+    else if (direction === 'send') 
+    {
         transport = await device.createSendTransport(transportOptions);
     }
-    else {
+    else 
+    {
         throw new Error(`bad transport 'direction': ${direction}`);
     }
 
@@ -291,7 +310,8 @@ async function createTransport(direction) {
         callback();
     });
 
-    if (direction === 'send') {
+    if (direction === 'send') 
+    {
         // sending transports will emit a produce event when a new track
         // needs to be set up to start sending. the producer's appData is
         // passed as a parameter
@@ -366,19 +386,22 @@ function findConsumerForTrack(peerId, mediaTag) {
     }
 }
 
-// note: only subscribe if we don't already have a consumer!
-async function subscribeToTrack(peerId, mediaTag) {
+// note: maybe only subscribe if we don't already have a consumer
+async function subscribeToTrack(peerId, mediaTag) 
+{
     log('subscribe to track', peerId, mediaTag);
 
     // create a receive transport if we don't already have one
-    if (!recvTransport) {
+    if (!recvTransport) 
+    {
         recvTransport = await createTransport('recv');
     }
 
     // if we do already have a consumer, we shouldn't have called this
     // method
     let consumer = findConsumerForTrack(peerId, mediaTag);
-    if (consumer) {
+    if (consumer) 
+    {
         log('already have consumer for track', peerId, mediaTag)
         return;
     };

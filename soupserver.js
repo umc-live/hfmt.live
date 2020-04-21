@@ -1,4 +1,9 @@
-// currently using the examples found online, but probably we don't want to await in the main server loop here
+/**
+ * to do:
+ * check audio, seems not to be working
+ * move all await calls to cluster thread
+ * 
+ */
 
 'use strict';
 
@@ -130,11 +135,14 @@ async function closeProducer(producer) {
       .filter((p) => p.id !== producer.id);
   */
     // remove this track's info from our room...mediaTag bookkeeping
-    if (room.peers[producer.appData.peerId]) {
-      delete (room.peers[producer.appData.peerId]
-              .media[producer.appData.mediaTag]);
+    if (room.peers.has(producer.appData.peerId) ) 
+    {
+      delete (room.peers[producer.appData.peerId].media[producer.appData.mediaTag]);
     }
-  } catch (e) {
+
+  } 
+  catch (e) 
+  {
     err(e);
   }
 }
@@ -149,7 +157,8 @@ async function closeConsumer(consumer) {
 //  room.consumers = room.consumers.filter((c) => c.id !== consumer.id);
 
   // remove layer info from from our room...consumerLayers bookkeeping
-  if (room.peers[consumer.appData.peerId]) {
+  if (room.peers.has(consumer.appData.peerId)) 
+  {
     delete room.peers[consumer.appData.peerId].consumerLayers[consumer.id];
   }
 }
@@ -160,14 +169,9 @@ async function closeConsumer(consumer) {
 
 function broadcastPeersToAll()
 {
-  /*
-  const obj = Array.from( room.peers.values() );
-    console.log('map to obj', obj);
-*/
   io.emit('sync-peers', {
       peers: Array.from( room.peers.values() )
    }); 
-    
 }
 
 io.on('connection', (socket) => {
@@ -195,7 +199,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('connect-transport', async (data, callback) => {
-    try {
+    try 
+    {
       let { transportId, dtlsParameters } = data;
 
       let transport = room.transports.get(transportId);
@@ -210,8 +215,11 @@ io.on('connection', (socket) => {
       log('connect-transport', peerId, transport.appData);
   
       await transport.connect({ dtlsParameters });
+
       callback({ connected: true });
-    } catch (e) {
+    } 
+    catch (e) 
+    {
       console.error('error in /signaling/connect-transport', e);
       callback({ error: e });
     }
@@ -219,7 +227,8 @@ io.on('connection', (socket) => {
 
 
   socket.on('create-transport', async (data, callback) => {
-    try {
+    try 
+    {
       let { direction } = data;
       log('create-transport', peerId, direction);
 
@@ -239,7 +248,8 @@ io.on('connection', (socket) => {
   });
 
   socket.on('send-track', async (data, callback) => {
-    try {
+    try 
+    {
       let { transportId, 
             kind, 
             rtpParameters,
@@ -248,7 +258,8 @@ io.on('connection', (socket) => {
 
       let transport = room.transports.get(transportId);
   
-      if (!transport) {
+      if (!transport) 
+      {
         err(`send-track: server-side transport ${transportId} not found`);
         callback({ error: `server-side transport ${transportId} not found`});
         return;
@@ -270,7 +281,8 @@ io.on('connection', (socket) => {
       // monitor audio level of this producer. we call addProducer() here,
       // but we don't ever need to call removeProducer() because the core
       // AudioLevelObserver code automatically removes closed producers
-      if (producer.kind === 'audio') {
+      if (producer.kind === 'audio') 
+      {
         audioLevelObserver.addProducer({ producerId: producer.id });
       }
   
@@ -280,43 +292,46 @@ io.on('connection', (socket) => {
         paused,
         encodings: rtpParameters.encodings
       };
+      callback({ id: producer.id });
+
       broadcastPeersToAll();
 
       console.log('sending track', room.peers.get(peerId).media[appData.mediaTag]);
       
-      callback({ id: producer.id });
 
-    } catch (e) {
+    } 
+    catch (e) 
+    {
       console.log('send error', e);
       callback({ error: e });
     }
   });
 
   socket.on('recv-track', async (data, callback) => {
-    try {
+    try 
+    {
       let { mediaPeerId, mediaTag, rtpCapabilities } = data;
     
       let producer;
 
       for (let value of room.producers.values() ) 
       {
-          if (value.appData.mediaTag === mediaTag && 
-              value.appData.peerId === mediaPeerId )
+          if (value.appData.mediaTag === mediaTag && value.appData.peerId === mediaPeerId )
           {
             producer = value;
             break;
           }
       }
       
-      if (!producer) {
-        let msg = 'server-side producer for ' +
-                    `${mediaPeerId}:${mediaTag} not found`;
+      if (!producer) 
+      {
+        let msg = `server-side producer for${mediaPeerId}:${mediaTag} not found`;
         err('recv-track: ' + msg);
         callback({ error: msg });
         return;
       }
   
-      if (!router.canConsume({ producerId: producer.id, rtpCapabilities }) ) 
+      if ( !router.canConsume({ producerId: producer.id, rtpCapabilities }) ) 
       {
         let msg = `client cannot consume ${mediaPeerId}:${mediaTag}`;
         err(`recv-track: ${peerId} ${msg}`);
@@ -328,8 +343,7 @@ io.on('connection', (socket) => {
 
       for (let value of room.transports.values() ) 
       {
-          if (value.appData.peerId === peerId && 
-              value.appData.clientDirection === 'recv' )
+          if (value.appData.peerId === peerId && value.appData.clientDirection === 'recv' )
           {
             transport = value;
             break;
@@ -366,9 +380,9 @@ io.on('connection', (socket) => {
       // stick this consumer in our list of consumers to keep track of,
       // and create a data structure to track the client-relevant state
       // of this consumer
-      console.log(`saving consumer.id ${consumer.id} in ${room.consumers}`);
+     // console.log(`saving consumer.id ${consumer.id} in ${room.consumers}`);
       room.consumers.set(consumer.id, consumer);
-      console.log(`post saving consumer.id ${consumer.id}`);
+     // console.log(`post saving consumer.id ${consumer.id}`);
 
 
       room.peers.get(peerId).consumerLayers[consumer.id] = {
@@ -378,7 +392,7 @@ io.on('connection', (socket) => {
   
       // update above data structure when layer changes.
       consumer.on('layerschange', (layers) => {
-        log(`consumer layerschange ${mediaPeerId}->${peerId}`, mediaTag, layers);
+     //   log(`consumer layerschange ${mediaPeerId}->${peerId}`, mediaTag, layers);
         if (room.peers.get(peerId) && room.peers.get(peerId).consumerLayers[consumer.id]) 
         {
             room.peers.get(peerId).consumerLayers[consumer.id].currentLayer = layers && layers.spatialLayer;
@@ -404,7 +418,8 @@ io.on('connection', (socket) => {
       let { consumerId } = data,
           consumer = room.consumers.get(consumerId);
   
-      if (!consumer) {
+      if (!consumer) 
+      {
         err(`pause-consumer: server-side consumer ${consumerId} not found`);
         callback({ error: `server-side consumer ${consumerId} not found` });
         return;
@@ -415,7 +430,9 @@ io.on('connection', (socket) => {
       await consumer.resume();
   
       callback({ resumed: true });
-    } catch (e) {
+    } 
+    catch (e) 
+    {
       console.error('error in /signaling/resume-consumer', e);
       callback({ error: e });
     }
@@ -423,13 +440,16 @@ io.on('connection', (socket) => {
   
 
   socket.on('leave', async (data, callback) => {
-    try {
+    try 
+    {
       let { peerId } = data;
       log('leave', peerId);
   
       await room.removePeer(peerId);
       callback({ left: true });
-    } catch (e) {
+    } 
+    catch (e) 
+    {
       console.error('error in /signaling/leave', e);
       callback({ error: e });
     }
