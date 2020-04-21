@@ -481,11 +481,15 @@ function addVideoAudio(consumer, peerId)
     el.setAttribute('controls', true);
 
     $(`#videos`).appendChild(el);
-    el.srcObject = new MediaStream([ consumer.track.clone() ]);
-    el.consumer = consumer;
+
     el.id = consumer.appData.mediaTag+'-'+peerId;
 
-    
+    const stream = new MediaStream;
+    stream.addTrack(consumer.track);
+    el.srcObject = stream;
+    el.play()
+        .catch( (error) => log( 'elememt failed to play:', error, el) );
+
     // let's "yield" and return before playing, rather than awaiting on
     // play() succeeding. play() will not succeed on a producer-paused
     // track until the producer unpauses.
