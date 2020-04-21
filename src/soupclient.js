@@ -134,6 +134,7 @@ async function joinRoom() {
 
 //        console.log('loaded mediasoup device!', routerRtpCapabilities);
 
+        lastPollSyncData = await socket.request('sync-peers-request');
         updateStreamConsumers();
 
         
@@ -526,7 +527,7 @@ function addVideoAudio(consumer, peerId)
     let devices = await navigator.mediaDevices.enumerateDevices();
 
     console.log('device list', devices);
-    
+
     let deviceInfo = devices.find((d) => d.deviceId === deviceId);
 
     infoEl.innerHTML = deviceInfo.label;

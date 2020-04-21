@@ -188,13 +188,11 @@ io.on('connection', (socket) => {
 
   socket.on('sync-peers-request', (data, callback) => {
     callback({ 
-      peerIds: room.getIds(), 
-      peers: room.peers 
+      peers: Array.from( room.peers.values() )
     });
   });
 
   socket.on('join-as-new-peer', (data, callback) => {
-    broadcastPeersToAll();
     callback( { routerRtpCapabilities: router.rtpCapabilities });
   });
 
