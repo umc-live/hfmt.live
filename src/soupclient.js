@@ -126,7 +126,7 @@ async function joinRoom() {
         await device.load({ routerRtpCapabilities });
 
         joined = true;
-        
+
         if (!recvTransport) 
         {
           recvTransport = await createTransport('recv');
@@ -488,8 +488,9 @@ function addVideoAudio(consumer, peerId)
 
     el.id = consumer.appData.mediaTag+'-'+peerId;
 
-    const stream = new MediaStream;
-    stream.addTrack(consumer.track);
+    //const stream = new MediaStream();
+    //stream.addTrack(consumer.track);
+    el.srcObject = new MediaStream([ consumer.track.clone() ]);
     el.srcObject = stream;
     el.play()
         .catch( (error) => log( 'elememt failed to play:', error, el) );
@@ -523,6 +524,9 @@ function addVideoAudio(consumer, peerId)
       return;
     }
     let devices = await navigator.mediaDevices.enumerateDevices();
+
+    console.log('device list', devices);
+    
     let deviceInfo = devices.find((d) => d.deviceId === deviceId);
 
     infoEl.innerHTML = deviceInfo.label;
