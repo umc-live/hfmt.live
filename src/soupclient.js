@@ -72,10 +72,10 @@ function removePeerAVElements(_id)
 {
   let elements = document.querySelectorAll(`[id$=${_id}]`);
   elements.forEach(e => {
-    elements.parentNode.removeChild(e);
+    e.parentNode.removeChild(e);
   });
 
-  
+
 }
 
 socket.on('remove-peer', (data)=>{
