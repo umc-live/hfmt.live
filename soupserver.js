@@ -82,17 +82,9 @@ async function startMediasoup()
 }
 
 async function createWebRtcTransport({ peerId, direction }) {
-  const {
-    listenIps,
-    initialAvailableOutgoingBitrate
-  } = soupconfig.webRtcTransport;
 
   const transport = await router.createWebRtcTransport({
-    listenIps: listenIps,
-    enableUdp: true,
-    enableTcp: true,
-    preferUdp: true,
-    initialAvailableOutgoingBitrate: initialAvailableOutgoingBitrate,
+    ...soupconfig.webRtcTransport,
     appData: { peerId, clientDirection: direction }
   });
 
