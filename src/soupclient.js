@@ -520,8 +520,9 @@ function addVideoAudio(consumer, peerId)
       el.setAttribute('autoplay', true);
     }*/
 
-    el.setAttribute('playsinline', true);
-    el.setAttribute('autoplay', true);
+    el.setAttribute('playsinline', '');
+    el.setAttribute('autoplay', '');
+    //el.setAttribute('muted', '');
     //el.setAttribute('controls', true);
 
     $(`#videos`).appendChild(el);
@@ -533,7 +534,7 @@ function addVideoAudio(consumer, peerId)
     // el.srcObject = stream;
 
     el.srcObject = new MediaStream([ consumer.track.clone() ]);
-    el.play()
+    await el.play()
         .catch( (error) => console.error( 'elememt failed to play:', error, el) );
 
     el.consumer = consumer;
