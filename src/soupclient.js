@@ -117,7 +117,8 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData)
 
 }
 
-async function joinRoom() {
+async function joinRoom() 
+{
     if (joined) 
         return;
 
@@ -135,7 +136,7 @@ async function joinRoom() {
           recvTransport = await createTransport('recv');
         }
 
-//        console.log('loaded mediasoup device!', routerRtpCapabilities);
+        console.log('loaded mediasoup device!', routerRtpCapabilities);
 
         lastPollSyncData = await socket.request('sync-peers-request');
         updateStreamConsumers();
