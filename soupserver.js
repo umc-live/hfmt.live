@@ -137,7 +137,7 @@ async function closeProducer(producer) {
     // remove this track's info from our room...mediaTag bookkeeping
     if (room.peers.has(producer.appData.peerId) ) 
     {
-      delete (room.peers[producer.appData.peerId].media[producer.appData.mediaTag]);
+      delete room.peers.get(producer.appData.peerId).media[producer.appData.mediaTag];
     }
 
   } 
@@ -159,7 +159,7 @@ async function closeConsumer(consumer) {
   // remove layer info from from our room...consumerLayers bookkeeping
   if (room.peers.has(consumer.appData.peerId)) 
   {
-    delete room.peers[consumer.appData.peerId].consumerLayers[consumer.id];
+    delete room.peers.get(consumer.appData.peerId).consumerLayers[consumer.id];
   }
 }
 
@@ -384,6 +384,7 @@ io.on('connection', (socket) => {
       room.consumers.set(consumer.id, consumer);
      // console.log(`post saving consumer.id ${consumer.id}`);
 
+      
 
       room.peers.get(peerId).consumerLayers[consumer.id] = {
         currentLayer: null,
@@ -398,7 +399,7 @@ io.on('connection', (socket) => {
             room.peers.get(peerId).consumerLayers[consumer.id].currentLayer = layers && layers.spatialLayer;
         }
       });
-  
+        
       callback({
         producerId: producer.id,
         id: consumer.id,

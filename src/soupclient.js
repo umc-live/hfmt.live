@@ -489,12 +489,13 @@ function addVideoAudio(consumer, peerId)
     // let's "yield" and return before playing, rather than awaiting on
     // play() succeeding. play() will not succeed on a producer-paused
     // track until the producer unpauses.
+    /*
     el.play()
       .then(()=>{})
       .catch((e) => {
         log(e);
       });
-    
+    */
   }
   
   function removeVideoAudio(consumer) {
