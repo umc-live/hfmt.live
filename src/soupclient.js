@@ -570,7 +570,7 @@ async function addVideoAudio(consumer, peerId)
 
     let infoEl = $('#camera-info');
 
-    infoEl.innerHTML = `${camVideoProducer.track.label} -- ${camAudioProducer.track.label}`
+    infoEl.innerHTML = `input video: ${camVideoProducer.track.label} | audio: ${camAudioProducer.track.label}`
 
     /*
     if (!deviceId) {
