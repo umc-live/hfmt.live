@@ -68,8 +68,19 @@ socket.on('sync-peers', (data) => {
 
 // need notification of new tracks too... 
 
+function removePeerAVElements(_id)
+{
+  let elements = document.querySelectorAll(`[id$=${_id}]`);
+  elements.forEach(e => {
+    elements.parentNode.removeChild(e);
+  });
+
+  
+}
+
 socket.on('remove-peer', (data)=>{
-  // notification of removal
+  const { removePeerId } = data;
+  removePeerAVElements(removePeerId);
 });
 
 function sortPeers(peers) {
@@ -659,7 +670,7 @@ async function addVideoAudio(consumer, peerId)
 
 async function leaveRoom() 
 {
-  
+
   if (!joined) {
     return;
   }
