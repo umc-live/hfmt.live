@@ -1,0 +1,11 @@
+to do 
+use drawsocket style url system for rooms
+then sub directories off rooms can be target for instrument routing
+or alternatively there could be an instrument selector
+
+this nginx line shoould pass everything to the default page keeping the 
+url intact
+
+location / {
+    try_files $uri $uri/ /index.html;
+}
