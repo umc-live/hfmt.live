@@ -494,7 +494,7 @@ async function subscribeToTrack(peerId, mediaTag)
 
 
 
-function addVideoAudio(consumer, peerId) 
+async function addVideoAudio(consumer, peerId) 
 {
     if (!(consumer && consumer.track)) 
     {
