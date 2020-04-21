@@ -434,8 +434,8 @@ io.on('connection', (socket) => {
     try 
     {
       
-      io.broadcast('remove-peer', {
-        peer: peerId
+      io.emit('remove-peer', {
+        removePeerId: room.get(peerId)
       });
 
       await room.removePeer(peerId);
