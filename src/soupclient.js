@@ -163,6 +163,7 @@ async function startCamera()
             video: true,
             audio: true
         });
+        
     } 
     catch (e) 
     {
@@ -238,6 +239,9 @@ async function sendCameraStreams()
     // state, if the checkbox in our UI is unchecked. so as soon as we
     // have a client-side camVideoProducer object, we need to set it to
     // paused as appropriate, too.
+
+    console.log('local video settings', localCam.getVideoTracks()[0].getSettings());
+
     camVideoProducer = await sendTransport.produce({
         track: localCam.getVideoTracks()[0],
         encodings: camEncodings(),
@@ -252,6 +256,9 @@ async function sendCameraStreams()
       }
     }
   */
+
+ console.log('local audio settings', localCam.getAudioTracks()[0].getSettings());
+
     // same thing for audio, but we can use our already-created
     camAudioProducer = await sendTransport.produce({
         track: localCam.getAudioTracks()[0],
