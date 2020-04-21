@@ -485,7 +485,7 @@ function addVideoAudio(consumer, peerId)
     el.consumer = consumer;
     el.id = consumer.appData.mediaTag+'-'+peerId;
 
-    /*
+    
     // let's "yield" and return before playing, rather than awaiting on
     // play() succeeding. play() will not succeed on a producer-paused
     // track until the producer unpauses.
@@ -494,7 +494,7 @@ function addVideoAudio(consumer, peerId)
       .catch((e) => {
         log(e);
       });
-      */
+    
   }
   
   function removeVideoAudio(consumer) {
