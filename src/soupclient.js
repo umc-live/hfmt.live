@@ -209,7 +209,7 @@ async function getCurrentAudioDeviceId()
   let deviceId = camAudioProducer.track.getSettings().deviceId;
   if (deviceId) 
   {
-    console.log('got device id from camVideoProducer');
+    console.log('got device id from camAudioProducer', camAudioProducer.track);
     return deviceId;
   }
   // Firefox doesn't have deviceId in MediaTrackSettings object
