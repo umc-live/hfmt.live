@@ -534,7 +534,7 @@ function addVideoAudio(consumer, peerId)
 
     el.srcObject = new MediaStream([ consumer.track.clone() ]);
     el.play()
-        .catch( (error) => log( 'elememt failed to play:', error, el) );
+        .catch( (error) => console.error( 'elememt failed to play:', error, el) );
 
     el.consumer = consumer;
     // let's "yield" and return before playing, rather than awaiting on
