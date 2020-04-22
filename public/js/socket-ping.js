@@ -10,7 +10,7 @@ console.log(`url: ${url}`);
 
 //const sock = io();
 
-const sock = io('https://hfmt.live/socket.io');
+const sock = io('https://hfmt.live/socket.io/');
 
 sock.on('connect', () => {
   console.log('socket.io connected');
