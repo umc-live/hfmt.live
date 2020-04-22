@@ -8,11 +8,7 @@ if( url.includes('.html') )
 
 console.log(`url: ${url}, window location: ${window.location}`);
 
-//const sock = io();
-
-const sock = io('https://hfmt.live', {
-  path: '/socket.io/'
-});
+const sock = io();
 
 sock.on('connect', () => {
   console.log('socket.io connected');
