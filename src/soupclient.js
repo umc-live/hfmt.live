@@ -151,6 +151,8 @@ async function joinRoom()
 
         joined = true;
 
+        $('btn_connect').disabled = true;
+        
         if (!recvTransport) 
         {
           recvTransport = await createTransport('recv');
@@ -325,6 +327,9 @@ async function sendCameraStreams()
     let display = $('#localVideo');
     display.srcObject = localCam;
   //  display.setAttribute('muted', true);
+
+  $('btn_start').disabled = true;
+
     
 }
 
@@ -706,7 +711,7 @@ async function leaveRoom()
 
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', joinRoom);
-    $('#startButton').addEventListener('click', sendCameraStreams);
+    $('#btn_start').addEventListener('click', sendCameraStreams);
     window.addEventListener('unload', leaveRoom);
 })
 
