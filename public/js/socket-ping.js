@@ -8,7 +8,9 @@ if( url.includes('.html') )
 
 console.log(`url: ${url}`);
 
-const sock = io();
+//const sock = io();
+
+const sock = io('http://htmt.live/socket.io/');
 
 sock.on('connect', () => {
   console.log('socket.io connected');
