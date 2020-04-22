@@ -151,7 +151,7 @@ async function joinRoom()
 
         joined = true;
 
-        $('btn_connect').disabled = true;
+        $('#btn_connect').disabled = true;
         
         if (!recvTransport) 
         {
@@ -328,7 +328,7 @@ async function sendCameraStreams()
     display.srcObject = localCam;
   //  display.setAttribute('muted', true);
 
-  $('btn_start').disabled = true;
+  $('#btn_start').disabled = true;
 
     
 }
