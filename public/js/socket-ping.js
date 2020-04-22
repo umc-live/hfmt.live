@@ -6,7 +6,7 @@ if( url.includes('.html') )
   url = url.slice(0, url.indexOf('.html') );
 }
 
-console.log(`url: ${url}`);
+console.log(`url: ${url}, window location: ${window.location}`);
 
 //const sock = io();
 
