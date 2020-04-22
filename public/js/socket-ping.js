@@ -1,3 +1,13 @@
+'use strict';
+
+let url = window.location.pathname;
+if( url.includes('.html') )
+{
+  url = url.slice(0, url.indexOf('.html') );
+}
+
+console.log(`url: ${url}`);
+
 const sock = io();
 
 sock.on('connect', () => {
