@@ -1,7 +1,8 @@
 /**
  * to do:
- * check audio, seems not to be working
  * move all await calls to cluster thread
+ * make router part of room
+ * close room when there are no people in it (or timeout)
  * 
  */
 

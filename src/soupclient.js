@@ -326,7 +326,7 @@ async function sendCameraStreams()
     showCameraInfo();
     let display = $('#localVideo');
     display.srcObject = localCam;
-  //  display.setAttribute('muted', true);
+    display.setAttribute('muted', true);
 
   $('#btn_start').disabled = true;
 
