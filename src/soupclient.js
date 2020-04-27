@@ -345,6 +345,9 @@ async function sendCameraStreams()
     // add visualizer here for local audio:
     localAudioSource = audioCtx.createMediaStreamSource(localMediaStream);
     localAudioSource.connect(analyser);
+
+    audioCtx.resume();
+    audioCtx.onstatechange = () => console.log(audioContext.state);
     draw();
 
     console.log(localAudioSource);
