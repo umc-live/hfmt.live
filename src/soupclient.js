@@ -23,11 +23,15 @@ const $ = document.querySelector.bind(document);
 
 const socket = io()
 
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let analyser = audioCtx.createAnalyser();
+let localAudioSource;
+
 let socketID;
 
 let device,
     joined,
-    localCam,
+    localMediaStream,
     localScreen,
     recvTransport,
     sendTransport,
@@ -172,7 +176,7 @@ async function joinRoom()
 
 async function startCamera() 
 {
-    if (localCam)
+    if (localMediaStream)
         return;
 
 //    log('start camera');
@@ -185,7 +189,7 @@ async function startCamera()
 
     try 
     {
-        localCam = await navigator.mediaDevices.getUserMedia({
+        localMediaStream = await navigator.mediaDevices.getUserMedia({
             video: true,
             audio: true
         });
@@ -233,7 +237,7 @@ async function getCurrentAudioDeviceId()
     return deviceId;
   }
   // Firefox doesn't have deviceId in MediaTrackSettings object
-  let track = localCam && localCam.getAudioTracks()[0];
+  let track = localMediaStream && localMediaStream.getAudioTracks()[0];
   if (!track) {
       return null;
   }
@@ -255,7 +259,7 @@ async function getCurrentVideoDeviceId()
       return deviceId;
     }
     // Firefox doesn't have deviceId in MediaTrackSettings object
-    let track = localCam && localCam.getVideoTracks()[0];
+    let track = localMediaStream && localMediaStream.getVideoTracks()[0];
     if (!track) {
         return null;
     }
@@ -289,10 +293,10 @@ async function sendCameraStreams()
     // have a client-side camVideoProducer object, we need to set it to
     // paused as appropriate, too.
 
-    console.log('local video settings', localCam.getVideoTracks()[0].getSettings());
+    console.log('local video settings', localMediaStream.getVideoTracks()[0].getSettings());
 
     camVideoProducer = await sendTransport.produce({
-        track: localCam.getVideoTracks()[0],
+        track: localMediaStream.getVideoTracks()[0],
         encodings: camEncodings(),
         appData: { mediaTag: 'cam-video' }
     });
@@ -306,11 +310,11 @@ async function sendCameraStreams()
     }
   */
 
- console.log('local audio settings', localCam.getAudioTracks()[0].getSettings());
+ console.log('local audio settings', localMediaStream.getAudioTracks()[0].getSettings());
 
     // same thing for audio, but we can use our already-created
     camAudioProducer = await sendTransport.produce({
-        track: localCam.getAudioTracks()[0],
+        track: localMediaStream.getAudioTracks()[0],
         appData: { mediaTag: 'cam-audio' }
     });
     /*
@@ -325,10 +329,15 @@ async function sendCameraStreams()
     //$('#stop-streams').style.display = 'initial';
     showCameraInfo();
     let display = $('#localVideo');
-    display.srcObject = localCam;
+    display.srcObject = localMediaStream;
     //display.setAttribute('muted', true);
 
-  $('#btn_start').disabled = true;
+    // add visualizer here for local audio:
+    localAudioSource = audioCtx.createMediaStreamSource(localMediaStream);
+    localAudioSource.connect(analyser);
+
+
+    $('#btn_start').disabled = true;
 
     
 }
@@ -702,7 +711,7 @@ async function leaveRoom()
   camAudioProducer = null;
   screenVideoProducer = null;
   screenAudioProducer = null;
-  localCam = null;
+  localMediaStream = null;
   localScreen = null;
   lastPollSyncData = {};
   consumers = [];
