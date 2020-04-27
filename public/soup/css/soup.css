@@ -40,7 +40,7 @@ body {
     height: 50;
     width: 100px;
     position: absolute;
-    top: 200px;
+    top: 100px;
     left: calc(100vw - 150px);
     z-index: 1;
 }

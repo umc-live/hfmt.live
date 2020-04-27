@@ -347,11 +347,10 @@ async function sendCameraStreams()
     localAudioSource.connect(analyser);
 
     audioCtx.resume();
-    audioCtx.onstatechange = () => console.log(audioContext.state);
+    audioCtx.onstatechange = () => console.log(audioCtx.state);
     draw();
 
     console.log(localAudioSource);
-    
 
     $('#btn_start').disabled = true;
 
