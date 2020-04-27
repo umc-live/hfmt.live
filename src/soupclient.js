@@ -749,7 +749,7 @@ function draw() {
 
   analyser.getByteTimeDomainData(dataArray);
 
-  canvasCtx.fillStyle = "rgb(200, 200, 200)";
+  canvasCtx.fillStyle = "rgb(255, 255, 255)";
   canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
 
   canvasCtx.lineWidth = 2;

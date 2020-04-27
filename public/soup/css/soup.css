@@ -36,6 +36,15 @@ body {
     z-index: 1;
 }
 
+#oscilloscope {
+    height: 50;
+    width: 100px;
+    position: absolute;
+    top: 200px;
+    left: calc(100vw - 150px);
+    z-index: 1;
+}
+
 video {
     width: 300px;
     height: auto;
