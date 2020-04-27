@@ -345,6 +345,10 @@ async function sendCameraStreams()
     // add visualizer here for local audio:
     localAudioSource = audioCtx.createMediaStreamSource(localMediaStream);
     localAudioSource.connect(analyser);
+    draw();
+
+    console.log(localAudioSource);
+    
 
     $('#btn_start').disabled = true;
 
@@ -771,4 +775,4 @@ function draw() {
   canvasCtx.stroke();
 }
 
-draw();
+//draw();
