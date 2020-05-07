@@ -17,7 +17,7 @@ socket.on('room-message', (data) => {
     console.log(data)
     if( data.hasOwnProperty('file') )
     {
-        processFileFromPeer(data.file);
+        processFile(data.file);
     }
 });
 
@@ -37,7 +37,7 @@ function fileToObj(file)
 
 }
 
-function processFileFromPeer(file)
+function processFile(file)
 {
     let obj = fileToObj(file);
     console.log(`received json ${JSON.stringify(obj, null, 2)}`);
@@ -195,7 +195,9 @@ function handleFiles()
 
     socket.emit('room-message', {
         file
-    })
+    });
+
+    processFile(file);
 
 }
 
