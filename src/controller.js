@@ -68,13 +68,11 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
 
 
 soupclient.on_removedPeerStream = (_id) => {
-    let elements = document.querySelectorAll(`#video-${_id}`);
-    elements.forEach(e => {
+    document.querySelectorAll(`#video-${_id}`).forEach(e => {
         e.parentNode.removeChild(e);
     });
 
-    let elements = document.querySelectorAll(`#audio-${_id}`);
-    elements.forEach(e => {
+    document.querySelectorAll(`#audio-${_id}`).forEach(e => {
         e.parentNode.removeChild(e);
     });
 }
