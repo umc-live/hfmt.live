@@ -8,10 +8,11 @@ soupclient.init(socket);
 
 socket.on('room-message', (data) => {
     console.log(data)
-    if( data.file )
+    if( data.hasOwnProperty('file') )
     {
-        console.log(data.file.stream());
-        
+        var jsonResult = JSON.parse(JSON.stringify(data.file));
+        console.log(jsonResult)
+
     }
 });
 
