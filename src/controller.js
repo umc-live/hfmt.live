@@ -130,7 +130,7 @@ async function showCameraInfo() {
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', soupclient.joinRoom );
     $('#btn_start').addEventListener('click', startStream);
-    window.addEventListener('unload', leaveRoom);
+    window.addEventListener('unload', soupclient.leaveRoom);
 })
 
 
