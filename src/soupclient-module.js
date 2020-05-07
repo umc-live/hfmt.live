@@ -99,8 +99,8 @@ export function init(_socket)
     }
 
     socket.on('remove-peer', (data)=>{
-    const { removePeerId } = data;
-    removePeerAVElements(removePeerId);
+        const { removePeerId } = data;
+        removePeerAVElements(removePeerId);
     });
 
     function sortPeers(peers) {

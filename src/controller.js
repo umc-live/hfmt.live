@@ -7,5 +7,9 @@ socket.on('connect', () => {
     console.log('test 2');
 });
 
+socket.on('sync-peers', (data) => {
+    console.log('sync-peers also got');
+});
+
 soupclient.init(socket);
 
