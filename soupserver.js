@@ -174,9 +174,10 @@ io.on('connection', (socket) => {
 
   console.log("New connection from " + socket.id);
 
-
+// make this room specific later
   socket.on('room-message', (data) => {
-    io.emit('room-message', {
+    //socket.to('game').emit or io namespaces etc.
+    socket.broadcast.emit('room-message', {
       from: peerId,
       data
     });
