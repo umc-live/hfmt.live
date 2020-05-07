@@ -124,10 +124,10 @@ export async function sendStream(_stream)
     if (!sendTransport) 
         sendTransport = await createTransport('send');
 
-    console.log('local video settings', localMediaStream.getVideoTracks()[0].getSettings());
+    console.log('local video settings', _stream.getVideoTracks()[0].getSettings());
 
     camVideoProducer = await sendTransport.produce({
-        track: localMediaStream.getVideoTracks()[0],
+        track: _stream.getVideoTracks()[0],
         encodings: camEncodings(),
         appData: { mediaTag: 'cam-video' }
     });
@@ -137,10 +137,10 @@ export async function sendStream(_stream)
         });
     */
 
-    console.log('local audio settings', localMediaStream.getAudioTracks()[0].getSettings());
+    console.log('local audio settings', _stream.getAudioTracks()[0].getSettings());
 
     camAudioProducer = await sendTransport.produce({
-        track: localMediaStream.getAudioTracks()[0],
+        track: _stream.getAudioTracks()[0],
         appData: { mediaTag: 'cam-audio' }
     });
 
