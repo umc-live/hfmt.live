@@ -167,7 +167,11 @@ function draw()
 function handleFiles()
 {
     const fileList = this.files; /* now you can work with the file list */
-    console.log(filelist);
+    console.log(fileList);
+
+    socket.emit('room-message', {
+        file: fileList
+    })
     
 }
 
