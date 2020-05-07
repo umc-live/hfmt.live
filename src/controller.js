@@ -42,6 +42,8 @@ function processFileFromPeer(file)
     let obj = fileToObj(file);
     console.log(`received json ${JSON.stringify(obj, null, 2)}`);
     
+    drawsocket.input(obj);
+
 }
 
 
