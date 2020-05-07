@@ -152,7 +152,7 @@ export function on_newPeerStream(_stream, _type, _id) {}
 
 // ---- 
 
-let socket = _socket
+let socket;
 
 const log = console.log;
 
