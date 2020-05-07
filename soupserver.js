@@ -177,10 +177,8 @@ io.on('connection', (socket) => {
 // make this room specific later
   socket.on('room-message', (data) => {
     //socket.to('game').emit or io namespaces etc.
-    socket.broadcast.emit('room-message', {
-      from: peerId,
-      data
-    });
+    data.from = peerId;
+    socket.broadcast.emit('room-message', data );
   });
 
   socket.on('heartbeat', (payload) => {
