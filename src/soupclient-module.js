@@ -76,6 +76,7 @@ export function init(_socket)
 
     socket.on('connect', () => {
         socketID = socket.id;
+        console.log('test 1');
     });
 
     socket.on('sync-peers', (data) => {
