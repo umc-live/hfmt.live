@@ -25,10 +25,11 @@ import * as d3 from 'd3-selection';
 let event_connected_callback = null;
 
 // << need to update TweenMax for GSAP 3.0
+// ticker is now gsap.ticker
+
 //TweenMax.ticker.fps(60);
 //TweenMax.ticker.useRAF(true);
-
-console.log(TweenMax.ticker.fps());
+//console.log(TweenMax.ticker.fps());
 
 let oscprefix = window.location.pathname; // document.getElementById("OSC").getAttribute("OSCprefix");
 if (oscprefix.includes('.html')) {
