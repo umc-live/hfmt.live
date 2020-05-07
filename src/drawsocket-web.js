@@ -2523,8 +2523,9 @@ class PDFdoc {
 }
 
 function sendMsg(_obj) {
-  if (port) {
-    port.sendObj(_obj);
+  if (socket) {
+    socket.emit('message', _obj);
+    //port.sendObj(_obj);
   }
 }
 
@@ -2559,7 +2560,8 @@ function initTimesync(socket_)
 
       if (!hasstate) {
         // ask server for current state
-        port.sendObj({ statereq: 1 });
+        socket_.emit('statereq');
+        //port.sendObj({ statereq: 1 });
 
         hasstate = true;
       }
@@ -2602,16 +2604,20 @@ function initTimesync(socket_)
     //    console.log('sending', data, timeout);
     return new Promise(function (resolve, reject) {
       let timeoutFn = setTimeout(reject, timeout);
+
+      socket.emit('timesync', data);
+/*
       if (port.readyState === port.OPEN) {
         //console.log('data',data);
         port.sendObj({
           timesync: data
         });
+              }
+
+*/
 
         clearTimeout(timeoutFn);
         resolve();
-      }
-
     });
 
   };
