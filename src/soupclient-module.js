@@ -14,19 +14,19 @@
 import * as mediasoup from "mediasoup-client";
 //import io from 'socket.io-client';
 
-//import deepEqual from 'deep-equal';
 /**
  * 
  * @param {required: socket.io instance, i.e. io() } _socket 
  */
-module.exports = (_socket) => {
+export function init(_socket)
+{
+    let socket = _socket
 
     const log = console.log;
 
     const hostname = window.location.hostname;
     const $ = document.querySelector.bind(document);
 
-    const socket = _socket;
 
     let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     let analyser = audioCtx.createAnalyser();
@@ -788,4 +788,9 @@ module.exports = (_socket) => {
     canvasCtx.stroke();
     }
 }
+
+//import deepEqual from 'deep-equal';
+
+
+
 //draw();
