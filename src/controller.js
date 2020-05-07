@@ -197,7 +197,7 @@ function handleFiles()
         file
     });
 
-    processFile(file);
+    processFile(file.arrayBuffer());
 
 }
 
