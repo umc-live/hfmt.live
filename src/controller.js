@@ -8,6 +8,11 @@ soupclient.init(socket);
 
 socket.on('room-message', (data) => {
     console.log(data)
+    if( data.file )
+    {
+        console.log(data.file.stream());
+        
+    }
 });
 
 function testCom()
@@ -166,13 +171,13 @@ function draw()
 
 function handleFiles()
 {
-    const fileList = this.files; /* now you can work with the file list */
-    console.log(fileList);
+    const file = this.files[0];
+    console.log(file);
 
     socket.emit('room-message', {
-        file: fileList
+        file
     })
-    
+
 }
 
 window.addEventListener('load', () => {
