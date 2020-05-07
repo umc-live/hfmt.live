@@ -169,10 +169,18 @@ function broadcastPeersToAll()
 
 io.on('connection', (socket) => {
 
-  let peerId = socket.id;
+  const peerId = socket.id;
   room.addPeer(peerId);
 
   console.log("New connection from " + socket.id);
+
+
+  socket.on('room-message', (data) => {
+    io.emit('room-message', {
+      from: peerId,
+      data
+    });
+  });
 
   socket.on('heartbeat', (payload) => {
     payload.nodeName = name;

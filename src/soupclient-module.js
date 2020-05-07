@@ -1,8 +1,6 @@
-
 'use strict';
 
 import * as mediasoup from "mediasoup-client";
-
 
 const CAM_VIDEO_SIMULCAST_ENCODINGS =
     [
@@ -154,7 +152,8 @@ export function on_removedPeerStream(_id) {}
 
 export function on_newPeerStream(_stream, _type, _id) {}
 
-// ---- 
+
+// ---- internal
 
 let socket;
 
@@ -184,7 +183,6 @@ let device,
 async function sleep(ms) {
     return new Promise((r) => setTimeout(() => r(), ms));
 }
-
 
 async function updateStreamConsumers(peersInfo = lastPollSyncData) {
     //    const data = await socket.request('sync-peer-request');
@@ -330,20 +328,9 @@ async function createTransport(direction) {
         transport.on('produce', async ({ kind, rtpParameters, appData }, callback, errback) => {
             log('transport produce event', appData.mediaTag);
 
-            // we may want to start out paused (if the checkboxes in the ui
-            // aren't checked, for each media type. not very clean code, here
-            // but, you know, this isn't a real application.)
+           
             let paused = false;
-            /*
-            if (appData.mediaTag === 'cam-video') 
-            {
-            paused = getCamPausedState();
-            }
-            else if (appData.mediaTag === 'cam-audio') 
-            {
-            paused = getMicPausedState();
-            }
-            */
+            
             // tell the server what it needs to know from us in order to set
             // up a server-side producer object, and get back a
             // producer.id. call callback() on success or errback() on
@@ -447,8 +434,8 @@ async function subscribeToTrack(peerId, mediaTag) {
     // keep track of all our consumers
     consumers.push(consumer);
 
+    // callback to add new stream
     on_newPeerStream(new MediaStream([consumer.track.clone()]), consumer.kind, peerId);
-  //  await addVideoAudio(consumer, peerId);
 
 }
 

@@ -6,11 +6,16 @@ const socket = io();
 soupclient.init(socket);
 
 
-/*
-socket.on('connect', () => {
-    console.log('test 2');
+socket.on('room-message', (data) => {
+    console.log(data)
 });
-*/
+
+function testCom()
+{
+    socket.emit('room-message', {
+        msg: 'hello room!'
+    });
+}
 
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
@@ -29,14 +34,6 @@ let localAudioSource;
 var canvas = document.getElementById("oscilloscope");
 var canvasCtx = canvas.getContext("2d");
 
-
-
-soupclient.on_removedPeerStream = (_id) => {
-    let elements = document.querySelectorAll(`[id$=${_id}]`);
-    elements.forEach(e => {
-        e.parentNode.removeChild(e);
-    });
-}
 
 soupclient.on_joinedRoom = ()=>{
     $('#btn_connect').disabled = true;
@@ -70,13 +67,17 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
 }
 
 
+soupclient.on_removedPeerStream = (_id) => {
+    let elements = document.querySelectorAll(`[id$=${_id}]`);
+    elements.forEach(e => {
+        e.parentNode.removeChild(e);
+    });
+}
 
 async function startStream() 
 {
     if (localMediaStream)
         return;
-
-    //    log('start camera');
 
     try {
         localMediaStream = await navigator.mediaDevices.getUserMedia({
@@ -110,7 +111,6 @@ async function startStream()
 
     $('#btn_start').disabled = true;
 
-
 }
 
 
@@ -123,15 +123,6 @@ async function showCameraInfo() {
 
     infoEl.innerHTML = `input video: ${videoTrack.label} | audio: ${audioTrack.label}`
 }
-
-
-window.addEventListener('load', () => {
-    $('#btn_connect').addEventListener('click', soupclient.joinRoom );
-    $('#btn_start').addEventListener('click', startStream);
-    window.addEventListener('unload', soupclient.leaveRoom);
-})
-
-
 
 function draw() 
 {
@@ -167,3 +158,10 @@ function draw()
     canvasCtx.lineTo(canvas.width, canvas.height / 2);
     canvasCtx.stroke();
 }
+
+window.addEventListener('load', () => {
+    $('#btn_connect').addEventListener('click', soupclient.joinRoom );
+    $('#btn_start').addEventListener('click', startStream);
+    window.addEventListener('unload', soupclient.leaveRoom);
+})
+
