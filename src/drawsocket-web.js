@@ -14,6 +14,9 @@
 
 import * as timesync from 'timesync';
 import {TweenMax, TimelineMax} from 'gsap/all';
+
+TweenMax.ticker.fps(60);
+
 import Tone from 'tone';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import * as SVGPoints from 'svg-points';
@@ -21,7 +24,6 @@ import * as d3 from 'd3-selection';
 
 let event_connected_callback = null;
 
-TweenMax.ticker.fps(60);
 TweenMax.ticker.useRAF(true);
 console.log(TweenMax.ticker.fps());
 
