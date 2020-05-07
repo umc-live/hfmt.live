@@ -17,6 +17,8 @@ function testCom()
     });
 }
 
+
+
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
 
@@ -162,10 +164,23 @@ function draw()
     canvasCtx.stroke();
 }
 
+function handleFiles()
+{
+    const fileList = this.files; /* now you can work with the file list */
+    console.log(filelist);
+    
+}
+
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', soupclient.joinRoom );
     $('#btn_start').addEventListener('click', startStream);
-    $('#btn_testmsg').addEventListener('click', testCom);
+    
+    $('#input_sendfile').addEventListener('change', handleFiles, false);
+
+    $('#btn_sendfile').addEventListener('click',()=> { 
+        $('#input_sendfile').click() 
+    });
+
     window.addEventListener('unload', soupclient.leaveRoom);
 })
 
