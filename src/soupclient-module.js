@@ -60,6 +60,10 @@ export async function joinRoom()
 
         joined = true;
 
+        if (!device.canProduce('audio')) {
+            console.error('mediasoup cannot produce audio for some reason');
+        }
+
         on_joinedRoom();
 
         if (!recvTransport) {
