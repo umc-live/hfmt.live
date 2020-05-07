@@ -5,57 +5,42 @@ import io from 'socket.io-client';
 const socket = io();
 soupclient.init(socket);
 
-
-socket.on('room-message', (data) => {
-    console.log(data)
-    if( data.hasOwnProperty('file') )
-    {
-
-        if ('TextDecoder' in window) {
-            // Decode as UTF-8
-            var dataView = new DataView(data.file);
-            var decoder = new TextDecoder('utf8');
-            var response = JSON.parse(decoder.decode(dataView));
-            console.log('1', response)
-
-        } else {
-            // Fallback decode as ASCII
-            var decodedString = String.fromCharCode.apply(null, new Uint8Array(data.file));
-            var response = JSON.parse(decodedString);
-            console.log('2', response)
-        }
-
-        //var arr = Array.from(new Uint8Array(data.file));
-        //var jsonResult = JSON.parse(JSON.stringify(arr));
-
-    }
-});
-
-function testCom()
-{
-    socket.emit('room-message', {
-        msg: 'hello room!'
-    });
-}
-
-
-
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
 
 let localMediaStream;
 
-let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let analyser = audioCtx.createAnalyser();
-analyser.fftSize = 2048;
-var bufferLength = analyser.frequencyBinCount;
-var dataArray = new Uint8Array(bufferLength);
-analyser.getByteTimeDomainData(dataArray);
-let localAudioSource;
+socket.on('room-message', (data) => {
+    console.log(data)
+    if( data.hasOwnProperty('file') )
+    {
+        processFileFromPeer(data.file);
+    }
+});
 
-// Get a canvas defined with ID "oscilloscope"
-var canvas = document.getElementById("oscilloscope");
-var canvasCtx = canvas.getContext("2d");
+
+function fileToObj(file)
+{
+    if ('TextDecoder' in window) {
+        var dataView = new DataView(file);
+        var decoder = new TextDecoder('utf8');
+        var obj = JSON.parse(decoder.decode(dataView));
+        return obj;
+    } else {
+        var decodedString = String.fromCharCode.apply(null, new Uint8Array(file));
+        var obj = JSON.parse(decodedString);
+        return obj;
+    }
+
+}
+
+function processFileFromPeer(file)
+{
+    let obj = fileToObj(file);
+    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
+    
+}
+
 
 
 soupclient.on_joinedRoom = ()=>{
@@ -140,15 +125,28 @@ async function startStream()
 }
 
 
-async function showCameraInfo() {
-    //    let deviceId = await getCurrentVideoDeviceId();
-    //    let audioDeviceId = await getCurrentAudioDeviceId();
+async function showCameraInfo() 
+{
     let infoEl = $('#camera-info');
     const audioTrack = localMediaStream.getAudioTracks()[0];
     const videoTrack = localMediaStream.getVideoTracks()[0];
 
     infoEl.innerHTML = `input video: ${videoTrack.label} | audio: ${audioTrack.label}`
 }
+
+
+// Oscilliscope
+
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let analyser = audioCtx.createAnalyser();
+analyser.fftSize = 2048;
+var bufferLength = analyser.frequencyBinCount;
+var dataArray = new Uint8Array(bufferLength);
+analyser.getByteTimeDomainData(dataArray);
+let localAudioSource;
+
+var canvas = document.getElementById("oscilloscope");
+var canvasCtx = canvas.getContext("2d");
 
 function draw() 
 {
