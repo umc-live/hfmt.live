@@ -310,6 +310,12 @@ async function sendCameraStreams()
         encodings: camEncodings(),
         appData: { mediaTag: 'cam-video' }
     });
+
+/*
+    dataProducer = await sendTransport.produceData({
+    });
+*/
+
     /*
     if (getCamPausedState()) {
       try {

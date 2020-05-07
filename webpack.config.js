@@ -27,7 +27,7 @@ module.exports = [
             minimize: false
         },
     }, {
-        entry: './src/soupclient.js',
+        entry: './src/controller.js',
         output: {
             filename: 'soupclient.bundle.js',
             path: path.resolve(__dirname, 'public/soup/js'),
