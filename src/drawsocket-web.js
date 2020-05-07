@@ -13,9 +13,13 @@
 'use strict';
 
 import * as timesync from 'timesync';
+import {TweenMax, TimelineMax} from 'gsap';
+import Tone from 'tone';
+import * as pdfjsLib from 'pdfjs-dist/build/pdf';
+import * as SVGPoints from 'svg-points';
+import * as d3 from 'd3-selection';
 
 let event_connected_callback = null;
-
 
 TweenMax.ticker.fps(60);
 TweenMax.ticker.useRAF(true);
@@ -2364,7 +2368,8 @@ gainNode.connect(audioCtx.destination);
  * PDF handler
  */
 
-let pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+//let pdfjsLib = window['pdfjs-dist/build/pdf'];
 // The workerSrc property
 pdfjsLib.GlobalWorkerOptions.workerSrc = 'scripts/pdfjs-dist/build/pdf.worker.js';
 

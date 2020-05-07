@@ -9,14 +9,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "d3-selection": "^1.4.1",
     "express": "^4.17.1",
+    "gsap": "^3.2.6",
     "http": "0.0.1-security",
     "mediasoup": "^3.5.7",
     "mediasoup-client": "^3.6.5",
     "minimist": "^1.2.5",
+    "pdfjs-dist": "^2.3.200",
     "promise": "^8.1.0",
     "socket.io": "^2.3.0",
+    "svg-points": "^6.0.1",
     "timesync": "^1.0.5",
+    "tone": "^13.8.25",
     "webrtc-adapter": "^7.5.1"
   },
   "devDependencies": {
