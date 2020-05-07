@@ -188,7 +188,7 @@ function draw()
     canvasCtx.stroke();
 }
 
-function handleFiles()
+async function handleFiles()
 {
     const file = this.files[0];
     console.log(file);
@@ -197,7 +197,7 @@ function handleFiles()
         file
     });
 
-    processFile(file.arrayBuffer());
+    processFile(await file.arrayBuffer());
 
 }
 
