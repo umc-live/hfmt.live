@@ -10,8 +10,23 @@ socket.on('room-message', (data) => {
     console.log(data)
     if( data.hasOwnProperty('file') )
     {
-        var jsonResult = JSON.parse(JSON.stringify(data.file));
-        console.log(jsonResult)
+
+        if ('TextDecoder' in window) {
+            // Decode as UTF-8
+            var dataView = new DataView(data.file);
+            var decoder = new TextDecoder('utf8');
+            var response = JSON.parse(decoder.decode(dataView));
+            console.log('1', response)
+
+        } else {
+            // Fallback decode as ASCII
+            var decodedString = String.fromCharCode.apply(null, new Uint8Array(data.file));
+            var response = JSON.parse(decodedString);
+            console.log('2', response)
+        }
+
+        //var arr = Array.from(new Uint8Array(data.file));
+        //var jsonResult = JSON.parse(JSON.stringify(arr));
 
     }
 });
