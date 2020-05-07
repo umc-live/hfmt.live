@@ -118,8 +118,8 @@ async function showCameraInfo() {
     //    let deviceId = await getCurrentVideoDeviceId();
     //    let audioDeviceId = await getCurrentAudioDeviceId();
     let infoEl = $('#camera-info');
-    const audioTrack = camVideoProducer.getAudioTracks()[0];
-    const videoTrack = camVideoProducer.getVideoTracks()[0];
+    const audioTrack = localMediaStream.getAudioTracks()[0];
+    const videoTrack = localMediaStream.getVideoTracks()[0];
 
     infoEl.innerHTML = `input video: ${videoTrack.label} | audio: ${audioTrack.label}`
 }
