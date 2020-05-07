@@ -14,7 +14,9 @@
     "mediasoup": "^3.5.7",
     "mediasoup-client": "^3.6.5",
     "minimist": "^1.2.5",
+    "promise": "^8.1.0",
     "socket.io": "^2.3.0",
+    "timesync": "^1.0.5",
     "webrtc-adapter": "^7.5.1"
   },
   "devDependencies": {

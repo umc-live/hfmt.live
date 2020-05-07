@@ -1,9 +1,12 @@
 
 import * as soupclient from './soupclient-module';
 import io from 'socket.io-client';
+import * as drawsocket from './drawsocket-web';
 
 const socket = io();
 soupclient.init(socket);
+drawsocket.init(socket);
+
 
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
