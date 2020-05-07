@@ -44,7 +44,7 @@ soupclient.on_joinedRoom = ()=>{
 
 soupclient.on_newPeerStream = async (stream, kind, id) => {
 
-    const tag = kind + '-' + peerId;
+    const tag = kind + '-' + id;
     if ($('#' + tag)) {
         console.log('already have tag');
         return;
