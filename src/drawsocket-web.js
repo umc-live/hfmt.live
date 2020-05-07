@@ -15,6 +15,9 @@
 import * as timesync from 'timesync';
 import {TweenMax, TimelineMax} from 'gsap/all';
 
+console.log(TweenMax.version);
+
+
 TweenMax.ticker.fps(60);
 
 import Tone from 'tone';
