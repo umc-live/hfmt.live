@@ -13,7 +13,7 @@
 'use strict';
 
 import * as timesync from 'timesync';
-import {TweenMax, TimelineMax} from 'gsap';
+import {TweenMax, TimelineMax} from 'gsap/all';
 import Tone from 'tone';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import * as SVGPoints from 'svg-points';
