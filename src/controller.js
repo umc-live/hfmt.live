@@ -50,7 +50,7 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
         return;
     }
 
-    let el = document.createElement(consumer.kind);
+    let el = document.createElement(kind);
     el.setAttribute('playsinline', '');
     el.setAttribute('autoplay', '');
     //el.setAttribute('muted', '');
