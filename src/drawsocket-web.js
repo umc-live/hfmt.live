@@ -21,6 +21,7 @@ import Tone from 'tone';
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
 import * as SVGPoints from 'svg-points';
 import * as d3 from 'd3-selection';
+import * as StartAudioContext from 'startaudiocontext';
 
 let event_connected_callback = null;
 
