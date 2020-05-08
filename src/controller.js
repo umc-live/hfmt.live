@@ -18,7 +18,7 @@ socket.on('room-message', (data) => {
     console.log(data)
     if( data.hasOwnProperty('file') )
     {
-        processFile(data.file);
+        processFile( fileToObj(data.file) );
     }
 });
 
@@ -38,12 +38,15 @@ function fileToObj(file)
 
 }
 
-function processFile(file)
+function processFile(obj)
 {
-    let obj = fileToObj(file);
+   // let obj = fileToObj(file);
 //    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
     
     let menu = $('#select_part');
+
+    // clear 
+
     Object.keys(obj).forEach( key => {
         let el = document.createElement('option');
         el.value = key;
@@ -58,11 +61,6 @@ function processFile(file)
     });
 
 }
-
-
-
-
-
 
 soupclient.on_joinedRoom = ()=>{
     $('#btn_connect').disabled = true;
@@ -213,7 +211,17 @@ async function handleFiles()
         file
     });
 
-    processFile(await file.arrayBuffer());
+    let reader = new FileReader();
+    reader.readAsText(file);
+
+    reader.onload = function() {
+        processFile( JSON.parse(reader.result) );
+    };
+
+    reader.onerror = function() {
+        console.log(reader.error);
+    };
+    
 
 }
 
