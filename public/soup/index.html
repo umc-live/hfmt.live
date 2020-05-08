@@ -50,11 +50,7 @@
 
         <select name="parts" id="select_part">
             <option value="">--Please select a part to display--</option>
-        </select>
-
-        <video id="localVideo" autoplay playsinline muted></video>
-        <div id="camera-info"></div>
-        <canvas id="oscilloscope"></canvas>    
+        </select> 
 
         <div id="log"></div>
         <!--
@@ -62,11 +58,9 @@
      -->
     </div>
 
-
-
-
-
-
+    <video id="localVideo" autoplay playsinline muted></video>
+    <div id="camera-info"></div>
+    <canvas id="oscilloscope"></canvas>   
 
     <script>
         window.localStorage.setItem('debug', 'mediasoup-client:WARN* mediasoup-client:ERROR*');
