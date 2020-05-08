@@ -7,6 +7,7 @@ const socket = io();
 soupclient.init(socket);
 drawsocket.init(socket);
 
+window.drawsocket = drawsocket;
 
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
