@@ -181,6 +181,13 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('room-message', data );
   });
 
+  socket.on('timesync', (data) => {
+    socket.emit('timesync', {
+        id: (typeof data.id == "undefined") ? null : data.id,
+        result: Date.now()
+    });
+  });
+
   socket.on('heartbeat', (payload) => {
     payload.nodeName = name;
     socket.emit('heartbeat', payload);
