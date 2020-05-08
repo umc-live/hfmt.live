@@ -50,7 +50,7 @@ function processFile(file)
         menu.appendChild(el);
     });
 
-    meun.addEventListener('change', (event) => {
+    menu.addEventListener('change', (event) => {
         console.log('loading event.target.value');
         
         drawsocket.input(obj[event.target.value]);
