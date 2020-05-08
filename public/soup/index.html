@@ -23,7 +23,7 @@
         <button id="btn_start">Start Webcam</button>
 
         <input type="file" accept=".json" id="input_sendfile" style="display:none">
-        <button id="btn_sendfile">Send File</button>
+        <button id="btn_sendfile">Send Score</button>
 
         <div id="log"></div>
      <!--
@@ -31,13 +31,17 @@
      --> 
     </div>
 
-
     <video id="localVideo" autoplay playsinline muted></video>    
     <div id="camera-info"></div>
     <canvas id="oscilloscope"></canvas>
 
     <div id="videos"></div>
 
+    <div id="parts_menu">
+        <select name="parts" id="select_part">
+            <option value="">--Please select a part to display--</option>
+        </select>
+    </div>
 
     <!-- drawsocket elements -->
 

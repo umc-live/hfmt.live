@@ -42,9 +42,30 @@ function processFile(file)
     let obj = fileToObj(file);
     console.log(`received json ${JSON.stringify(obj, null, 2)}`);
     
-    drawsocket.input(obj);
+    let menu = $('#select_part');
+    Object.keys(obj).forEach( key => {
+        let el = document.createElement('option');
+        el.value = key;
+        el.innerHTML = key;
+
+        el.addEventListener('change', (event) => {
+            drawsocket.input([,
+                {
+                    key: 'clear',
+                    val: '*'
+                },
+                obj[event.target.value]
+            ]);
+          });
+
+        menu.appendChild(el);
+    })
+
 
 }
+
+
+
 
 
 
