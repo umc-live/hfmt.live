@@ -19,34 +19,31 @@
 
 <body>
 
-    <video id="localVideo" autoplay playsinline muted></video>    
+    <video id="localVideo" autoplay playsinline muted></video>
     <div id="camera-info"></div>
     <canvas id="oscilloscope"></canvas>
 
     <div id="videos"></div>
 
-    <!-- drawsocket elements -->
-    <div id="touchdiv"></div>
+    <!--drawsocket -->
+    <div id="drawsocket">
 
-    <!--main main main setup -->
-    <div id="main-div" >
+        <div id="touchdiv"></div>
+        <div id="main-div">
 
-      <div id="main-html" ></div>
+            <div id="main-html"></div>
 
-      <svg  id="svg" 
-            version="1.1" 
-            baseProfile="full" 
-            xmlns="http://www.w3.org/2000/svg" 
-            xmlns:xlink="http://www.w3.org/1999/xlink" >
-          
-            <defs id="defs"></defs>
-            <g id="main-svg"></g>
-            
-      </svg>
+            <svg id="svg" version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink">
 
-  </div>
-    <div id="forms" ></div>
+                <defs id="defs"></defs>
+                <g id="main-svg"></g>
 
+            </svg>
+
+        </div>
+        <div id="forms"></div>
+    </div>
 
     <div class="ui">
         <button id="btn_connect">Connect</button>
@@ -54,25 +51,25 @@
 
         <input type="file" accept=".json" id="input_sendfile" style="display:none">
         <button id="btn_sendfile">Send Score</button>
-        
+
         <select name="parts" id="select_part">
             <option value="">--Please select a part to display--</option>
         </select>
 
         <div id="log"></div>
-     <!--
+        <!--
         <button id="btn_screen">Share Screen</button>
-     --> 
+     -->
     </div>
 
-    
 
-    
+
+
 
 
 
     <script>
-	    window.localStorage.setItem('debug', 'mediasoup-client:WARN* mediasoup-client:ERROR*');
+        window.localStorage.setItem('debug', 'mediasoup-client:WARN* mediasoup-client:ERROR*');
 	    //window.localStorage.setItem('debug', 'mediasoup-client:*');
     </script>
     <script src="js/soupclient.bundle.js"></script>
