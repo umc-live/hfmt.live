@@ -44,8 +44,7 @@ function processFile(obj)
 //    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
     
     let menu = $('#select_part');
-
-    // clear 
+    menu.innerHTML = "";
 
     Object.keys(obj).forEach( key => {
         let el = document.createElement('option');
