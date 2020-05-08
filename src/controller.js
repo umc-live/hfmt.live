@@ -40,7 +40,7 @@ function fileToObj(file)
 function processFile(file)
 {
     let obj = fileToObj(file);
-    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
+//    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
     
     let menu = $('#select_part');
     Object.keys(obj).forEach( key => {

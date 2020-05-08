@@ -2205,7 +2205,7 @@ if (typeof document.hidden !== "undefined") { // Opera 12.10 and Firefox 18 and 
 }
 
 function handleVisibilityChange() {
-  if (!port) {
+  if (!socket) {
     console.log('handleVisibilityChange, no port');
     return;
   }
