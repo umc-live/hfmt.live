@@ -46,6 +46,11 @@ function processFile(obj)
     let menu = $('#select_part');
     menu.innerHTML = "";
 
+    let el1 = document.createElement('option');
+    el1.value = "";
+    el1.innerHTML = "--Please select a part to display--";
+    menu.appendChild(el1);
+
     Object.keys(obj).forEach( key => {
         let el = document.createElement('option');
         el.value = key;
