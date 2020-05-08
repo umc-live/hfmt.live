@@ -49,13 +49,9 @@ function processFile(file)
         el.innerHTML = key;
 
         el.addEventListener('change', (event) => {
-            drawsocket.input([,
-                {
-                    key: 'clear',
-                    val: '*'
-                },
-                obj[event.target.value]
-            ]);
+            console.log('loading event.target.value');
+            
+            drawsocket.input(obj[event.target.value]);
           });
 
         menu.appendChild(el);
