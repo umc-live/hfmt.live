@@ -14,14 +14,17 @@
 
 import * as timesync from 'timesync';
 import {TweenMax, TimelineMax} from 'gsap/all';
-
 console.log(TweenMax.version);
 
 import Tone from 'tone';
+import * as StartAudioContext from 'startaudiocontext';
+
 import * as pdfjsLib from 'pdfjs-dist/build/pdf';
+import * as pdfworker from 'pdfjs-dist/build/pdf.worker';
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfworker;
+
 import * as SVGPoints from 'svg-points';
 import * as d3 from 'd3-selection';
-import * as StartAudioContext from 'startaudiocontext';
 
 let event_connected_callback = null;
 
@@ -2378,7 +2381,6 @@ gainNode.connect(audioCtx.destination);
 
 //let pdfjsLib = window['pdfjs-dist/build/pdf'];
 // The workerSrc property
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'scripts/pdfjs-dist/build/pdf.worker.js';
 
 class PDFdoc {
 
