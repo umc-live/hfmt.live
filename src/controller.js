@@ -229,6 +229,49 @@ async function handleFiles()
 
 }
 
+function sendDrawsocketMessage()
+{
+    console.log("sendDrawsocketMessage");
+
+    let inputText = $('#drawsocket_output_text').value;
+    console.log(inputText);
+
+    try 
+    {
+        let json_ = JSON.parse(inputText);
+        json_.timetag = Date.now();
+        socket.emit('room-message',
+            json_        
+        );
+
+        drawsocket.input(json_);
+    }
+    catch (err) 
+    {
+        console.log('failled to parse', err);
+    }
+   
+    $('#message_panel').style.display = "none";
+
+}
+
+
+function createMessagePanel()
+{
+    $('#message_panel').style.display = "inline-block";
+}
+
+function keyHandler(e) {
+    var TABKEY = 9;
+    if(e.keyCode == TABKEY) {
+        this.value += "\t";
+        if(e.preventDefault) {
+            e.preventDefault();
+        }
+        return false;
+    }
+}
+
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', soupclient.joinRoom );
     $('#btn_start').addEventListener('click', startStream);
@@ -239,6 +282,21 @@ window.addEventListener('load', () => {
         $('#input_sendfile').click() 
     });
 
+    $('#btn_drawsocket').addEventListener('click', createMessagePanel );
+    $('#btn_drawsocket_send').addEventListener('click', sendDrawsocketMessage );
+
+    let textinput = $('#drawsocket_output_text');
+    textinput.addEventListener('keydown', keyHandler, false );
+    textinput.value = `{ 
+        "key" : "tween", 
+        "val" : [{ 
+            "id" : "score-anim", 
+            "cmd" : "play" 
+        }, { 
+           "id" : "miniscore-anim", 
+           "cmd" : "play" 
+        }]
+    }`;
+
     window.addEventListener('unload', soupclient.leaveRoom);
 })
-

@@ -41,16 +41,24 @@
         <div id="forms"></div>
     </div>
 
+    <!-- control panel -->
     <div class="ui">
         <button id="btn_connect">Connect</button>
         <button id="btn_start">Start Webcam</button>
 
         <input type="file" accept=".json" id="input_sendfile" style="display:none">
-        <button id="btn_sendfile">Send Score</button>
+        <button id="btn_sendfile">Share Score</button>
 
         <select name="parts" id="select_part">
-            <option value="">--Please select a part to display--</option>
+            <option value="">-- no score loaded --</option>
         </select> 
+
+        <button id="btn_drawsocket">drawsocket-msg-out</button>
+
+        <div id="message_panel" style="display: none;" >
+            <textarea id="drawsocket_output_text" placeholder="insert drawsocket text here"></textarea>
+            <button id="btn_drawsocket_send">send</button>
+        </div>
 
         <div id="log"></div>
         <!--
@@ -58,6 +66,7 @@
      -->
     </div>
 
+    <!-- local video -->
     <video id="localVideo" autoplay playsinline muted></video>
     <div id="camera-info"></div>
     <canvas id="oscilloscope"></canvas>   
