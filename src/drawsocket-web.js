@@ -2555,7 +2555,7 @@ function initTimesync(socket_)
   ts.on('sync', function (state) {
 
     console.log('syncing', state);
-    statusDiv.innerHTML = "<p>synchronizing...</p>";
+    statusDiv.innerHTML = "synchronizing...";
     statusDiv.style.visibility = "visible";
 
     if (state === 'end') {
