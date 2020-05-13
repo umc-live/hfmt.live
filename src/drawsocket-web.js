@@ -2647,7 +2647,7 @@ function init(socket_)
   });
 
   socket.on('timesync', (data) => {
-    ts.receive(null, data.timesync);
+    ts.receive(null, data);
   });
 
   socket.on('ping', ()=> {
