@@ -2638,7 +2638,7 @@ function init(socket_)
   });
 
   socket.on('connected', () => {
-    console.log("connected");
+    console.log("drawsocket connected");
     statusDiv.style.visibility = "hidden";
 
     do_sync();
@@ -2659,7 +2659,8 @@ function init(socket_)
   socket.on('statereq', ()=> {
     socket.emit('statereq'); 
   });
-
+  
+  do_sync();
 
 }
 
