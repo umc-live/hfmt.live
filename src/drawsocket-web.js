@@ -2547,7 +2547,7 @@ function initTimesync(socket_)
 
   ts = timesync.create({
     server: socket_,
-    interval: 5000,
+    interval: 10000,
     repeat: 5,
     delay: 100
   });
