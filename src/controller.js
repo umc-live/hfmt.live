@@ -20,6 +20,10 @@ socket.on('room-message', (data) => {
     {
         processFile( fileToObj(data.file) );
     }
+    else
+    {
+        drawsocket.input(data);
+    }
 });
 
 
