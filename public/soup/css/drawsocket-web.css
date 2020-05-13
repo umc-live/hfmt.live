@@ -143,6 +143,7 @@ g {
   position: absolute;
   top: calc(100vh - 50px);
   left: 10px;
+  width: calc(100vw - 50px);;
   /* border: solid blue 1px; */
   display: block;
   box-sizing: border-box;

@@ -2606,7 +2606,7 @@ function initTimesync(socket_)
 
 
   ts.send = function (socket, data, timeout) {
-    console.log('sending', data, timeout);
+   // console.log('sending', data, timeout);
     return new Promise(function (resolve, reject) {
       let timeoutFn = setTimeout(reject, timeout);
 
