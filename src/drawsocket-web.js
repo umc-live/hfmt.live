@@ -95,7 +95,7 @@ let drawing = d3.select("#main-svg"); // svg group drawing layer
 let mainSVG = d3.select("#svg"); // actual svg
 let maindef = d3.select("#defs");
 let forms = d3.select("#forms");
-let statusDiv = document.getElementById("loading");
+let statusDiv = document.getElementById("statusDiv");
 let log_enabled = false;
 
 function removeNode(node) {
@@ -2659,7 +2659,7 @@ function init(socket_)
   socket.on('statereq', ()=> {
     socket.emit('statereq'); 
   });
-  
+
   do_sync();
 
 }
