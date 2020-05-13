@@ -2559,8 +2559,9 @@ function initTimesync(socket_)
     statusDiv.style.visibility = "visible";
 
     if (state === 'end') {
-      display_log('sync offset: ' + ts.offset + ' ms');
-      statusDiv.style.visibility = "hidden";
+      statusDiv.innerHTML = `sync offset: ${ts.offset} ms`;
+      //display_log('sync offset: ' + ts.offset + ' ms');
+      //statusDiv.style.visibility = "hidden";
 
       if (!hasstate) {
         // ask server for current state
