@@ -2544,6 +2544,7 @@ function setConnectionCallback(cb) {
 
 function initTimesync(socket_)
 {
+
   ts = timesync.create({
     server: socket_,
     interval: null,
@@ -2630,6 +2631,8 @@ function init(socket_)
 {
   socket = socket_;
 
+  initTimesync(socket);
+
   socket.on('drawsocket', (dataobj) => {
     drawsocket_input(dataobj);
   });
@@ -2643,8 +2646,8 @@ function init(socket_)
 
   });
 
-  socket.on('timesync', ()=> {
-    ts.receive(null, obj.timesync);
+  socket.on('timesync', (data) => {
+    ts.receive(null, data.timesync);
   });
 
   socket.on('ping', ()=> {
@@ -2657,7 +2660,6 @@ function init(socket_)
     socket.emit('statereq'); 
   });
 
-  initTimesync(socket);
 
 }
 
