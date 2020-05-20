@@ -25,7 +25,7 @@ socket.on('room-message', (data) => {
 
             console.log(typeof data.file[i], data.file[i]);
 
-            let file = arrayBufferToString( data.file[i] );
+            let file = new File(data.file[i]);
             console.log(typeof file);
             
             if( file.type === "application/json" )
@@ -138,7 +138,7 @@ async function handleFiles()
     });
 
     return;
-    
+
     let fileArray = [];
     for( let i = 0; i < this.files.length; i++)
     {
