@@ -22,7 +22,10 @@ socket.on('room-message', (data) => {
         
         for(let i = 0; i < data.file.length; i++)
         {
-            let file = fileToObj( data.file[i] );
+
+            console.log(typeof data.file[i]);
+
+            let file = arrayBufferToString( data.file[i] );
             console.log(typeof file);
             
             if( file.type === "application/json" )
@@ -71,8 +74,7 @@ function fileToObj(file)
     if ('TextDecoder' in window) {
         var dataView = new DataView(file);
         var decoder = new TextDecoder('utf8');
-        var obj = decoder.decode(dataView); //<< not parsing since it could be another type?
-  //      var obj = JSON.parse(decoder.decode(dataView));
+        var obj = JSON.parse(decoder.decode(dataView));
         return obj;
     } else {
         var decodedString = String.fromCharCode.apply(null, new Uint8Array(file));
@@ -81,6 +83,21 @@ function fileToObj(file)
     }
 
 }
+
+function arrayBufferToString(file)
+{
+    if ('TextDecoder' in window) {
+        var dataView = new DataView(file);
+        var decoder = new TextDecoder('utf8');
+        var obj = decoder.decode(dataView); //<< not parsing since it could be another type?
+        return obj;
+    } else {
+        var obj = String.fromCharCode.apply(null, new Uint8Array(file));
+        return obj;
+    }
+
+}
+
 
 function processFile(obj)
 {
@@ -116,7 +133,12 @@ async function handleFiles()
     const file = this.files[0];
     console.log(this.files, this.files.length);
 
-    const fileArray = [...this.files];
+
+    let fileArray = [];
+    for( let i = 0; i < this.file.length; i++)
+    {
+        fileArray.push(this.files[i]);
+    }
 
     socket.emit('room-message', {
         file: fileArray
