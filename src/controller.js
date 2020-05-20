@@ -22,7 +22,7 @@ socket.on('room-message', (data) => {
         
         for(let i = 0; i < data.file.length; i++)
         {
-            let file = data.file[i];
+            let file = fileToObj( data.file[i] );
             console.log(typeof file);
             
             if( file.type === "application/json" )
@@ -71,7 +71,8 @@ function fileToObj(file)
     if ('TextDecoder' in window) {
         var dataView = new DataView(file);
         var decoder = new TextDecoder('utf8');
-        var obj = JSON.parse(decoder.decode(dataView));
+        var obj = decoder.decode(dataView); //<< not parsing since it could be another type?
+  //      var obj = JSON.parse(decoder.decode(dataView));
         return obj;
     } else {
         var decodedString = String.fromCharCode.apply(null, new Uint8Array(file));
