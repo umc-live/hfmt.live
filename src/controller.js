@@ -112,6 +112,8 @@ soupclient.on_removedPeerStream = (_id) => {
     });
 }
 
+// to do: set audio and video stream devices
+
 async function startStream() 
 {
     if (localMediaStream)
