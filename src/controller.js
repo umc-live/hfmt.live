@@ -18,11 +18,26 @@ socket.on('room-message', (data) => {
     console.log(data)
     if( data.hasOwnProperty('file') )
     {
+        console.log(data.file);
+        
+        for(let i = 0; i < data.file.length; i++)
+        {
+            let file = data.file[i];
+            if( file.type == "application/json")
+            {
+                processFile( fileToObj(file) );
+            }
+            else
+            {
+                console.log(file);
+            }
+
+        }
+/*
         data.file.forEach(f => {
             //if( f.type === "application/json" )
-            processFile( fileToObj(f) );
         });
-        
+  */      
     }
     else
     {
