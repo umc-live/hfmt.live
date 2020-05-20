@@ -23,28 +23,17 @@ socket.on('room-message', (data) => {
         for(let i = 0; i < data.file.length; i++)
         {
 
-            console.log(typeof data.file[i], data.file[i]);
-
-            let file = new File(data.file[i]);
+            let file = data.file[i];
             console.log(typeof file);
             
             if( file.type === "application/json" )
             {
-                let reader = new FileReader();
-                reader.readAsText(file);
-    
-                reader.onload = function() {
-                    processFile( JSON.parse(reader.result) );
-                };
-    
-                reader.onerror = function() {
-                    console.log(reader.error);
-                };
+                console.log( arrayBufferToString(file.buf) );
                 
             }
             else
             {
-                console.log(file);
+                console.log( arrayBufferToString(file.buf) );
             }
 
             /*
