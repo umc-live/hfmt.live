@@ -22,7 +22,9 @@ socket.on('room-message', (data) => {
         
         for(let i = 0; i < data.file.length; i++)
         {
-            let file = File(data.file[i]);
+            let file = data.file[i];
+            console.log(typeof file);
+            
             if( file.type === "application/json" )
             {
                 let reader = new FileReader();
@@ -113,11 +115,13 @@ async function handleFiles()
     const file = this.files[0];
     console.log(this.files, this.files.length);
 
+    const fileArray = [...this.files];
+
     socket.emit('room-message', {
-        file: this.files
+        file: fileArray
     });
 
-    this.files.forEach(f => {
+    fileArray.forEach(f => {
         if( f.type === "application/json" )
         {
             let reader = new FileReader();
