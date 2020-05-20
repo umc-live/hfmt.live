@@ -24,32 +24,18 @@ socket.on('room-message', (data) => {
         {
 
             let file = data.file[i];
-            console.log(typeof file);
             
             if( file.type === "application/json" )
             {
-                console.log( arrayBufferToString(file.buf) );
-                
+                const json_ = JSON.parse( arrayBufferToString(file.buf) );
+                processDrawsocketFile( json_ );
             }
             else
             {
                 console.log( arrayBufferToString(file.buf) );
             }
 
-            /*
-            if( file.type == "application/json")
-            {
-                
-                processFile( fileToObj(file) );
-            }
-            */
-
         }
-/*
-        data.file.forEach(f => {
-            //if( f.type === "application/json" )
-        });
-  */      
     }
     else
     {
@@ -88,7 +74,7 @@ function arrayBufferToString(file)
 }
 
 
-function processFile(obj)
+function processDrawsocketFile(obj)
 {
    // let obj = fileToObj(file);
 //    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
