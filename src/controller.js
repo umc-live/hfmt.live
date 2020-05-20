@@ -22,7 +22,7 @@ socket.on('room-message', (data) => {
         
         for(let i = 0; i < data.file.length; i++)
         {
-            let file = data.file[i];
+            let file = File(data.file[i]);
             if( file.type === "application/json" )
             {
                 let reader = new FileReader();
