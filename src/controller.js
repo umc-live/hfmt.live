@@ -137,18 +137,17 @@ async function handleFiles()
     let fileArray = [];
     for( let i = 0; i < this.file.length; i++)
     {
-        fileArray.push(this.files[i]);
-    }
+        let file = this.file[i];
+        console.log(file);
+        
+        socket.emit('room-message', {
+            file: file
+        });
 
-    socket.emit('room-message', {
-        file: fileArray
-    });
-
-    fileArray.forEach(f => {
-        if( f.type === "application/json" )
+        if( file.type === "application/json" )
         {
             let reader = new FileReader();
-            reader.readAsText(f);
+            reader.readAsText(file);
 
             reader.onload = function() {
                 processFile( JSON.parse(reader.result) );
@@ -159,7 +158,15 @@ async function handleFiles()
             };
             
         }
+
+        //fileArray.push(this.files[i]);
+    }
+/*
+    socket.emit('room-message', {
+        file: fileArray
     });
+*/
+
 
     
 
