@@ -97,7 +97,7 @@ function processDrawsocketFile(obj)
     menu.addEventListener('change', (event) => {
         console.log('loading event.target.value');
         
-        drawsocket.input(obj[event.target.value]);
+        drawsocket.input( obj[event.target.value] );
     });
 
 }
