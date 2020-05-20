@@ -23,7 +23,7 @@ socket.on('room-message', (data) => {
         for(let i = 0; i < data.file.length; i++)
         {
 
-            console.log(typeof data.file[i]);
+            console.log(typeof data.file[i], data.file[i]);
 
             let file = arrayBufferToString( data.file[i] );
             console.log(typeof file);
@@ -132,8 +132,13 @@ async function handleFiles()
 {
     const file = this.files[0];
     console.log(this.files, this.files.length);
+    
+    socket.emit('room-message', {
+        file: this.files
+    });
 
-
+    return;
+    
     let fileArray = [];
     for( let i = 0; i < this.files.length; i++)
     {
