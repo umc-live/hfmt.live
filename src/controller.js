@@ -135,7 +135,7 @@ async function handleFiles()
 
 
     let fileArray = [];
-    for( let i = 0; i < this.file.length; i++)
+    for( let i = 0; i < this.files.length; i++)
     {
         let file = this.files[i];
         console.log(file);
