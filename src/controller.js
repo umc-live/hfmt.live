@@ -137,7 +137,7 @@ async function handleFiles()
     let fileArray = [];
     for( let i = 0; i < this.file.length; i++)
     {
-        let file = this.file[i];
+        let file = this.files[i];
         console.log(file);
         
         socket.emit('room-message', {
