@@ -70,6 +70,31 @@ function processFile(obj)
 
 }
 
+
+async function handleFiles()
+{
+    const file = this.files[0];
+    console.log(this.files, this.files.length);
+
+    socket.emit('room-message', {
+        file
+    });
+
+    let reader = new FileReader();
+    reader.readAsText(file);
+
+    reader.onload = function() {
+        processFile( JSON.parse(reader.result) );
+    };
+
+    reader.onerror = function() {
+        console.log(reader.error);
+    };
+    
+
+}
+
+
 soupclient.on_joinedRoom = ()=>{
     $('#btn_connect').disabled = true;
 }
@@ -210,29 +235,6 @@ function draw()
 
     canvasCtx.lineTo(canvas.width, canvas.height / 2);
     canvasCtx.stroke();
-}
-
-async function handleFiles()
-{
-    const file = this.files[0];
-    console.log(file);
-
-    socket.emit('room-message', {
-        file
-    });
-
-    let reader = new FileReader();
-    reader.readAsText(file);
-
-    reader.onload = function() {
-        processFile( JSON.parse(reader.result) );
-    };
-
-    reader.onerror = function() {
-        console.log(reader.error);
-    };
-    
-
 }
 
 function sendDrawsocketMessage()
