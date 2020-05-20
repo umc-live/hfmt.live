@@ -18,7 +18,11 @@ socket.on('room-message', (data) => {
     console.log(data)
     if( data.hasOwnProperty('file') )
     {
-        processFile( fileToObj(data.file) );
+        data.file.forEach(f => {
+            //if( f.type === "application/json" )
+            processFile( fileToObj(f) );
+        });
+        
     }
     else
     {
@@ -77,19 +81,26 @@ async function handleFiles()
     console.log(this.files, this.files.length);
 
     socket.emit('room-message', {
-        file
+        file: this.files
     });
 
-    let reader = new FileReader();
-    reader.readAsText(file);
+    this.files.forEach(f => {
+        if( f.type === "application/json" )
+        {
+            let reader = new FileReader();
+            reader.readAsText(f);
 
-    reader.onload = function() {
-        processFile( JSON.parse(reader.result) );
-    };
+            reader.onload = function() {
+                processFile( JSON.parse(reader.result) );
+            };
 
-    reader.onerror = function() {
-        console.log(reader.error);
-    };
+            reader.onerror = function() {
+                console.log(reader.error);
+            };
+            
+        }
+    });
+
     
 
 }
