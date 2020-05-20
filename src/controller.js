@@ -132,19 +132,15 @@ async function handleFiles()
 {
     const file = this.files[0];
     console.log(this.files, this.files.length);
-    
-    socket.emit('room-message', {
-        file: this.files
-    });
 
-    return;
 
     let fileArray = [];
     for( let i = 0; i < this.files.length; i++)
     {
         let file = this.files[i];
         console.log(file);
-        
+       /*
+
         socket.emit('room-message', {
             file: file
         });
@@ -163,14 +159,17 @@ async function handleFiles()
             };
             
         }
-
-        //fileArray.push(this.files[i]);
+        */
+        fileArray.push({
+            type: file.type,
+            buf: file
+        });
     }
-/*
+
     socket.emit('room-message', {
         file: fileArray
     });
-*/
+
 
 
     
