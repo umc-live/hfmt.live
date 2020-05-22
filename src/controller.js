@@ -127,7 +127,7 @@ async function handleFiles()
             reader.readAsText(file);
 
             reader.onload = function() {
-                processFile( JSON.parse(reader.result) );
+                processDrawsocketFile( JSON.parse(reader.result) );
             };
 
             reader.onerror = function() {
