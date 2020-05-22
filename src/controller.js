@@ -77,7 +77,7 @@ function arrayBufferToString(file)
 function processDrawsocketFile(obj)
 {
    // let obj = fileToObj(file);
-//    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
+    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
     
     let menu = $('#select_part');
     menu.innerHTML = "";
