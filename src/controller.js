@@ -77,7 +77,7 @@ function arrayBufferToString(file)
 function processDrawsocketFile(obj)
 {
    // let obj = fileToObj(file);
-    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
+//    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
     
     let menu = $('#select_part');
     menu.innerHTML = "";
@@ -119,6 +119,7 @@ async function handleFiles()
         socket.emit('room-message', {
             file: file
         });
+        */
 
         if( file.type === "application/json" )
         {
@@ -134,7 +135,7 @@ async function handleFiles()
             };
             
         }
-        */
+        
         fileArray.push({
             type: file.type,
             buf: file
