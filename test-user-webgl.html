@@ -7,8 +7,6 @@ var cubeRotation = 0.0;
 // will set to true when video can be copied to texture
 var copyVideo = false;
 
-main();
-
 //
 // Start here
 //
@@ -591,6 +589,8 @@ function loadShader(gl, type, source) {
 
 soupclient.on_newPeerStream = async (stream, kind, id) => {
 
+    console.log('----> received ');
+
     const tag = kind + '-' + id;
     if ($('#' + tag)) {
         console.log('already have tag');
@@ -618,6 +618,8 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
     
     if( kind == 'video')
     {
+        console.log('----> starting webgl video?');
+        
         const video = el;
 
         var then = 0;
@@ -640,5 +642,8 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
     }
    
 }
+
+main();
+
 </script>
 
