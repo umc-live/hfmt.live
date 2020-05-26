@@ -144,10 +144,8 @@ function processFile(name, obj, type)
 
         menu.addEventListener('change', (event) => {            
             if( type == 'text/html')
-            {
-               
+            {               
                 insertHTML(obj, $('#main-html') );
-                testCallMe();
             }
             else if( type == 'text/js' )
             {
