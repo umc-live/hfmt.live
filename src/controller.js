@@ -22,24 +22,24 @@ const $ = document.querySelector.bind(document);
 let localMediaStream;
 
 socket.on('room-message', (data) => {
-    console.log(data)
+    //console.log(data)
     if( data.hasOwnProperty('file') )
     {
-        console.log(data.file);
+      //  console.log(data.file);
         
         for(let i = 0; i < data.file.length; i++)
         {
 
             let file = data.file[i];
-            
+            let str = arrayBufferToString(file.buf);
             if( file.type === "application/json" )
             {
-                const json_ = JSON.parse( arrayBufferToString(file.buf) );
-                processDrawsocketFile( json_ );
+                const json_ = JSON.parse( str );
+                processFile( json_ , 'drawsocket');
             }
             else
             {
-                console.log( arrayBufferToString(file.buf) );
+                processFile( str , file.type );
             }
 
         }
@@ -80,8 +80,7 @@ function arrayBufferToString(file)
 
 }
 
-
-function processDrawsocketFile(obj)
+function processFile(obj, type)
 {
    // let obj = fileToObj(file);
 //    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
@@ -91,7 +90,7 @@ function processDrawsocketFile(obj)
 
     let el1 = document.createElement('option');
     el1.value = "";
-    el1.innerHTML = "--Please select a part to display--";
+    el1.innerHTML = "-- Select Display --";
     menu.appendChild(el1);
 
     Object.keys(obj).forEach( key => {
@@ -103,7 +102,15 @@ function processDrawsocketFile(obj)
 
     menu.addEventListener('change', (event) => {
         console.log('loading event.target.value');
-        drawsocket.input( obj[event.target.value] );
+
+        if( type == 'drawsocket')
+        {
+            drawsocket.input( obj[event.target.value] );
+        }
+        else if( type == 'js')
+        {
+            
+        }
     });
 
 }
