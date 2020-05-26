@@ -15,7 +15,7 @@ soupclient.init(socket);
 drawsocket.init(socket);
 
 window.drawsocket = drawsocket;
-window.soupclient = soupclient;
+window.drawsocket.on_newPeerStream = null;
 
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
@@ -220,6 +220,16 @@ soupclient.on_joinedRoom = ()=>{
 soupclient.on_newPeerStream = async (stream, kind, id) => {
 
     console.log('default on_newPeerStream');
+    
+    if( drawsocket.on_newPeerStream )
+    {
+        const ret = await drawsocket.on_newPeerStream(stream, kind, id);
+        if( ret == 1 )
+        {
+            return;
+        }
+
+    }
     
     const tag = kind + '-' + id;
     if ($('#' + tag)) {
