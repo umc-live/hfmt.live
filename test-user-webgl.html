@@ -1,7 +1,12 @@
 
 <canvas id="glcanvas" width="640" height="480"></canvas>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"></script>
 <script>
+
+const hostname = window.location.hostname;
+const $ = document.querySelector.bind(document);
+
+let localMediaStream;
 
 var cubeRotation = 0.0;
 // will set to true when video can be copied to texture
@@ -10,16 +15,18 @@ var copyVideo = false;
 //
 // Start here
 //
-function main() {
-  const canvas = document.querySelector('#glcanvas');
-  const gl = canvas.getContext('webgl');
+const canvas = document.querySelector('#glcanvas');
+const gl = canvas.getContext('webgl');
+
+//function main() {
 
   // If we don't have a GL context, give up now
-
+/*
   if (!gl) {
     alert('Unable to initialize WebGL. Your browser or machine may not support it.');
     return;
   }
+*/
 
   // Vertex shader program
 
@@ -107,7 +114,8 @@ function main() {
   }
   requestAnimationFrame(render);
   */
-}
+
+  //}
 
 function setupVideo(url) {
   const video = document.createElement('video');
@@ -587,7 +595,8 @@ function loadShader(gl, type, source) {
   return shader;
 }
 
-soupclient.on_newPeerStream = async (stream, kind, id) => {
+
+window.drawsocket.on_newPeerStream = async (stream, kind, id) => {
 
     console.log('----> received ');
 
@@ -622,6 +631,25 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
         
         const video = el;
 
+        copyVideo = true;
+        /*
+        video.addEventListener('playing', function() {
+            playing = true;
+            checkReady();
+        }, true);
+
+        video.addEventListener('timeupdate', function() {
+            timeupdate = true;
+            checkReady();
+        }, true);
+
+        function checkReady() {
+            if (playing && timeupdate) {
+                copyVideo = true;
+            }
+        }
+        */
+       
         var then = 0;
 
         // Draw the scene repeatedly
@@ -643,7 +671,7 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
    
 }
 
-main();
+//main();
 
 </script>
 
