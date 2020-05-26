@@ -15,7 +15,9 @@ soupclient.init(socket);
 drawsocket.init(socket);
 
 window.drawsocket = drawsocket;
-window.drawsocket.on_newPeerStream = async function(stream, kind, id){}
+window.drawsocket.on_newPeerStream = async function(stream, kind, id){
+    return 0;
+}
 
 
 const hostname = window.location.hostname;
@@ -224,7 +226,7 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
     
 //    if( drawsocket.on_newPeerStream )
     {
-        const ret = await drawsocket.on_newPeerStream(stream, kind, id);
+        const ret = await window.drawsocket.on_newPeerStream(stream, kind, id);
         if( ret == 1 )
         {
             return;
