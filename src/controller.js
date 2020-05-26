@@ -80,7 +80,7 @@ function arrayBufferToString(file)
 
 }
 
-function processFile(obj, type)
+function processFile(name, obj, type)
 {
    // let obj = fileToObj(file);
 //    console.log(`received json ${JSON.stringify(obj, null, 2)}`);
@@ -93,26 +93,43 @@ function processFile(obj, type)
     el1.innerHTML = "-- Select Display --";
     menu.appendChild(el1);
 
-    Object.keys(obj).forEach( key => {
-        let el = document.createElement('option');
-        el.value = key;
-        el.innerHTML = key;
-        menu.appendChild(el);
-    });
+    if( type == 'drawsocket')
+    {
+        Object.keys(obj).forEach( key => {
+            let el = document.createElement('option');
+            el.value = key;
+            el.innerHTML = `${name}: ${key}`;
+            menu.appendChild(el);
+        });
 
-    menu.addEventListener('change', (event) => {
-        console.log('loading event.target.value');
-
-        if( type == 'drawsocket')
-        {
+        menu.addEventListener('change', (event) => { 
             drawsocket.input( obj[event.target.value] );
-        }
-        else if( type == 'js')
-        {
-            
-        }
-    });
+        });
+    }
+    else
+    {
+        let el = document.createElement('option');
+        el.value = name;
+        el.innerHTML = name;
+        menu.appendChild(el);
 
+        drawsocket.input({
+            key: "clear",
+            val: "*"
+        });
+
+        menu.addEventListener('change', (event) => {            
+            if( type == 'text/html')
+            {
+                $('#main-html').innerHTML = obj;
+            }
+            else if( type == 'text/js' )
+            {
+                // ?
+            }
+        });
+    }
+    
 }
 
 
@@ -134,23 +151,28 @@ async function handleFiles()
         });
         */
 
-        if( file.type === "application/json" )
-        {
-            let reader = new FileReader();
-            reader.readAsText(file);
+       let reader = new FileReader();
+       reader.readAsText(file);
 
-            reader.onload = function() {
-                processDrawsocketFile( JSON.parse(reader.result) );
-            };
-
-            reader.onerror = function() {
-                console.log(reader.error);
-            };
+        reader.onload = function() {
+            if( file.type === "application/json" )
+            {
+                processFile( file.name, JSON.parse(reader.result), 'drawsocket' );
+            }
+            else
+            {
+                processFile( file.name, reader.result, file.type );
+            }
             
         }
         
+        reader.onerror = function() {
+            console.log(reader.error);
+        };
+
         fileArray.push({
             type: file.type,
+            name: file.name,
             buf: file
         });
     }
