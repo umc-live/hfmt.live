@@ -122,6 +122,7 @@ function processFile(name, obj, type)
             if( type == 'text/html')
             {
                 $('#main-html').innerHTML = obj;
+                testCallMe();
             }
             else if( type == 'text/js' )
             {
