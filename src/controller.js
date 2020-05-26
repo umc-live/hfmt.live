@@ -1,3 +1,10 @@
+/**
+ * to do:
+ * add html and js options for file input
+ *  in these cases, add the files to the menu
+ *  I guess really everything should be in one file? not sure yet
+ */
+
 
 import * as soupclient from './soupclient-module';
 import io from 'socket.io-client';
@@ -96,7 +103,6 @@ function processDrawsocketFile(obj)
 
     menu.addEventListener('change', (event) => {
         console.log('loading event.target.value');
-        
         drawsocket.input( obj[event.target.value] );
     });
 
