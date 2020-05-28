@@ -19,8 +19,7 @@ window.drawsocket.on_newPeerStream = async function(stream, kind, id){
     return 0;
 }
 
-window.drawsocket.remoteMediaStreams = soupclient.remoteMediaStreams;
-
+window.drawsocket.getMediaStreams = soupclient.getStreams;
 
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
@@ -210,9 +209,6 @@ async function handleFiles()
     socket.emit('room-message', {
         file: fileArray
     });
-
-
-
     
 
 }

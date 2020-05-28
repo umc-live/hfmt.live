@@ -9,10 +9,21 @@ const CAM_VIDEO_SIMULCAST_ENCODINGS =
     ];
 
 
-export let remoteMediaStreams = { 
+let remoteMediaStreams = { 
     audio: {},
     video: {}
 };
+
+/**
+ * returns remoteMediaStreams obj
+ *   { 
+ *       audio: {},
+ *       video: {}
+ *   }
+ */
+export function getStreams() {
+    return remoteMediaStreams;
+}
 
 /**
  * 
