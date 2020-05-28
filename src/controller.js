@@ -91,7 +91,7 @@ function arrayBufferToString(file)
 async function loadScript(node, src){
     return new Promise((resolve, reject) => {
         node.onload = ()=> {
-            document.head.removeChild(script);
+            document.head.removeChild(node);
             resolve()
         };
         script.onerror = reject;
