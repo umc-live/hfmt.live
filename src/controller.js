@@ -88,7 +88,14 @@ function arrayBufferToString(file)
 
 }
 
-function insertHTML(html, dest, append=false){
+async function loadScript(node, src){
+    return new Promise((resolve, reject) => {
+        node.onload = () => resolve()
+        node.src = src
+    })
+  }
+
+async function insertHTML(html, dest, append=false){
     // if no append is requested, clear the target element
     if(!append) 
         dest.innerHTML = '';
@@ -114,7 +121,8 @@ function insertHTML(html, dest, append=false){
         if( scripts[i].hasAttribute('src') ) 
         {
             console.log('loading src', i);
-            script.src = scripts[i].src;
+            await loadScript(script, scripts[i].src);
+            //script.src = scripts[i].src;
         }
         else
             console.log('loading script', i);
