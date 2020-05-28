@@ -9,7 +9,7 @@ const CAM_VIDEO_SIMULCAST_ENCODINGS =
     ];
 
 
-export let remoteStreams = { 
+export let remoteMediaStreams = { 
     audio: {},
     video: {}
 };
@@ -440,7 +440,7 @@ async function subscribeToTrack(peerId, mediaTag) {
     consumers.push(consumer);
 
     let newStream = new MediaStream([consumer.track.clone()]);
-    remoteStreams[consumer.kind][peerId] = newStream;
+    remoteMediaStreams[consumer.kind][peerId] = newStream;
 
     // callback to add new stream
     on_newPeerStream(newStream, consumer.kind, peerId);

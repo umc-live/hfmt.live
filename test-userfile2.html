@@ -1,0 +1,20 @@
+
+<div>
+    all your base are belong to us
+  </div>
+  
+  
+  <script>
+    function init()
+    {
+        console.log(window.drawsocket.remoteMediaStreams);
+    }
+  
+    init();
+  
+    drawsocket.on_newPeerStream = async (stream, kind, id) => {
+      console.log('----> received ');
+    }
+    
+  </script>
+  
