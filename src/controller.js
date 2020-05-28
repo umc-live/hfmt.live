@@ -40,11 +40,11 @@ socket.on('room-message', (data) => {
             if( file.type === "application/json" )
             {
                 const json_ = JSON.parse( str );
-                processFile( json_ , 'drawsocket');
+                processFile( file.name, json_ , 'drawsocket');
             }
             else
             {
-                processFile( str , file.type );
+                processFile( file.name, str , file.type );
             }
 
         }
