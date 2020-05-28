@@ -88,15 +88,15 @@ function arrayBufferToString(file)
 
 }
 
-async function loadScript(node, src){
+async function loadScript(script, src){
     return new Promise((resolve, reject) => {
-        node.onload = ()=> {
-            document.head.removeChild(node);
+        script.onload = ()=> {
+            document.head.removeChild(script);
             resolve()
         };
         script.onerror = reject;
-        node.src = src
-        document.head.appendChild(node);
+        script.src = src
+        document.head.appendChild(script);
     })
   }
 
