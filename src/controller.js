@@ -19,7 +19,7 @@ window.drawsocket.on_newPeerStream = async function(stream, kind, id){
     return 0;
 }
 
-window.drawsocket.getMediaStreams = soupclient.getStreams();
+window.drawsocket.getMediaStreams = function(){ return soupclient.getStreams() };
 
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
