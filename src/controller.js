@@ -19,6 +19,8 @@ window.drawsocket.on_newPeerStream = async function(stream, kind, id){
     return 0;
 }
 
+window.drawsocket.remoteMediaStreams = soupclient.remoteMediaStreams;
+
 
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);

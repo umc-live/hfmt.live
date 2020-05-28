@@ -9,6 +9,11 @@ const CAM_VIDEO_SIMULCAST_ENCODINGS =
     ];
 
 
+export let remoteStreams = { 
+    audio: {},
+    video: {}
+};
+
 /**
  * 
  * @param {required: socket.io instance, i.e. io() } _socket 
@@ -434,8 +439,11 @@ async function subscribeToTrack(peerId, mediaTag) {
     // keep track of all our consumers
     consumers.push(consumer);
 
+    let newStream = new MediaStream([consumer.track.clone()]);
+    remoteStreams[consumer.kind][peerId] = newStream;
+
     // callback to add new stream
-    on_newPeerStream(new MediaStream([consumer.track.clone()]), consumer.kind, peerId);
+    on_newPeerStream(newStream, consumer.kind, peerId);
 
 }
 
