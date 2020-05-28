@@ -90,7 +90,7 @@ function arrayBufferToString(file)
 
 async function loadScript(node, src){
     return new Promise((resolve, reject) => {
-        node.onload = () => resolve()
+        node.onload = () => resolve(true)
         node.src = src
     })
   }
@@ -122,6 +122,8 @@ async function insertHTML(html, dest, append=false){
         {
             console.log('loading src', i);
             await loadScript(script, scripts[i].src);
+            console.log('returned');
+
             //script.src = scripts[i].src;
         }
         else
