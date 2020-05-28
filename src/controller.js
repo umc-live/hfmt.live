@@ -15,11 +15,13 @@ soupclient.init(socket);
 drawsocket.init(socket);
 
 window.drawsocket = drawsocket;
+window.drawsocket.getMediaStreams = function(){ return soupclient.getStreams() };
+console.log(window.drawsocket.getMediaStreams);
+
 window.drawsocket.on_newPeerStream = async function(stream, kind, id){
     return 0;
 }
 
-window.drawsocket.getMediaStreams = function(){ return soupclient.getStreams() };
 
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
