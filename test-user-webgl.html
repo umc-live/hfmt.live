@@ -642,6 +642,7 @@ function run(){
     }
   }
 
+
   function webGLproc(video)
   {
     console.log('----> starting webgl video?');
@@ -650,14 +651,24 @@ function run(){
 
     var then = 0;
 
+    let videoDiv = $('#videos');
+    let incr = 0;
+    let drawVideo = videoDiv.children[incr++ % videoDiv.children.length ];
+
+    
     // Draw the scene repeatedly
     function render(now) {
         now *= 0.001;  // convert to seconds
         const deltaTime = now - then;
         then = now;
 
+        if( deltaTime >= 4 )
+        {
+          drawVideo = videoDiv.children[incr++ % videoDiv.children.length ];
+        }
+
         if (copyVideo) {
-            updateTexture(gl, texture, video);
+            updateTexture(gl, texture, drawVideo);
         }
 
         drawScene(gl, programInfo, buffers, texture, deltaTime);

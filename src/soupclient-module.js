@@ -65,8 +65,8 @@ export function init(_socket)
 
 function removePeerStream(id)
 {
-    remoteMediaStreams.audio.delete(id);
-    remoteMediaStreams.video.delete(id);
+    delete remoteMediaStreams.audio[id];
+    delete remoteMediaStreams.video[id];
 }
 
 
