@@ -1,3 +1,8 @@
+/**
+ * note: looks like consumers is only used to keep consumers in scope, 
+ * but isn't updated when they are removed, this is probably a memory leak but in most cases will not be an issue
+ */
+
 'use strict';
 
 import * as mediasoup from "mediasoup-client";
@@ -52,9 +57,18 @@ export function init(_socket)
 
     socket.on('remove-peer', (data) => {
         const { removePeerId } = data;
+
+        removePeerStream(removePeerId);
         on_removedPeerStream(removePeerId);
     });
 }
+
+function removePeerStream(id)
+{
+    remoteMediaStreams.audio.delete(id);
+    remoteMediaStreams.video.delete(id);
+}
+
 
 /**
  * start mediasoup device, on_joinedRoom() callback on completion
@@ -221,7 +235,8 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData) {
 
     }
 
-    for (let peer of peerArray) {
+    for (let peer of peerArray) 
+    {
         if (peer.id === socketID) {
             //            console.log('skip our own stream');
             continue;
@@ -229,8 +244,10 @@ async function updateStreamConsumers(peersInfo = lastPollSyncData) {
 
         console.log('peer', peer);
 
-        if (Object.keys(peer.media).length > 0) {
-            for (let [mediaTag, info] of Object.entries(peer.media)) {
+        if (Object.keys(peer.media).length > 0) 
+        {
+            for (let [mediaTag, info] of Object.entries(peer.media)) 
+            {
                 await subscribeToTrack(peer.id, mediaTag);
                 //          console.log('available-track', peer.id, mediaTag, info);
             }
@@ -433,7 +450,8 @@ async function subscribeToTrack(peerId, mediaTag) {
     // the server-side consumer will be started in paused state. wait
     // until we're connected, then send a resume request to the server
     // to get our first keyframe and start displaying video
-    while (recvTransport.connectionState !== 'connected') {
+    while (recvTransport.connectionState !== 'connected') 
+    {
         log(' sleeping while transport connstate', recvTransport.connectionState);
         await sleep(100);
     }
