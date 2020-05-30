@@ -651,10 +651,14 @@ function run(){
 
     var then = 0;
 
-    let videoDiv = $('#videos');
+    //let videoDivNodeList = $('#videos').childNodes; // live list
     let incr = 0;
-    let drawVideo = videoDiv.children[incr++ % videoDiv.children.length ];
+    let prevUpdate = 0;
+    let videoElemList = document.querySelectorAll('#videos video');
+    let drawVideo = videoElemList[incr++ % videoElemList.length ];
 
+    console.log('setting to', drawVideo);
+    
     
     // Draw the scene repeatedly
     function render(now) {
@@ -662,9 +666,15 @@ function run(){
         const deltaTime = now - then;
         then = now;
 
-        if( deltaTime >= 4 )
+        const deltaUpdate = now - prevUpdate;
+
+        if( deltaUpdate >= 4 )
         {
-          drawVideo = videoDiv.children[incr++ % videoDiv.children.length ];
+          videoElemList = document.querySelectorAll('#videos video');
+          drawVideo = videoElemList[incr++ % videoElemList.length ];
+          console.log('check', drawVideo);
+
+          prevUpdate = now;
         }
 
         if (copyVideo) {
