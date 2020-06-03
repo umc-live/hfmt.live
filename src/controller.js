@@ -477,7 +477,7 @@ function checkURLArgs()
         val: _val
       });
   
-      drawsocket_input({
+      drawsocket.input({
         key: "file",
         val: _val
       });
