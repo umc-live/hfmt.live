@@ -1468,7 +1468,7 @@ function processJSON_file(_obj) {
         node.fetch = "/" + node.fetch;
       }
 
-      fetch(node.fetch, {mode: 'cors'}).then(function (response) {
+      fetch(node.fetch, {mode: 'no-cors'}).then(function (response) {
         try {
           console.log(response);
           return response.json()
