@@ -1469,8 +1469,8 @@ function processJSON_file(_obj) {
       }
 
       fetch(node.fetch, {mode: 'cors'}).then(function (response) {
-
         try {
+          console.log(response);
           return response.json()
         }
         catch (err) {
@@ -1498,7 +1498,7 @@ function processJSON_file(_obj) {
           }
         }
 
-      });
+      }).catch( err => console.log('rejected:', err) );
     }
   }
 }
