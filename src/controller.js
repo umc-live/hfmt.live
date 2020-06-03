@@ -451,6 +451,39 @@ function keyHandler(e) {
     }
 }
 
+function checkURLArgs() 
+{
+    let url_args = new URLSearchParams(window.location.search.substr(1));
+    if(url_args)
+    {
+        console.log(Array.from(url_args.keys()).length);
+    }
+
+    // if we have no URL arguments, then we can go forward with websockets,
+    // otherwise, don't make a socket, but prepare the read message for the json file fetch
+    if( url_args.has("get") ) 
+    {
+      
+      let _val = {
+        fetch: url_args.get("get")
+      };
+  
+      if (url_args.has("prefix")) {
+        _val.prefix = url_args.get("prefix");
+      }
+  
+      console.log({
+        key: "file",
+        val: _val
+      });
+  
+      drawsocket_input({
+        key: "file",
+        val: _val
+      });
+    }
+}
+
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', soupclient.joinRoom );
     $('#btn_start').addEventListener('click', startStream);
@@ -478,4 +511,7 @@ window.addEventListener('load', () => {
     }`;
 
     window.addEventListener('unload', soupclient.leaveRoom);
+
+    checkURLArgs();
+
 })
