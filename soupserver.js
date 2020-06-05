@@ -169,10 +169,10 @@ function broadcastPeersToAll()
 
 
 io.of((name, query, next) => {
-  console.log('test', query.token);
+  console.log('test', name, query.token);
   next(null, true);
 }).on('connect', (socket) => {
-  console.log("foo!");
+  console.log("foo!", socket.nsp.name);
   
 });
 
