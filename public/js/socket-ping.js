@@ -8,7 +8,17 @@ if( url.includes('.html') )
 
 console.log(`url: ${url}, window location: ${window.location}`);
 
-const sock = io();
+
+let oscprefix = window.location.pathname; // document.getElementById("OSC").getAttribute("OSCprefix");
+if (oscprefix.includes('.html')) {
+  oscprefix = oscprefix.slice(0, oscprefix.indexOf('.html'));
+}
+
+console.log('loading with namespace', oscprefix);
+
+const sock = io(oscprefix);
+
+//const sock = io();
 
 sock.on('connect', () => {
   console.log('socket.io connected');
