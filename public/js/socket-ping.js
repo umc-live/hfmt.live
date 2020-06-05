@@ -16,7 +16,7 @@ if (oscprefix.includes('.html')) {
 
 console.log('loading with namespace', oscprefix);
 
-const sock = io(`/${oscprefix}`);
+const sock = io(`/namespace-${oscprefix}`);
 
 //const sock = io();
 
