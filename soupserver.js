@@ -183,7 +183,7 @@ const dynamicNsp = io.of(/^\/dynamic-\d+$/)
     console.log('check', newNamespace);
   
     // broadcast to all clients in the given sub-namespace
-    newNamespace.emit('hello');
+    newNamespace.emit('message', 'hello');
   });
 
 
