@@ -167,16 +167,16 @@ function broadcastPeersToAll()
    }); 
 }
 
-/*
+
 io.of((name, query, next) => {
-  console.log(query.token);
+  console.log('test', query.token);
   next(null, true);
 }).on('connect', (socket) => {
   console.log("foo!");
   
 });
-*/
 
+/*
 const dynamicNsp = io.of(/^\/dynamic-\d+$/)
   .on('connect', (socket) => {
     const newNamespace = socket.nsp; // newNamespace.name === '/dynamic-101'
@@ -185,7 +185,7 @@ const dynamicNsp = io.of(/^\/dynamic-\d+$/)
     // broadcast to all clients in the given sub-namespace
     newNamespace.emit('message', 'hello');
   });
-
+*/
 
 io.on('connection', (socket) => {
 
