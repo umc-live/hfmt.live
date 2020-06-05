@@ -173,6 +173,7 @@ io.of((name, query, next) => {
   next(null, true);
 }).on('connect', (socket) => {
   console.log("foo!", socket.nsp.name);
+  initSocket(socket);
   
 });
 
@@ -187,8 +188,8 @@ const dynamicNsp = io.of(/^\/dynamic-\d+$/)
   });
 */
 
-io.on('connection', (socket) => {
-
+function initSocket(socket)
+{
   const peerId = socket.id;
   room.addPeer(peerId);
 
@@ -491,7 +492,10 @@ io.on('connection', (socket) => {
     
     room.removePeer(peerId);
   });
+}
 
+io.on('connection', (socket) => {
+  initSocket(socket);
 });
 
 main();
