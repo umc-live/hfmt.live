@@ -1464,7 +1464,7 @@ function processJSON_file(_obj) {
   for (let node of _obj) {
     if (node.hasOwnProperty('fetch')) {
 
-      if (node.fetch.startsWith("http") && !node.fetch.startsWith("/")) {
+      if (!node.fetch.startsWith("http") && !node.fetch.startsWith("/")) {
         node.fetch = "/" + node.fetch;
       }
 
