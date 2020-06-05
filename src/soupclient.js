@@ -26,6 +26,8 @@ if (oscprefix.includes('.html')) {
   oscprefix = oscprefix.slice(0, oscprefix.indexOf('.html'));
 }
 
+console.log('loading with namespace', oscprefix);
+
 const socket = io(oscprefix);
 
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
