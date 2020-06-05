@@ -21,7 +21,12 @@ const log = console.log;
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
 
-const socket = io()
+let oscprefix = window.location.pathname; // document.getElementById("OSC").getAttribute("OSCprefix");
+if (oscprefix.includes('.html')) {
+  oscprefix = oscprefix.slice(0, oscprefix.indexOf('.html'));
+}
+
+const socket = io(oscprefix);
 
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let analyser = audioCtx.createAnalyser();
