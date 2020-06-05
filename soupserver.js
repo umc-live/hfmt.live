@@ -167,6 +167,14 @@ function broadcastPeersToAll()
    }); 
 }
 
+io.of((name, query, next) => {
+  console.log(query.token);
+  next(null, true);
+}).on('connect', (socket) => {
+  console.log("foo!");
+  
+});
+
 io.on('connection', (socket) => {
 
   const peerId = socket.id;
