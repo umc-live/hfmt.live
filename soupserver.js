@@ -170,9 +170,9 @@ function broadcastPeersToAll()
 
 io.of((name, query, next) => {
   console.log('test', name, query.token);
-  next(null, true);
+  next(null, true); //<< true here should be an authentification maybe, checking the query.token
 }).on('connect', (socket) => {
-  console.log("foo!", socket.nsp.name);
+  console.log("connected to namespace-> ", socket.nsp.name);
   initSocket(socket);
   
 });
