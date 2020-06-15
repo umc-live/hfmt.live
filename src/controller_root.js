@@ -284,6 +284,8 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
     
 
     const tag = kind + '-' + id.replace(/\/#/gi, '');
+    console.log('test tag', tag);
+    
 
     if ($('#' + tag)) {
         console.log('already have tag');
