@@ -282,8 +282,8 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
 
     }
     
-
-    const tag = kind + '-' + id.replace(/\/#/gi, '');
+    id = id.replace(/\/#/gi, '');
+    const tag = kind + '-' id+ 
     console.log('test tag', tag);
     
 
