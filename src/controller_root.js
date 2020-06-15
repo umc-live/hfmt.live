@@ -312,11 +312,14 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
 
 
 soupclient.on_removedPeerStream = (_id) => {
-    document.querySelectorAll(`#video-${_id}`).forEach(e => {
+
+    const tag = _id.substr(_id.lastIndexOf('#')+1);;
+
+    document.querySelectorAll(`#video-${tag}`).forEach(e => {
         e.parentNode.removeChild(e);
     });
 
-    document.querySelectorAll(`#audio-${_id}`).forEach(e => {
+    document.querySelectorAll(`#audio-${tag}`).forEach(e => {
         e.parentNode.removeChild(e);
     });
 }
