@@ -57,9 +57,9 @@ class Room {
     {
       console.log('removing peer', _id);
 
-      if( this.peers.has(id) )
+      if( this.peers.has(_id) )
       {
-          const peer = this.peers.get(id);
+          const peer = this.peers.get(_id);
           console.log('namespace', peer.socket.nsp.name);
 
       }
