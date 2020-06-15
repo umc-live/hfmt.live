@@ -35,7 +35,6 @@ sock.on('message', (m) => {
 
 sock.on('room-message', (m) => { 
   console.log('received', m);
-  log.innerHTML = m; 
 });
  
  

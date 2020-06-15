@@ -35,4 +35,13 @@ module.exports = [
         optimization: {
             minimize: false
         },
+    }, {
+        entry: './src/controller_root.js',
+        output: {
+            filename: 'root.drawsocket.bundle.js',
+            path: path.resolve(__dirname, 'public/js'),
+        },
+        optimization: {
+            minimize: false
+        },
     }]
