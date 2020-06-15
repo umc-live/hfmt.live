@@ -282,7 +282,7 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
     }
     console.log('default on_newPeerStream');
 
-    const peerId = id.lastIndexOf('#') != -1 ? id : id.substr(id.lastIndexOf('#')+1);
+    const peerId = id.lastIndexOf('#') < 0 ? id : id.substr(id.lastIndexOf('#')+1);
 
     const tag = kind + '-' + peerId;// id.substr(id.lastIndexOf('#')+1);;
     console.log('test tag', tag);
