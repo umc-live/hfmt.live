@@ -509,9 +509,11 @@ function initSocket(socket)
   });
 }
 
+/*
 io.on('connection', (socket) => {
   initSocket(socket);
 });
+*/
 
 main();
 
