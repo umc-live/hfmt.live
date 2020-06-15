@@ -515,12 +515,12 @@ function initSocket(socket)
   });
 }
 
-// this breaks the soup version
-/*
+// commenting this out breaks the soup version
+// but it makes 2 instances of peer in room
 io.on('connection', (socket) => {
   initSocket(socket);
 });
-*/
+
 
 main();
 
