@@ -191,6 +191,8 @@ const dynamicNsp = io.of(/^\/dynamic-\d+$/)
 function initSocket(socket)
 {
   const peerId = socket.id;
+  const namespace = socket.nsp.name;
+  
   room.addPeer(peerId);
 
   console.log("New connection from " + socket.id);
@@ -478,9 +480,12 @@ function initSocket(socket)
     try 
     {
       
+
       io.emit('remove-peer', {
         removePeerId: peerId
       });
+
+    //  console.log("removing from namespace-> ", namespace);
 
       await room.removePeer(peerId);
       callback({ left: true });
@@ -498,6 +503,8 @@ function initSocket(socket)
       removePeerId: peerId
     });
     
+   // console.log("removing from namespace-> ", namespace);
+
     room.removePeer(peerId);
   });
 }

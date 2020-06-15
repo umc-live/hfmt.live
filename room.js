@@ -56,7 +56,7 @@ class Room {
     async removePeer(_id)
     {
       console.log('removing peer', _id);
-      console.log('namespace', this.peers.socket.nsp.name);
+      console.log('namespace', this.peers.get(_id).socket.nsp.name);
 
 
       this.transports.forEach(async (t, key) => {
