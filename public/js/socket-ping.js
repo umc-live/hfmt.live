@@ -43,7 +43,7 @@ const sendHeartbeat = () => {
 setInterval(sendHeartbeat, 100);
 
 setInterval( ()=>{
-  sock.emit('message', {
+  sock.emit('room-message', {
     msg: `hello from ${sock.id}`
   });
 }, 1000);
