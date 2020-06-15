@@ -47,6 +47,10 @@ export function init(_socket)
 
     socket.on('connect', () => {
         socketID = socket.id;
+        if( socketID.lastIndexOf('#') != -1 )
+        {
+            socketID = socketID.substr(socketID.lastIndexOf('#')+1);
+        }
     });
 
     socket.on('sync-peers', (data) => {

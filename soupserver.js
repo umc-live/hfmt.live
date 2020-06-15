@@ -515,6 +515,7 @@ function initSocket(socket)
   });
 }
 
+// this breaks the soup version
 /*
 io.on('connection', (socket) => {
   initSocket(socket);
