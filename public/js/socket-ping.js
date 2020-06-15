@@ -32,6 +32,12 @@ sock.on('message', (m) => {
   console.log('received', m);
   log.innerHTML = m; 
 });
+
+sock.on('room-message', (m) => { 
+  console.log('received', m);
+  log.innerHTML = m; 
+});
+ 
  
 
 const sendHeartbeat = () => {
