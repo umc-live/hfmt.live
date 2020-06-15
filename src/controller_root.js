@@ -316,6 +316,11 @@ soupclient.on_removedPeerStream = (_id) => {
 
     console.log("removing id", _id);
     
+    if( _id.lastIndexOf('#') != -1 )
+    {
+        _id = _id.substr(_id.lastIndexOf('#')+1);
+    }
+
     document.querySelectorAll(`#video-${_id}`).forEach(e => {
         e.parentNode.removeChild(e);
     });
