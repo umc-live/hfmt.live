@@ -53,27 +53,20 @@ class Room {
     }
 
 
-    async removePeer(_id)
+    async removePeer(id_, namespace_)
     {
-      console.log('removing peer', _id);
-
-      if( this.peers.has(_id) )
-      {
-          const peer = this.peers.get(_id);
-          console.log('namespace', peer.socket.nsp.name);
-
-      }
-
+      console.log('removing peer', id_);
+      console.log('namespace', namespace_);
 
       this.transports.forEach(async (t, key) => {
-        if( t.appData.peerId == _id )
+        if( t.appData.peerId == id_ )
         {
           await t.close();
           this.transports.delete(key);
         }
       });
 
-      this.peers.delete(_id);
+      this.peers.delete(id_);
       console.log('room population:', this.peers.size); 
 
     }
