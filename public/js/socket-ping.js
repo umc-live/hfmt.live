@@ -42,6 +42,12 @@ const sendHeartbeat = () => {
 
 setInterval(sendHeartbeat, 100);
 
+setInterval( ()=>{
+  sock.emit('message', {
+    msg: `hello from ${sock.id}`
+  });
+}, 1000);
+
 const onHeartbeat = (payload) => {
   //console.log('received heartbeat');
   const roundtripTime = Date.now() - payload.timestamp;
