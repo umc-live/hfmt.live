@@ -270,7 +270,6 @@ soupclient.on_joinedRoom = ()=>{
 
 soupclient.on_newPeerStream = async (stream, kind, id) => {
 
-    console.log('default on_newPeerStream');
     
 //    if( drawsocket.on_newPeerStream )
     {
@@ -281,7 +280,8 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
         }
 
     }
-    
+    console.log('default on_newPeerStream');
+
     
     const tag = kind + '-' + id.substr(id.lastIndexOf('#')+1);;
     console.log('test tag', tag);

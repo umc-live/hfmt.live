@@ -55,7 +55,9 @@ class Room {
 
     async removePeer(_id)
     {
-      console.log('removing peer');
+      console.log('removing peer', _id);
+      console.log('namespace', this.peers.socket.nsp.name);
+
 
       this.transports.forEach(async (t, key) => {
         if( t.appData.peerId == _id )
@@ -66,6 +68,8 @@ class Room {
       });
 
       this.peers.delete(_id);
+      console.log('room population:', this.peers.size); 
+
     }
 
     announcePeer( id )
