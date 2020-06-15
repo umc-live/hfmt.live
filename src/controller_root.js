@@ -282,8 +282,9 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
     }
     console.log('default on_newPeerStream');
 
-    
-    const tag = kind + '-' + id.substr(id.lastIndexOf('#')+1);;
+    const peerId = id.lastIndexOf('#') != -1 ? id : id.substr(id.lastIndexOf('#')+1);
+
+    const tag = kind + '-' + peerId;// id.substr(id.lastIndexOf('#')+1);;
     console.log('test tag', tag);
 
     if ($('#' + tag)) {
@@ -315,13 +316,11 @@ soupclient.on_removedPeerStream = (_id) => {
 
     console.log("removing id", _id);
     
-    const tag = _id.substr(_id.lastIndexOf('#')+1);;
-
-    document.querySelectorAll(`#video-${tag}`).forEach(e => {
+    document.querySelectorAll(`#video-${_id}`).forEach(e => {
         e.parentNode.removeChild(e);
     });
 
-    document.querySelectorAll(`#audio-${tag}`).forEach(e => {
+    document.querySelectorAll(`#audio-${_id}`).forEach(e => {
         e.parentNode.removeChild(e);
     });
 }

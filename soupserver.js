@@ -190,7 +190,8 @@ const dynamicNsp = io.of(/^\/dynamic-\d+$/)
 
 function initSocket(socket)
 {
-  const peerId = socket.id;
+  const peerId = socket.id.lastIndexOf('#') != -1 ? socket.id : socket.id.substr(socket.id.lastIndexOf('#')+1);
+
   const namespace = socket.nsp.name;
   
   room.addPeer(peerId);
