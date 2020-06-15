@@ -485,7 +485,7 @@ function initSocket(socket)
         removePeerId: peerId
       });
 
-    //  console.log("removing from namespace-> ", namespace);
+      console.log(`${peerId} leaving namespace->  ${namespace}`);
 
       await room.removePeer(peerId);
       callback({ left: true });
@@ -503,7 +503,7 @@ function initSocket(socket)
       removePeerId: peerId
     });
     
-   // console.log("removing from namespace-> ", namespace);
+    console.log(`removing ${peerId} from namespace->  ${namespace}`);
 
     room.removePeer(peerId);
   });
