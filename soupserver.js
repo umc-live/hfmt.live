@@ -196,7 +196,7 @@ function initSocket(socket)
   {
     peerId = peerId.substr(peerId.lastIndexOf('#')+1);
   }
-  
+
   const namespace = socket.nsp.name;
   
   room.addPeer(peerId);
@@ -517,10 +517,11 @@ function initSocket(socket)
 
 // commenting this out breaks the soup version
 // but it makes 2 instances of peer in room
+/*
 io.on('connection', (socket) => {
   initSocket(socket);
 });
-
+*/
 
 main();
 
