@@ -51,6 +51,9 @@ export function init(_socket)
         {
             socketID = socketID.substr(socketID.lastIndexOf('#')+1);
         }
+
+        console.log(`connected, with logged socket ID ${socketID}`);
+        
     });
 
     socket.on('sync-peers', (data) => {
