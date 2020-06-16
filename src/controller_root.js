@@ -18,7 +18,12 @@ if (oscprefix.includes('.html')) {
 
 console.log('loading with namespace', oscprefix);
 
-const socket = io(`/namespace-${oscprefix}`);
+if( oscprefix === '/' )
+{
+    // redirect to instructions page
+}
+
+const socket = io(oscprefix);
 //const socket = io();
 
 soupclient.init(socket);
