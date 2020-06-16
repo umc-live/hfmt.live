@@ -285,7 +285,8 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
         }
 
     }
-    console.log('default on_newPeerStream');
+    
+    console.log('default on_newPeerStream id', kind, id);
 
     const peerId = id.lastIndexOf('#') < 0 ? id : id.substr(id.lastIndexOf('#')+1);
 

@@ -1,0 +1,93 @@
+
+<div>
+     mouse drag video example
+  </div>
+  
+  
+  <script>
+
+
+
+    function init()
+    {
+
+        
+        let vidTag = document.getElementById('videos');
+        vidTag.style ="z-index: 100";
+
+        document.body.appendChild(vidTag);
+
+        console.log( drawsocket.getMediaStreams() );
+
+        let vids = document.getElementsByTagName('video');
+        
+        for( let i = 0; i < vids.length; i++)
+        {   
+
+            vids[i].onmousemove = (event) => {
+                if( event.buttons > 0 )
+                {
+                    console.log('mouse move', event);        
+
+                    vids[i].style = `position: absolute; 
+                        top: ${event.clientY - event.target.clientHeight * 0.5 }px; 
+                        left: ${event.clientX - event.target.clientWidth * 0.5 }px;`;
+                }
+            };
+
+        }
+
+
+    }
+  
+    init();
+  
+    
+drawsocket.on_newPeerStream = async (stream, kind, id) => {
+
+    console.log('user on_newPeerStream id', kind, id);
+
+    const peerId = id;//.lastIndexOf('#') < 0 ? id : id.substr(id.lastIndexOf('#')+1);
+
+    const tag = kind + '-' + peerId;// id.substr(id.lastIndexOf('#')+1);;
+    console.log('test tag', tag);
+
+    if ( document.querySelector('#' + tag) )  
+    {
+        console.log('already have tag');
+        return;
+    }
+
+    let el = document.createElement(kind);
+    el.setAttribute('playsinline', '');
+    el.setAttribute('autoplay', '');
+
+    el.id = tag;
+
+    el.onmousemove = (event) => {
+        if( event.buttons > 0 )
+        {
+            el.style = `position: absolute; 
+            top: ${event.clientY - event.target.clientHeight * 0.5 }px; 
+            left: ${event.clientX - event.target.clientWidth * 0.5 }px;`;
+        }
+    };
+
+    el.srcObject = stream;
+
+    document.querySelector(`#videos`).appendChild(el);
+
+    await el.play().catch((error) => {
+            console.error('elememt failed to play:', error, el);
+            el.setAttribute('controls', '');
+        });
+
+
+    return 1;
+
+}
+
+    
+    
+  </script>
+  
