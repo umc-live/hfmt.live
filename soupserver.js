@@ -329,7 +329,10 @@ function initSocket(socket)
         paused,
         encodings: rtpParameters.encodings
       };
+
       callback({ id: producer.id });
+
+      console.log('sending track', producer.id, room.peers.get(peerId).media[appData.mediaTag]);
 
       // to only send to members of namespace, something like this:
       // but room.peers is the whole list, so maybe it's necessary to make 
@@ -339,10 +342,9 @@ function initSocket(socket)
         peers: Array.from( room.peers.values() )
       }); 
       */
-      broadcastPeersToAll();
 
-      console.log('sending track', room.peers.get(peerId).media[appData.mediaTag]);
-      
+
+      broadcastPeersToAll();      
 
     } 
     catch (e) 

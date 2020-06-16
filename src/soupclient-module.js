@@ -410,6 +410,7 @@ async function createTransport(direction) {
         }
     });
 
+    console.log('fished transport setup');
     return transport;
 }
 
