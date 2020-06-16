@@ -162,7 +162,7 @@ async function closeConsumer(consumer) {
 
 function broadcastPeersToAll()
 {
-  console.log('sync-peers');
+  console.log('sync-peers ', Data.now() );
   io.emit('sync-peers', {
       peers: Array.from( room.peers.values() )
    }); 

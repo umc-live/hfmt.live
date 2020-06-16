@@ -58,7 +58,7 @@ export function init(_socket)
 
     socket.on('sync-peers', (data) => {
         lastPollSyncData = data;
-        console.log('sync-peers got', data);
+        console.log('sync-peers got', data, Date.now() );
         updateStreamConsumers();
     });
 
