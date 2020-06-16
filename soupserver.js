@@ -223,7 +223,7 @@ function initSocket(socket)
   });
 
   socket.on('sync-peers-request', (data, callback) => {
-    console.log('peers requested', JSON.stringify(Array.from( room.peers.values() )) );
+    console.log( peerId + ' requested peers ', JSON.stringify(Array.from( room.peers.values() )) );
     
     callback({ 
       peers: Array.from( room.peers.values() )
