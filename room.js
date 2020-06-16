@@ -59,7 +59,7 @@ class Room {
         }
         
         let nsp = this.namespacePeers.get(namespace);
-        nsp.set(id) = this.peers.get(id);
+        nsp.set(id, this.peers.get(id));
 
         return this.peers.get(id);
     }
