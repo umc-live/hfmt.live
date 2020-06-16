@@ -163,15 +163,6 @@ async function closeConsumer(consumer) {
 // https://socket.io/docs/rooms-and-namespaces/
 
 
-function broadcastPeersToAll()
-{
-  console.log('sync-peers ', Date.now() );
-  io.emit('sync-peers', {
-      peers: Array.from( room.peers.values() )
-   }); 
-}
-
-
 io.of((name, query, next) => {
   console.log('test', name, query.token);
   next(null, true); //<< true here should be an authentification maybe, checking the query.token
@@ -181,16 +172,6 @@ io.of((name, query, next) => {
   
 });
 
-/*
-const dynamicNsp = io.of(/^\/dynamic-\d+$/)
-  .on('connect', (socket) => {
-    const newNamespace = socket.nsp; // newNamespace.name === '/dynamic-101'
-    console.log('check', newNamespace);
-  
-    // broadcast to all clients in the given sub-namespace
-    newNamespace.emit('message', 'hello');
-  });
-*/
 
 function initSocket(socket)
 {
@@ -327,7 +308,7 @@ function initSocket(socket)
         audioLevelObserver.addProducer({ producerId: producer.id });
       }
       */
-     
+
       room.producers.set(producer.id, producer);
 
       room.peers.get(peerId).media[appData.mediaTag] = {
