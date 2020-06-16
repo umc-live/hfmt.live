@@ -60,7 +60,8 @@ async function startMediasoup()
 //  console.log(`created router with rtpCapabilities: ${JSON.stringify(_router.rtpCapabilities, null, 2)}`);
  
     // audioLevelObserver for signaling active speaker
-  //
+
+  /*
   const _audioLevelObserver = await _router.createAudioLevelObserver({
 		interval: 800
 	});
@@ -78,7 +79,9 @@ async function startMediasoup()
     room.activeSpeaker.peerId = null;
   });
 
- return { _worker, _router, _audioLevelObserver }; //, 
+ return { _worker, _router, _audioLevelObserver }; 
+ */
+  return { _worker, _router}; 
 
 }
 
@@ -100,7 +103,7 @@ async function main()
 
 	worker = soup._worker;
 	router = soup._router;
-	audioLevelObserver = soup._audioLevelObserver;
+	//audioLevelObserver = soup._audioLevelObserver;
 
 console.log(`created router with rtpCapabilities: ${JSON.stringify(router.rtpCapabilities, null, 2)}`);
 
@@ -315,6 +318,7 @@ function initSocket(socket)
         closeProducer(producer);
       });
   
+      /*
       // monitor audio level of this producer. we call addProducer() here,
       // but we don't ever need to call removeProducer() because the core
       // AudioLevelObserver code automatically removes closed producers
@@ -322,7 +326,8 @@ function initSocket(socket)
       {
         audioLevelObserver.addProducer({ producerId: producer.id });
       }
-  
+      */
+     
       room.producers.set(producer.id, producer);
 
       room.peers.get(peerId).media[appData.mediaTag] = {
