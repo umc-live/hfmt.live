@@ -208,10 +208,12 @@ function initSocket(socket)
   });
 
   socket.on('sync-peers-request', (data, callback) => {
-    console.log( peerId + ' requested peers ', JSON.stringify(Array.from( room.peers.values() )) );
+
+    const peerList = Array.from( room.namespacePeers.get(namespace).values() );
+    console.log( peerId + ' requested peers ', JSON.stringify(peerList) );
     
     callback({ 
-      peers: Array.from( room.namespacePeers.get(namespace).values() )
+      peers: peerList
     });
   });
 
@@ -323,9 +325,10 @@ function initSocket(socket)
       // to only send to members of namespace, something like this:
       // but room.peers is the whole list, so maybe it's necessary to make 
       // real rooms, but then we'd have to make sure to close them if no one is there
-      
+      const peerList = Array.from( room.namespacePeers.get(namespace).values() );
+
       io.of(namespace).emit('sync-peers', {
-        peers: Array.from( room.peers.values() )
+        peers: peerList
       }); 
       
 
