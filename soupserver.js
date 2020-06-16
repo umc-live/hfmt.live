@@ -477,11 +477,10 @@ function initSocket(socket)
     try 
     {
       
-
-      io.emit('remove-peer', {
+      io.of(namespace).emit('remove-peer', {
         removePeerId: peerId
       });
-
+      
       console.log(`${peerId} leaving namespace->  ${namespace}`);
 
       await room.removePeer(peerId);
@@ -496,7 +495,7 @@ function initSocket(socket)
 
   socket.on("disconnect", () => {
 
-    io.emit('remove-peer', {
+    io.of(namespace).emit('remove-peer', {
       removePeerId: peerId
     });
     
