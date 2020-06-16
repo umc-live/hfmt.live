@@ -105,6 +105,8 @@ export async function joinRoom()
             recvTransport = await createTransport('recv');
         }
 
+        console.log('sync-peers-request');
+
         lastPollSyncData = await socket.request('sync-peers-request');
         updateStreamConsumers();
 
