@@ -201,7 +201,7 @@ function initSocket(socket)
   
   room.addPeer(peerId);
 
-  console.log("New connection from " + socket.id);
+  console.log("New connection from " + peerId + " in namespace " + namespace);
 
 // make this room specific later
   socket.on('room-message', (data) => {
@@ -223,6 +223,8 @@ function initSocket(socket)
   });
 
   socket.on('sync-peers-request', (data, callback) => {
+    console.log('peers requested', JSON.stringify(Array.from( room.peers.values() )) );
+    
     callback({ 
       peers: Array.from( room.peers.values() )
     });
