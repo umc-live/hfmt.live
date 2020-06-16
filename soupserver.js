@@ -337,14 +337,14 @@ function initSocket(socket)
       // to only send to members of namespace, something like this:
       // but room.peers is the whole list, so maybe it's necessary to make 
       // real rooms, but then we'd have to make sure to close them if no one is there
-      /*
-      io.of(socket.nsp.name).emit('sync-peers', {
+      
+      io.of(namespace).emit('sync-peers', {
         peers: Array.from( room.peers.values() )
       }); 
-      */
+      
 
 
-      broadcastPeersToAll();      
+      //broadcastPeersToAll();      
 
     } 
     catch (e) 
