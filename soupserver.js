@@ -184,7 +184,7 @@ function initSocket(socket)
 
   const namespace = socket.nsp.name;
   
-  room.addPeer(peerId);
+  room.addPeer(peerId, namespace);
 
   console.log("New connection from " + peerId + " in namespace " + namespace);
 
@@ -211,7 +211,7 @@ function initSocket(socket)
     console.log( peerId + ' requested peers ', JSON.stringify(Array.from( room.peers.values() )) );
     
     callback({ 
-      peers: Array.from( room.peers.values() )
+      peers: Array.from( room.namespacePeers.get(namespace).values() )
     });
   });
 
@@ -480,10 +480,10 @@ function initSocket(socket)
       io.of(namespace).emit('remove-peer', {
         removePeerId: peerId
       });
-      
+
       console.log(`${peerId} leaving namespace->  ${namespace}`);
 
-      await room.removePeer(peerId);
+      await room.removePeer(peerId, namespace);
       callback({ left: true });
     } 
     catch (e) 
@@ -501,7 +501,7 @@ function initSocket(socket)
     
     console.log(`removing ${peerId} from namespace->  ${namespace}`);
 
-    room.removePeer(peerId);
+    room.removePeer(peerId, namespace);
   });
 }
 

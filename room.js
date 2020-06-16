@@ -12,6 +12,8 @@ class Room {
 
         // lookup by socket id
         this.peers = new Map();
+        this.namespacePeers = new Map();
+
         this.stats = new Map();
         this.transports = new Map();
         this.producers = new Map();
@@ -24,11 +26,12 @@ class Room {
       return [...this.peers.keys()];
     }
 
-    addPeer (id, displayName = "", device={}, rtpCapabilities={})
+    addPeer (id, namespace, displayName = "", device={}, rtpCapabilities={})
     {
         this.peers.set(id, 
         {
             id: id,
+            namespace: namespace,
             consumerLayers: {},
             stats: {},
             media: {}/*,
@@ -49,6 +52,15 @@ class Room {
                 dataConsumers : new Map()
             }*/
         });
+
+        if( !this.namespacePeers.has(namespace) )
+        {
+          this.namespacePeers.set(namespace, new Map() );
+        }
+        
+        let nsp = this.namespacePeers.get(namespace);
+        nsp.set(id) = this.peers.get(id);
+
         return this.peers.get(id);
     }
 
@@ -67,10 +79,26 @@ class Room {
       });
 
       this.peers.delete(id_);
-      console.log('room population:', this.peers.size); 
+
+      if( this.namespacePeers.has(namespace_) )
+      {
+        let nsp = this.namespacePeers.get(namespace_);
+        nsp.delete(id_);
+
+        console.log('room population:', nsp.size); 
+
+        if( nsp.size == 0 )
+        {
+          console.log('removing namespace', namespace_); 
+          this.namespacePeers.delete(namespace_);
+        }
+      }
+
+
 
     }
 
+    /*
     announcePeer( id )
     {
         if( this.peers.has(id) )
@@ -82,7 +110,6 @@ class Room {
             });
         }
     }
-
 
 
     async updatePeerStats() 
@@ -124,7 +151,7 @@ class Room {
       }
     }
   }
-
+  */
 }
 
 module.exports = Room;
