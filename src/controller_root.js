@@ -21,6 +21,7 @@ console.log('loading with namespace', oscprefix);
 if( oscprefix === '/' )
 {
     // redirect to instructions page
+    window.location.replace("https://hfmt.live/start.html");
 }
 
 const socket = io(oscprefix);
@@ -498,18 +499,73 @@ function checkURLArgs()
   
       if (url_args.has("prefix")) {
         _val.prefix = url_args.get("prefix");
+
+        console.log({
+            key: "file",
+            val: _val
+          });
+      
+          drawsocket.input({
+            key: "file",
+            val: _val
+          });
+    
       }
-  
-      console.log({
-        key: "file",
-        val: _val
-      });
-  
-      drawsocket.input({
-        key: "file",
-        val: _val
-      });
+      else
+      {
+       
+        fetch(_val.fetch).then(function (response) {
+            try {
+              console.log(response);
+              return response.json()
+            }
+            catch (err) {
+              console.log('caught error:', err);
+            }
+    
+            return;
+          }).then(function (_json) {
+
+            processFile(name, _json, 'drawsocket');
+
+        });
+      }
+      
     }
+}
+
+function setupMax()
+{
+    if( typeof window.max !== "undefined" )
+    {
+        window.max.bindInlet('drawsocket', function (a) {
+            try {
+                const obj = JSON.parse(a);
+                drawsocket_input(obj);
+                window.max.outlet("received", a);
+            }
+            catch(err)
+            {
+                window.max.outlet("error", err);
+            }
+        });
+
+        window.max.bindInlet('broadcast', function (a) {
+            try {
+                const obj = JSON.parse(a);
+                json_.timetag = Date.now();
+                socket.emit('room-message',
+                    json_        
+                );
+
+            }
+            catch(err)
+            {
+                window.max.outlet("error", err);
+            }
+        });
+    }
+
 }
 
 window.addEventListener('load', () => {
@@ -541,5 +597,7 @@ window.addEventListener('load', () => {
     window.addEventListener('unload', soupclient.leaveRoom);
 
     checkURLArgs();
+
+    setupMax();
 
 })
