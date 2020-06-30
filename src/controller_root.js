@@ -72,6 +72,11 @@ socket.on('room-message', (data) => {
     {
         drawsocket.input(data);
     }
+
+    if( typeof window.max != "undefined" )
+    {
+        window.max.outlet("messageIn", JSON.stringify(data));
+    }
 });
 
 
