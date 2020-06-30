@@ -551,22 +551,22 @@ function setupMax()
             }
             catch(err)
             {
-                window.max.outlet("error", err);
+                window.max.outlet("error", JSON.stringify(err));
             }
         });
 
         window.max.bindInlet('broadcast', function (a) {
             try {
                 const obj = JSON.parse(a);
-                json_.timetag = Date.now();
+                obj.timetag = Date.now();
                 socket.emit('room-message',
-                    json_        
+                    obj        
                 );
 
             }
             catch(err)
             {
-                window.max.outlet("error", err);
+                window.max.outlet("error", JSON.stringify(err));
             }
         });
     }
