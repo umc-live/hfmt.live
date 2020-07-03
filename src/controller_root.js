@@ -28,7 +28,7 @@ if( oscprefix === '/' )
 let url_args = new URLSearchParams(window.location.search);      
 let usrArg = url_args.get('usr');  
 if( usrArg )
-    console.log( `socket with custom usr arg ${usrArg}` );
+    console.log( `socket with custom usr arg ${usrArg}, args ${url_args}`);
 
 
 const socket = io(oscprefix, { 

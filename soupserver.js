@@ -161,7 +161,9 @@ async function closeConsumer(consumer) {
 
 // consider using socket.io rooms:
 // https://socket.io/docs/rooms-and-namespaces/
+
 /*
+//use this if we need to reject connections someday
 io.use(function(socket, next){
   console.log("Query: ", socket.handshake.query, socket.id );
   // return the result of next() to accept the connection.
@@ -184,13 +186,16 @@ io.of((name, query, next) => {
 
 function initSocket(socket)
 {
-  console.log("init Query: ", socket.handshake.query, socket.id );
-
   let peerId = socket.id;
 
   if( peerId.lastIndexOf('#') != -1 )
   {
     peerId = peerId.substr(peerId.lastIndexOf('#')+1);
+  }
+
+  if( socket.handshake.query && socket.handshake.query.userArg )
+  {
+      peerId += `--${socket.handshake.query.userArg}`;
   }
 
   const namespace = socket.nsp.name;

@@ -53,6 +53,14 @@ export function init(_socket)
             socketID = socketID.substr(socketID.lastIndexOf('#')+1);
         }
 
+
+        let url_args = new URLSearchParams(window.location.search);      
+        let usrArg = url_args.get('usr');  
+        if( usrArg ){
+            socketID += `--${userArg}`;
+            console.log( `soupe socket adding userArg ${usrArg}`);
+        }
+
         console.log(`connected, with logged socket ID ${socketID}`);
         
     });
