@@ -24,7 +24,18 @@ if( oscprefix === '/' )
     window.location.replace("https://hfmt.live/start.html");
 }
 
-const socket = io(oscprefix);
+
+let url_args = new URLSearchParams(window.location.search);      
+let usrArg = url_args.get('usr');  
+if( usrArg )
+    console.log( `socket with custom usr arg ${usrArg}` );
+
+
+const socket = io(oscprefix, { 
+    query: {    
+        userArg: usrArg
+    }
+});
 //const socket = io();
 
 soupclient.init(socket);

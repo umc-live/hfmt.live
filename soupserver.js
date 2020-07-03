@@ -162,6 +162,15 @@ async function closeConsumer(consumer) {
 // consider using socket.io rooms:
 // https://socket.io/docs/rooms-and-namespaces/
 
+io.use(function(socket, next){
+  console.log("Query: ", socket.handshake.query);
+  // return the result of next() to accept the connection.
+ // if (socket.handshake.query.usr == "bar") {
+      return next();
+  //}
+  // call next() with an Error if you need to reject the connection.
+  next(new Error('Authentication error'));
+});
 
 io.of((name, query, next) => {
   console.log('test', name, query.token);
