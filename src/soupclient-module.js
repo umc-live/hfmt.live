@@ -46,7 +46,13 @@ export function init(_socket)
     };
 
     socket.on('connect', () => {
-        socketID = socket.id;
+        let url_args = new URLSearchParams(window.location.search);      
+        let usrArg = url_args.get('usr');  
+        if( usrArg )
+            console.log( `socket with custom usr arg ${usrArg}` );
+
+        socketID = socket.id + '--' + usrArg;
+
         if( socketID.lastIndexOf('#') != -1 )
         {
             socketID = socketID.substr(socketID.lastIndexOf('#')+1);
