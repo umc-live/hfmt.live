@@ -163,13 +163,13 @@ async function closeConsumer(consumer) {
 // https://socket.io/docs/rooms-and-namespaces/
 
 io.use(function(socket, next){
-  console.log("Query: ", socket.handshake.query);
+  console.log("Query: ", socket.handshake.query, socket.id );
   // return the result of next() to accept the connection.
  // if (socket.handshake.query.usr == "bar") {
       return next();
   //}
   // call next() with an Error if you need to reject the connection.
-  next(new Error('Authentication error'));
+  //next(new Error('Authentication error'));
 });
 
 io.of((name, query, next) => {
@@ -184,6 +184,8 @@ io.of((name, query, next) => {
 
 function initSocket(socket)
 {
+  console.log("init Query: ", socket.handshake.query, socket.id );
+
   let peerId = socket.id;
 
   if( peerId.lastIndexOf('#') != -1 )
