@@ -193,9 +193,9 @@ function initSocket(socket)
     peerId = peerId.substr(peerId.lastIndexOf('#')+1);
   }
 
-  if( socket.handshake.query && socket.handshake.query.userArg )
+  if( socket.handshake.query && socket.handshake.query.userId )
   {
-      peerId += `--${socket.handshake.query.userArg}`;
+      peerId += `--${socket.handshake.query.userId}`;
   }
 
   const namespace = socket.nsp.name;
