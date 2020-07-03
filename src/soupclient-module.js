@@ -57,7 +57,7 @@ export function init(_socket)
         let url_args = new URLSearchParams(window.location.search);      
         let usrArg = url_args.get('usr');  
         if( usrArg ){
-            socketID += `--${userArg}`;
+            socketID += `--${usrArg}`;
             console.log( `soupe socket adding userArg ${usrArg}`);
         }
 
