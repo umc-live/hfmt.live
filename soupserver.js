@@ -161,7 +161,7 @@ async function closeConsumer(consumer) {
 
 // consider using socket.io rooms:
 // https://socket.io/docs/rooms-and-namespaces/
-
+/*
 io.use(function(socket, next){
   console.log("Query: ", socket.handshake.query);
   // return the result of next() to accept the connection.
@@ -171,9 +171,9 @@ io.use(function(socket, next){
   // call next() with an Error if you need to reject the connection.
   next(new Error('Authentication error'));
 });
-
+*/
 io.of((name, query, next) => {
-  console.log('test', name, query.token);
+  console.log('test', name, query);
   next(null, true); //<< true here should be an authentification maybe, checking the query.token
 }).on('connect', (socket) => {
   console.log("connected to namespace-> ", socket.nsp.name);
