@@ -93,7 +93,8 @@
         ui_div.parentElement.removeChild(ui_div);
         localUI_div.parentElement.removeChild(localUI_div);
         
-        document.getElementById('statusDiv').hidden = true;
+        let log = document.getElementById('statusDiv');
+        log.style.visibility = "hidden";
 
         let startbutton = document.getElementById('startbutton');
 
