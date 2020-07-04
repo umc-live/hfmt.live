@@ -65,10 +65,13 @@
    -->
   </div>
 
-  <!-- local video -->
-  <video id="localVideo" autoplay playsinline muted></video>
-  <div id="camera-info"></div>
-  <canvas id="oscilloscope"></canvas>   
+
+    <!-- local video -->
+    <div id="local_ui">
+        <video id="localVideo" autoplay playsinline muted></video>
+        <div id="camera-info"></div>
+        <canvas id="oscilloscope"></canvas>   
+    </div>
 
   <script>
       window.localStorage.setItem('debug', 'mediasoup-client:WARN* mediasoup-client:ERROR*');
