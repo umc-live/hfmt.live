@@ -72,6 +72,10 @@
         let localvid = document.getElementById("quintetnet-local");
         localvid.srcObject = stream;
 
+        let qvid = document.getElementById(`quintetnet-${url_args.get('id')}`);
+        if( qvid )
+            qvid.srcObject = stream;
+
         return 1;
     }
 
