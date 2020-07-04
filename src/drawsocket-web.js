@@ -2559,7 +2559,7 @@ function initTimesync(socket_)
 
     console.log('syncing', state);
     statusDiv.innerHTML = "synchronizing...";
-    statusDiv.style.visibility = "visible";
+  //  statusDiv.style.visibility = "visible";
 
     if (state === 'end') {
       statusDiv.innerHTML = `sync offset: ${ts.offset} ms`;
