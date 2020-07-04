@@ -549,7 +549,7 @@ function checkURLArgs()
       }
       else
       {
-        const filetype = _val.fetch.endsWith('json') ? 'json' : (_val.fetch.endsWith('html') ? 'html' : null);
+        const _filetype = _val.fetch.endsWith('json') ? 'json' : (_val.fetch.endsWith('html') ? 'html' : null);
 
         fetch(_val.fetch).then(function (response) {
             try {
