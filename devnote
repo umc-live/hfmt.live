@@ -1,11 +1,10 @@
 to do 
-use drawsocket style url system for rooms
-then sub directories off rooms can be target for instrument routing
-or alternatively there could be an instrument selector
 
-this nginx line shoould pass everything to the default page keeping the 
-url intact
 
-location / {
-    try_files $uri $uri/ /index.html;
-}
+what should the default page be?
+maybe better if there is no default page?
+this makes it more flexible but a little less simple
+even less simple would be to have a conductor page, that sets the default pages for performers and audience...  mabye nice..
+for example, users could request the page via websocket, and the conductor page would respond with the file links. this woudl require that the conductor page is always running.
+
+
