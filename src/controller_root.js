@@ -9,6 +9,7 @@
 import * as soupclient from './soupclient-module';
 import io from 'socket.io-client';
 import * as drawsocket from './drawsocket-web';
+import { isGeneratorFunction } from 'pdfjs-dist/build/pdf.worker';
 
 
 let oscprefix = window.location.pathname; // document.getElementById("OSC").getAttribute("OSCprefix");
@@ -531,7 +532,8 @@ function checkURLArgs()
         fetch: url_args.get("get")
       };
   
-      if (url_args.has("prefix")) {
+      if (url_args.has("prefix")) 
+      {
         _val.prefix = url_args.get("prefix");
 
         console.log({
@@ -547,24 +549,38 @@ function checkURLArgs()
       }
       else
       {
-       
+        const filetype = _val.fetch.endsWith('json') ? 'json' : (_val.fetch.endsWith('html') ? 'html' : null);
+
         fetch(_val.fetch).then(function (response) {
             try {
-              console.log(response);
-              return response.json()
+                console.log(response);
+                if ( _filetype == 'json' ) {
+                    return response.json()
+                }
+                else if ( _filetype == 'html') {
+                    return response.text();
+                }
+
             }
             catch (err) {
-              console.log('caught error:', err);
+                console.log('caught error:', err);
             }
-    
+
             return;
-          }).then(function (_json) {
+        }).then(function (_fileContent) {
 
-            processFile(name, _json, 'drawsocket');
+            if( _filetype == 'json' ){
+                processFile(name, _fileContent, 'drawsocket');
+            }
+            else if( _filetype == 'html' )
+            {
+                console.log('apply html here');
+            }
 
-        }).catch( err => 
+        }).catch(err =>
             console.error(`fetch error ${err}`)
         );
+
       }
       
     }
