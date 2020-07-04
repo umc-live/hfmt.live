@@ -1,5 +1,24 @@
+<style type="text/css">
+    #drawsocket {
+        top: 0px;
+    }
+
+    .quintetnet_div {
+      width: 160px;
+      top: 0px;
+    }
+
+    .quintetnet_div video {
+        width: 160px;
+        height: 120px;
+        background-color: black;
+    }
+
+</style>
+
 <div class="quintetnet_div">
-    <video id="localVideo" autoplay playsinline muted></video>
+    <button id="startbutton">start stream</button> 
+    <video id="quintetnet-local" autoplay playsinline muted></video>
     <video id="quintetnet-1" autoplay playsinline muted></video>
     <video id="quintetnet-2" autoplay playsinline muted></video>
     <video id="quintetnet-3" autoplay playsinline muted></video>
@@ -14,7 +33,9 @@
 
     async function streamHandler(stream, kind, id) {
         console.log('----> received stream ');
-return;
+
+        return 1; // return 1 to disable default action
+
         const tag = kind + '-' + id;
 
         let el = $('#' + tag);
@@ -44,6 +65,14 @@ return;
 
     drawsocket.on_newPeerStream = async (stream, kind, id) => {
         streamHandler(stream, kind, id);
+        return 1;
+    }
+
+    drawsocket.on_newLocalStream = async (stream) => {
+        let localvid = document.getElementById("quintetnet-local");
+        localvid.srcObject = stream;
+
+        return 1;
     }
 
 
@@ -52,8 +81,12 @@ return;
         let ui_div = document.getElementById('default_ui');
         let localUI_div = document.getElementById('local_ui');
 
-        ui_div.innerHTML = "";
-        localUI_div.innerHTML = "";
+        ui_div.parentElement.removeChild(ui_div);
+        localUI_div.parentElement.removeChild(localUI_div);
+        
+
+        let startbutton = document.getElementById('startbutton');
+        startbutton.addEventListener("click", drawsocket.startStream );
 
         console.log( drawsocket.getMediaStreams() );
 /*

@@ -46,7 +46,11 @@ window.drawsocket.getMediaStreams = function(){ return soupclient.getStreams() }
 
 //console.log('set the stream?', window.drawsocket.getMediaStreams);
 
-window.drawsocket.on_newPeerStream = async function(stream, kind, id){
+window.drawsocket.on_newPeerStream = async function(stream, kind, id) {
+    return 0;
+}
+
+window.drawsocket.on_newLocalStream = async function(stream) {
     return 0;
 }
 
@@ -374,6 +378,20 @@ async function startStream()
     await soupclient.sendStream(localMediaStream);
 
 
+    const ret = await window.drawsocket.on_newLocalStream(localMediaStream);
+    if( ret != 1 )
+    {
+        defaultDisplay();
+    }
+
+    // default display when 
+}
+
+window.drawsocket.startStream = startStream;
+
+async function defaultDisplay()
+{
+
     //$('#stop-streams').style.display = 'initial';
     showCameraInfo();
     let display = $('#localVideo');
@@ -586,7 +604,7 @@ function setupMax()
 
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', soupclient.joinRoom );
-    $('#btn_start').addEventListener('click', startStream);
+    $('#btn_start').addEventListener('click', startStream); // << this should maybe be in the soupclient...
     
     $('#input_sendfile').addEventListener('change', handleFiles, false);
 
