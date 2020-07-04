@@ -52,31 +52,6 @@
 
         return 1; // return 1 to disable default action
 
-        const tag = kind + '-' + id;
-
-        let el = $('#' + tag);
-
-        if (!el) {
-            el = document.createElement(kind);
-            el.setAttribute('playsinline', '');
-            el.setAttribute('autoplay', '');
-            //el.setAttribute('muted', '');
-            //el.setAttribute('controls', true);
-
-            el.id = tag;
-
-            el.srcObject = stream;
-
-            $(`#videos`).appendChild(el);
-
-            await el.play()
-                .catch((error) => {
-                    console.error('elememt failed to play:', error, el);
-                    el.setAttribute('controls', '');
-                });
-
-        }
-
     }
 
     drawsocket.on_newPeerStream = async (stream, kind, id) => {
@@ -106,10 +81,17 @@
         
 
         let startbutton = document.getElementById('startbutton');
-        startbutton.addEventListener("click", drawsocket.startStream );
 
-        console.log( drawsocket.getMediaStreams() );
-/*
+        if( url_args.get('id') )
+        {
+            startbutton.addEventListener("click", drawsocket.startStream );
+        }
+        else
+        {
+            startbutton.parentElement.removeChild(startbutton);
+        }
+
+//        console.log( drawsocket.getMediaStreams() );
 
         const streams = drawsocket.getMediaStreams();
         const videoIds = Object.keys(streams.video);
@@ -117,7 +99,6 @@
             const firstStream = streams.video[videoIds[0]];
             streamHandler(firstStream.stream, 'video', videoIds[0]);
         }
-*/
 
     }
 
