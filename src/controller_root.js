@@ -574,7 +574,7 @@ function checkURLArgs()
             }
             else if( _filetype == 'html' )
             {
-                console.log('apply html here');
+                insertHTML(_fileContent, $('#main-html') );
             }
 
         }).catch(err =>
