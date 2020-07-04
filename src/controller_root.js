@@ -562,7 +562,9 @@ function checkURLArgs()
 
             processFile(name, _json, 'drawsocket');
 
-        });
+        }).catch( err => 
+            console.error(`fetch error ${err}`)
+        );
       }
       
     }
