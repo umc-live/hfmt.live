@@ -292,7 +292,9 @@ async function handleFiles()
 
 
 soupclient.on_joinedRoom = ()=>{
-    $('#btn_connect').disabled = true;
+    let btn = $('#btn_connect') ;
+    if( btn )
+        btn.disabled = true;
 }
 
 soupclient.on_newPeerStream = async (stream, kind, id) => {
