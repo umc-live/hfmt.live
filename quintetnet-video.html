@@ -2,22 +2,32 @@
     let url_args = new URLSearchParams(window.location.search);
     console.log( `hello user ${url_args.get('user')}` );
 
-
-  function init()
-  {
-    const streams = drawsocket.getMediaStreams();
-    const videoIds = Object.keys(streams.video);
-    if( videoIds.length > 0 )
+    function run()
     {
-      const firstStream = streams.video[ videoIds[0] ];
-      streamHandler(firstStream.stream, 'video', videoIds[0] );
+
+
+
+        function init()
+        {
+
+            let uiDiv = document.getElementById('ui');
+            
+
+            const streams = drawsocket.getMediaStreams();
+            const videoIds = Object.keys(streams.video);
+            if( videoIds.length > 0 )
+            {
+                const firstStream = streams.video[ videoIds[0] ];
+                streamHandler(firstStream.stream, 'video', videoIds[0] );
+            }          
+
+
+        }
     }
 
-    
+ 
 
-  }
-
-  init();
+  run();
 
 
 </script>
