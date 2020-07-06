@@ -193,7 +193,7 @@ function initSocket(socket)
     peerId = peerId.substr(peerId.lastIndexOf('#')+1);
   }
 
-  if( socket.handshake.query && socket.handshake.query.userId )
+  if( socket.handshake.query && socket.handshake.query.userId != 'null' )
   {
     console.log('handshake.query', socket.handshake.query);
       peerId += `-id-${socket.handshake.query.userId}`;
