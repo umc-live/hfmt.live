@@ -195,6 +195,7 @@ function initSocket(socket)
 
   if( socket.handshake.query && socket.handshake.query.userId )
   {
+    console.log('handshake.query', socket.handshake.query);
       peerId += `-id-${socket.handshake.query.userId}`;
   }
 
