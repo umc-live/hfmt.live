@@ -1,8 +1,8 @@
 
 # hfmt.live
-`hfmt.live` is a web-based platform aming to enable creative uses of audio/video media streams, supported by the Hochschule für Musik und Theater Hamburg, as part of the Digital Stage project, initiated during the Covid-19 pandemic, with additional generous support from Digital Ocean's covid development initiative.
+`hfmt.live` is a web-based platform aiming to enable creative uses of audio/video media streams, developed through by the [Hochschule für Musik und Theater Hamburg *Innovative Hochschule*](https://www.hfmt-hamburg.de/innovative-hochschule/), as part of the [Digital Stage](https://digital-stage.org/?lang=en) project, initiated during the COVID-19 pandemic, with additional generous support from [Digital Ocean](https://www.digitalocean.com/)'s COVID-19 development initiative.
 
-The system provides a wrapper for WebRTC media streams using Mediasoup SFU as an unerlying media router.
+The system provides a wrapper for WebRTC media streams using the [mediasoup](https://mediasoup.org/) Selective Forwarding Unit (SFU) as an underlying media router.
 
 There is a default view for the page, but the system was designed to host user designed HTML pages (+CSS/JS), so the display layout and usage of the system has no (or very minimal) use restrictions.
 
@@ -11,7 +11,7 @@ JSON files may also be used, using the [drawsocket](https://github.com/HfMT-ZM4/
 ## Basic use
 *please note: `hfmt.live` is very much an experimental developmental project! this code is possibly unstable and subject to change unexpectedly!*
 
-The `hfmt.live` server uses the URL to specify a "room", where users may send and receive media streams, as well as messages via Websockets, and may also share files with each other that change the view of the page.
+The `hfmt.live` server uses the URL to specify a "room", where users may send and receive media streams, as well as messages via WebSockets, and may also share files with each other that change the view of the page.
 
 For example, [https://hfmt.live/demo](https://hfmt.live/demo) enters the room "demo". Any user who enters the room "demo" can join and stream their audio and video. At the moment there is no authentication, but this may change in the nearish future.
 
@@ -30,15 +30,15 @@ In the default page, there are buttons for `Connect`, `Start Webcam`, `Share Sco
 
 Alternatively, users may supply a URL parameter `get` to specify a page view file directly, circumventing the `Send Score` system.
 
-For example, [https://hfmt.live/demo?get=https://raw.githubusercontent.com/HfMT-ZM4/hfmt.live/master/test-user-webgl.html](https://hfmt.live/demo?get=https://raw.githubusercontent.com/HfMT-ZM4/hfmt.live/master/test-user-webgl.html), enters the room namespace "demo", and request to load the file `test-user-webgl.html` stored in the `hfmt.live` github repository. When users connect to the media stream, the videa feeds are used as textures for an webgl cube spinning on the page.
+For example, [https://hfmt.live/demo?get=https://raw.githubusercontent.com/HfMT-ZM4/hfmt.live/master/test-user-webgl.html](https://hfmt.live/demo?get=https://raw.githubusercontent.com/HfMT-ZM4/hfmt.live/master/test-user-webgl.html), enters the room namespace "demo", and request to load the file `test-user-webgl.html` stored in the `hfmt.live` GitHub repository. When users connect to the media stream, the video feeds are used as textures for an WebGL cube spinning on the page.
 
-In this way, links can be used to set custom displays without needing the files to be stored locally on the server. Note, that the files need to be on servers that allow [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS), as used by the github "raw" pages.
+In this way, links can be used to set custom displays without needing the files to be stored locally on the server. Note, that the files need to be on servers that allow [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS), as used by the GitHub "raw" pages.
 
 ## API
 
 The `hfmt.live` wrapper API uses of the [drawsocket](https://github.com/HfMT-ZM4/drawsocket) object, stored in the global `window` namespace, with some additional functions for handling media streams:
 
-* `drawsocket.getMediaStreams()`: returns a object of media streams, sorted by video and audio. Useful for initialization on load, to get list of current streams active in the room.
+* `drawsocket.getMediaStreams()`: returns an object of media streams, sorted by video and audio. Useful for initialization on load, to get list of current streams active in the room.
     ```
     {
         video: [ v_stream1, v_stream2, etc.],
