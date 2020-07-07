@@ -55,6 +55,10 @@ window.drawsocket.on_newLocalStream = async function(stream) {
     return 0;
 }
 
+window.drawsocket.on_removedPeerStream = async function(id) {
+    return 0;
+}
+
 
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
@@ -344,8 +348,15 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
 
 soupclient.on_removedPeerStream = (_id) => {
 
+
+    const ret = await window.drawsocket.on_newLocalStream(_id);
+    if( ret == 1 )
+    {
+        return;
+    }
+
     console.log("removing id", _id);
-    
+
     if( _id.lastIndexOf('#') != -1 )
     {
         _id = _id.substr(_id.lastIndexOf('#')+1);
