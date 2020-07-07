@@ -29,11 +29,11 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 const log = (msg) => {
-  console.log(`[${Date.now()}]: ${msg}`);
+  console.log(`[${Date()}]: ${msg}`);
 }
 
 const errorLog = (msg) => {
-  console.error(`[${Date.now()}]: ${msg}`);
+  console.error(`[${Date()}]: ${msg}`);
 }
 
 
