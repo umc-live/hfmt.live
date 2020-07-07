@@ -346,10 +346,10 @@ soupclient.on_newPeerStream = async (stream, kind, id) => {
 }
 
 
-soupclient.on_removedPeerStream = (_id) => {
+soupclient.on_removedPeerStream = async (_id) => {
 
 
-    const ret = await window.drawsocket.on_newLocalStream(_id);
+    const ret = await window.drawsocket.on_removedPeerStream(_id);
     if( ret == 1 )
     {
         return;
