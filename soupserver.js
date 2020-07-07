@@ -28,8 +28,14 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
-const log = console.log;
-const err = console.error;
+const log = (msg) => {
+  console.log(`[${Date.now()}]: ${msg}`);
+}
+
+const errorLog = (msg) => {
+  console.error(`[${Date.now()}]: ${msg}`);
+}
+
 
 let worker, router, room, audioLevelObserver;
 
@@ -139,7 +145,7 @@ async function closeProducer(producer) {
   } 
   catch (e) 
   {
-    err(e);
+    errorLog(e);
   }
 }
 
@@ -247,7 +253,7 @@ function initSocket(socket)
   
       if (!transport) 
       {
-        err(`connect-transport: server-side transport ${transportId} not found`);
+        errorLog(`connect-transport: server-side transport ${transportId} not found`);
         callback({ error: `server-side transport ${transportId} not found` });
         return;
       }
@@ -260,7 +266,7 @@ function initSocket(socket)
     } 
     catch (e) 
     {
-      console.error('error in /signaling/connect-transport', e);
+      errorLog('error in /signaling/connect-transport', e);
       callback({ error: e });
     }
   });
@@ -282,7 +288,7 @@ function initSocket(socket)
       });
 
     } catch (e) {
-      console.error('error in /signaling/create-transport', e);
+      errorLog('error in /signaling/create-transport', e);
       callback({ error: e });
     }
   });
@@ -300,7 +306,7 @@ function initSocket(socket)
   
       if (!transport) 
       {
-        err(`send-track: server-side transport ${transportId} not found`);
+        errorLog(`send-track: server-side transport ${transportId} not found`);
         callback({ error: `server-side transport ${transportId} not found`});
         return;
       }
@@ -379,7 +385,7 @@ function initSocket(socket)
       if (!producer) 
       {
         let msg = `server-side producer for${mediaPeerId}:${mediaTag} not found`;
-        err('recv-track: ' + msg);
+        errorLog('recv-track: ' + msg);
         callback({ error: msg });
         return;
       }
@@ -387,7 +393,7 @@ function initSocket(socket)
       if ( !router.canConsume({ producerId: producer.id, rtpCapabilities }) ) 
       {
         let msg = `client cannot consume ${mediaPeerId}:${mediaTag}`;
-        err(`recv-track: ${peerId} ${msg}`);
+        errorLog(`recv-track: ${peerId} ${msg}`);
         callback({ error: msg });
         return;
       }
@@ -406,7 +412,7 @@ function initSocket(socket)
       if (!transport) 
       {
         let msg = `server-side recv transport for ${peerId} not found`;
-        err('recv-track: ' + msg);
+        errorLog('recv-track: ' + msg);
         callback({ error: msg });
         return;
       }
@@ -462,7 +468,7 @@ function initSocket(socket)
         producerPaused: consumer.producerPaused
       });
     } catch (e) {
-      console.error('error in /signaling/recv-track', e);
+      errorLog('error in /signaling/recv-track', e);
       callback({ error: e });
     }
   });
@@ -474,7 +480,7 @@ function initSocket(socket)
   
       if (!consumer) 
       {
-        err(`pause-consumer: server-side consumer ${consumerId} not found`);
+        errorLog(`pause-consumer: server-side consumer ${consumerId} not found`);
         callback({ error: `server-side consumer ${consumerId} not found` });
         return;
       }
@@ -487,7 +493,7 @@ function initSocket(socket)
     } 
     catch (e) 
     {
-      console.error('error in /signaling/resume-consumer', e);
+      errorLog('error in /signaling/resume-consumer', e);
       callback({ error: e });
     }
   });
@@ -508,7 +514,7 @@ function initSocket(socket)
     } 
     catch (e) 
     {
-      console.error('error in /signaling/leave', e);
+      errorLog('error in /signaling/leave', e);
       callback({ error: e });
     }
   });
