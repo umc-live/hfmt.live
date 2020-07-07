@@ -1,6 +1,6 @@
 
 # hfmt.live
-`hfmt.live` is a web-based platform aming to enable creative uses of audio/video media streams, supported by the Hochschule für Musik und Theater Hamburg, as part of the Digital Stage project, initiated during the Covid-19 pandemic, with additional generous support from Digital Ocean's Covid development initiative.
+`hfmt.live` is a web-based platform aming to enable creative uses of audio/video media streams, supported by the Hochschule für Musik und Theater Hamburg, as part of the Digital Stage project, initiated during the Covid-19 pandemic, with additional generous support from Digital Ocean's covid development initiative.
 
 The system provides a wrapper for WebRTC media streams using Mediasoup SFU as an unerlying media router.
 
