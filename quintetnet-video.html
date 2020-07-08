@@ -171,6 +171,7 @@
         let isMuted = false;
         mutebutton.addEventListener("click", () => {
             isMuted = !isMuted;
+            console.log('setting mute to', isMuted);
             document.querySelectorAll("audio").forEach(a => {
                 a.setAttribute("muted", isMuted);
             })
