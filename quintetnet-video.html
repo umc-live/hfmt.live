@@ -173,7 +173,7 @@
             isMuted = !isMuted;
             console.log('setting mute to', isMuted);
             document.querySelectorAll("audio").forEach(a => {
-                a.setAttribute("muted", (isMuted ? true : false));
+                a.setAttribute("volume", (isMuted ? 0 : 1));
             })
         });
 
