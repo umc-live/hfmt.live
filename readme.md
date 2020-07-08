@@ -38,6 +38,10 @@ In this way, links can be used to set custom displays without needing the files 
 
 The `hfmt.live` wrapper API uses of the [drawsocket](https://github.com/HfMT-ZM4/drawsocket) object, stored in the global `window` namespace, with some additional functions for handling media streams:
 
+* `drawsocket.joinRoom()`: requests to join room and receive streams (could be used for viewers who only receive streams, without sending.
+
+* `drawsocket.startStream()`: starts audio/video send stream to room, and automatically calls `joinRoom` if not already joined.
+
 * `drawsocket.getMediaStreams()`: returns an object of media streams, sorted by video and audio. Useful for initialization on load, to get list of current streams active in the room.
     ```
     {

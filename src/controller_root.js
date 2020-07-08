@@ -60,6 +60,8 @@ window.drawsocket.on_removedPeerStream = async function(id) {
 }
 
 
+
+
 const hostname = window.location.hostname;
 const $ = document.querySelector.bind(document);
 
@@ -402,6 +404,7 @@ async function startStream()
 }
 
 window.drawsocket.startStream = startStream;
+window.drawsocket.joinRoom = soupclient.joinRoom;
 
 async function defaultDisplay()
 {
