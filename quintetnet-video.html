@@ -72,6 +72,12 @@
     <video id="quintetnet-3" autoplay playsinline muted></video>
     <video id="quintetnet-4" autoplay playsinline muted></video>
     <video id="quintetnet-5" autoplay playsinline muted></video>
+    <audio id="quintetnet-1a" autoplay playsinline ></video>
+    <audio id="quintetnet-2a" autoplay playsinline ></video>
+    <audio id="quintetnet-3a" autoplay playsinline ></video>
+    <audio id="quintetnet-4a" autoplay playsinline ></video>
+    <audio id="quintetnet-5a" autoplay playsinline ></video>
+
 </div>
 
 <script>
@@ -89,6 +95,11 @@
             if( kind == "video" )
             {
                 let vid = document.getElementById(`quintetnet-${qID}`);
+                vid.srcObject = stream;
+            }
+            else if( kind == "audio" )
+            {
+                let vid = document.getElementById(`quintetnet-${qID}a`);
                 vid.srcObject = stream;
             }
         }
@@ -163,7 +174,12 @@
             const firstStream = streams.video[videoIds[0]];
             streamHandler(firstStream.stream, 'video', videoIds[0]);
         }
-
+        
+        const audioIds = Object.keys(streams.audio);
+        if (audioIds.length > 0) {
+            const firstStream = streams.video[audioIds[0]];
+            streamHandler(firstStream.stream, 'audio', audioIds[0]);
+        }
     }
 
 
