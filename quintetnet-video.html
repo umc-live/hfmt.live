@@ -66,6 +66,7 @@
     
     </style>
     <button id="startbutton">start stream</button> 
+    <button id="mutebutton">mute</button> 
     <video id="quintetnet-local" autoplay playsinline muted></video>
     <video id="quintetnet-1" autoplay playsinline muted></video>
     <video id="quintetnet-2" autoplay playsinline muted></video>
@@ -165,6 +166,16 @@
             drawsocket.joinRoom();
             startbutton.disabled = true;
         }
+
+        let mutebutton = document.getElementById('mutebutton');
+        let isMuted = false;
+        mutebutton.addEventListener("click", () => {
+            isMuted = !isMuted;
+            document.querySelectorAll("audio").forEach(a => {
+                a.setAttribute("muted", isMuted);
+            })
+        });
+
 
 //        console.log( drawsocket.getMediaStreams() );
 
