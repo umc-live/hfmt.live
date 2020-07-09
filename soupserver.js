@@ -480,7 +480,7 @@ function initSocket(socket)
   
       if (!consumer) 
       {
-        errorLog(`pause-consumer: server-side consumer ${consumerId} not found`);
+        errorLog(`resume-consumer: server-side consumer ${consumerId} not found`);
         callback({ error: `server-side consumer ${consumerId} not found` });
         return;
       }
@@ -498,6 +498,63 @@ function initSocket(socket)
     }
   });
   
+
+  // --> /signaling/pause-producer
+  //
+  // called to stop sending a track from a specific client
+  //
+  socket.on('pause-producer', async (data, callback) => {
+    try {
+      let { peerId, producerId } = data,
+          producer = room.producers.get(producerId);
+
+      if (!producer) {
+        errorLog(`pause-producer: server-side producer ${producerId} not found`);
+        callback({ error: `server-side producer ${producerId} not found` });
+        return;
+      }
+
+      log('pause-producer', producer.appData);
+
+      await producer.pause();
+
+      room.peers.get(peerId).media[producer.appData.mediaTag].paused = true;
+
+      callback({ paused: true });
+    } catch (e) {
+      errorLog('error in pause-producer', e);
+      callback({ error: e });
+    }
+  });
+
+  // --> /signaling/resume-producer
+  //
+  // called to resume sending a track from a specific client
+  //
+  socket.on('resume-producer', async (data, callback) => {
+    try {
+      let { peerId, producerId } = data,
+          producer = room.producers.get(producerId);
+
+      if (!producer) {
+        errorLog(`resume-producer: server-side producer ${producerId} not found`);
+        callback({ error: `server-side producer ${producerId} not found` });
+        return;
+      }
+
+      log('resume-producer', producer.appData);
+
+      await producer.resume();
+
+      room.peers.get(peerId).media[producer.appData.mediaTag].paused = false;
+
+      callback({ resumed: true });
+    } catch (e) {
+      errorLog('error in /signaling/resume-producer', e);
+      callback({ error: e });
+    }
+  });
+
 
   socket.on('leave', async (data, callback) => {
     try 
