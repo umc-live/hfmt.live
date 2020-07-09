@@ -175,9 +175,11 @@
             document.querySelectorAll("audio").forEach(a => {
                 if( isMuted )
                 {
-;
+                    a.pause();
                 }
-                a.setAttribute("muted", isMuted );
+                else
+                    a.play();
+//                a.setAttribute("muted", isMuted );
 
             })
         });
