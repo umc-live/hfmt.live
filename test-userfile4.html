@@ -67,7 +67,7 @@
         var gainNode = audioCtx.createGain();
 
         let gainSlider = document.getElementById('gain');
-        gainSlider.oninput = function() {
+        gainSlider.oninput = () => {
             gainNode.gain.setValueAtTime(gainSlider.value, audioCtx.currentTime);
         }
 
