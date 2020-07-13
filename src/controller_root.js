@@ -377,6 +377,7 @@ soupclient.on_removedPeerStream = async (_id) => {
 
 async function startStream() 
 {
+    
     if (localMediaStream)
         return;
 
@@ -639,7 +640,7 @@ function setupMax()
 
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', soupclient.joinRoom );
-    $('#btn_start').addEventListener('click', drawsocket.startStream ); // << this should maybe be in the soupclient...
+    $('#btn_start').addEventListener('click', window.drawsocket.startStream); // << this should maybe be in the soupclient...
     
     $('#input_sendfile').addEventListener('change', handleFiles, false);
 
