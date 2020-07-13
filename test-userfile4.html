@@ -27,7 +27,7 @@
         newSlider.setAttribute('value', 1);
         newSlider.setAttribute('step', 0.001);
         newSlider.setAttribute('orient', 'vertical');
-        newSlider.id = id+"-volume";
+        newSlider.id = id; //+"-volume"
 
         newSlider.addEventListener('input', e => {
             console.log('new volume', e.target.value, newSlider.id );
@@ -63,7 +63,10 @@
         let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         var gainNode = audioCtx.createGain();
 
-        let gainSlider = document.getElementById('gain');
+        let gainSlider = makeVolumeSlider('gainSlider');
+        document.getElementById('forms').appendChild(gainSlider);
+
+        //let gainSlider = document.getElementById('gain');
         gainSlider.oninput = () => {
             gainNode.gain.setValueAtTime(gainSlider.value, audioCtx.currentTime);
         }
@@ -86,8 +89,6 @@
         console.log('added video stream only');
 
 
-        let nsl = makeVolumeSlider(1);
-        document.body.appendChild(nsl);
 
     }
 
