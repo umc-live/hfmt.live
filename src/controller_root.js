@@ -45,6 +45,11 @@ drawsocket.init(socket);
 window.drawsocket = drawsocket;
 window.drawsocket.getMediaStreams = function(){ return soupclient.getStreams() };
 
+window.drawsocket.sendStream = async function(stream, kind) {
+    soupclient.sendStream(stream.kind);
+    return 0;
+}
+
 //console.log('set the stream?', window.drawsocket.getMediaStreams);
 
 window.drawsocket.on_newPeerStream = async function(stream, kind, id) {
@@ -640,7 +645,7 @@ function setupMax()
 
 window.addEventListener('load', () => {
     $('#btn_connect').addEventListener('click', soupclient.joinRoom );
-    $('#btn_start').addEventListener('click', window.drawsocket.startStream); // << this should maybe be in the soupclient...
+    $('#btn_start').addEventListener('click', drawsocket.startStream); // << this should maybe be in the soupclient...
     
     $('#input_sendfile').addEventListener('change', handleFiles, false);
 

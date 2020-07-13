@@ -37,9 +37,10 @@
     }
 
 
-    let localMdeaStream;
+    let localMediaStream;
 
-    window.drawsocket.startStream = async () => {
+    async function startMediaStream () {
+
         if (localMediaStream)
             return;
 
@@ -56,7 +57,7 @@
 
         console.log(localMediaStream);
 
-        await soupclient.sendStream(localMediaStream, 'video');
+        await drawsocket.sendStream(localMediaStream, 'video');
         console.log('added video stream only');
 
 
@@ -85,7 +86,7 @@
        // panner.connect(audioCtx.destination);
 
 
-        await soupclient.sendStream(dest.stream, 'audio');
+        await drawsocket.sendStream(dest.stream, 'audio');
         console.log('added video stream only');
 
 
@@ -95,6 +96,14 @@
    function init()
    {
     
+        let loggedButton = document.getElementById('btn_start');
+        let ui = loggedButton.parentElement;
+        
+        let startButton = document.createElement('button');
+        startButton.innerHTML = "Start Stream";
+        startButton.onclick = startMediaStream;
+
+        ui.replaceChild(startButton, loggedButton);
 
        let vidTag = document.getElementById('videos');
        vidTag.style ="z-index: 100";
