@@ -1,0 +1,144 @@
+
+<div>
+    mouse drag video example
+ </div>
+ <svg xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">
+    <!-- transform="translate(30 40)" -->
+     <g class="slider" id="foo">
+        <rect class="frame" x="10" y="10" width="10" height="100" fill="white" stroke="black"></rect>
+        <rect class="indicator" x="10" y="110" width="10" height="4" fill="black" stroke="black"></rect>
+    </g>
+
+ </svg>
+ 
+  <input id='htmlslider' type="range" min="0" max="1" value="0" step="0.001" orient="vertical">
+
+
+  <style>
+        /* for vertical slider */
+        input[type="range"] {
+            writing-mode: bt-lr;
+            -webkit-appearance: slider-vertical;
+        }
+  </style>
+
+ <script>
+
+    
+    const svgObj = document.querySelector("svg");
+
+    let mouseDownRef = {x:0, y:0, target: null};
+
+    function translate(obj, delta_pos)
+    {
+
+        let transformlist = obj.transform.baseVal; 
+
+        let matrix = obj.getCTM();
+        matrix.e = delta_pos.x;
+        matrix.f = delta_pos.y;
+        console.log(matrix, delta_pos);
+        const transformMatrix = svgObj.createSVGTransformFromMatrix(matrix);
+        transformlist.initialize( transformMatrix );
+
+    }
+
+
+    function mouseDownHandler(event)
+    {
+        mouseDownRef = { x: event.clientX, y: event.clientY, target: event.target };
+        console.log(mouseDownRef)
+    }
+
+
+    function mouseDrag(event)
+    {
+        if( event.buttons > 0 && event.target == mouseDownRef.target )
+        {
+            translate(event.target, { 
+                x: 0, 
+                y : event.clientY - mouseDownRef.y
+             });
+        }
+    }
+
+    function mouseUpHandler(event)
+    {
+        mouseDownRef = {x:0, y:0, target: null};
+    }
+
+   function init()
+   {
+
+
+    let vslider = document.getElementById('htmlslider');
+    vslider.addEventListener('input', (event) => {
+        console.log(event.target.value);
+    });
+    // good to also allow clicking in the parent box
+
+        const slider = document.querySelector('#foo');
+        let slidebar = slider.querySelector(".indicator");
+        
+        slidebar.addEventListener("mousedown", mouseDownHandler );
+        slidebar.addEventListener("mousemove", (event) => {
+            if( event.buttons > 0 )
+            {
+                translate(slidebar, { 
+                    x: 0, 
+                    y : event.clientY - mouseDownRef.y
+                });
+            }
+        });
+        
+        function applyTransform(event){
+            let matrix = slidebar.getCTM();
+            let y = Number(slidebar.getAttribute('y'));
+            slidebar.setAttribute('y', y + matrix.f );
+            matrix.f = 0;
+            const transformMatrix = svgObj.createSVGTransformFromMatrix(matrix);
+            let transformlist = slidebar.transform.baseVal; 
+            transformlist.initialize( transformMatrix );
+        }
+
+        slidebar.addEventListener("mouseup", applyTransform );
+        slidebar.addEventListener("mouseleave", applyTransform );
+
+
+        return;
+
+       let vidTag = document.getElementById('videos');
+       vidTag.style ="z-index: 100";
+
+       document.body.appendChild(vidTag);
+
+       console.log( drawsocket.getMediaStreams() );
+
+       let vids = document.getElementsByTagName('video');
+       
+       for( let i = 0; i < vids.length; i++)
+       {   
+
+           vids[i].onmousemove = (event) => {
+               if( event.buttons > 0 )
+               {
+                   console.log('mouse move', event);        
+
+                   vids[i].style = `position: absolute; 
+                       top: ${event.clientY - event.target.clientHeight * 0.5 }px; 
+                       left: ${event.clientX - event.target.clientWidth * 0.5 }px;`;
+               }
+           };
+
+       }
+
+
+   }
+ 
+   init();
+ 
+   
+   
+   
+ </script>
+ 

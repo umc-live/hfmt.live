@@ -8,3 +8,9 @@ even less simple would be to have a conductor page, that sets the default pages 
 for example, users could request the page via websocket, and the conductor page would respond with the file links. this woudl require that the conductor page is always running.
 
 
+add webaudio connection
+input from userMedia or rtc stream to webaudio:
+https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamAudioSourceNode
+
+output from webaudio to stream to conenct to webrtc:
+https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamAudioDestinationNode

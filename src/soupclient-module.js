@@ -162,37 +162,52 @@ export async function leaveRoom() {
 /**
  * 
  * @param {required: audio/video medeia stream to send} _stream 
+ * @param {optional: string, 'video', 'audio' to set sream type, default is undefined, which will use audio and video from same stream}
  */
-export async function sendStream(_stream) 
+export async function sendStream(_stream, kind) 
 {
     await joinRoom();
 
     if (!sendTransport) 
         sendTransport = await createTransport('send');
 
-    console.log('local video settings', _stream.getVideoTracks()[0].getSettings());
+    if( typeof kind == "undefined" || kind == "video" )
+    {
+        console.log('local video settings', _stream.getVideoTracks()[0].getSettings());
 
-    camVideoProducer = await sendTransport.produce({
-        track: _stream.getVideoTracks()[0],
-        encodings: camEncodings(),
-        appData: { mediaTag: 'cam-video' }
-    });
+        camVideoProducer = await sendTransport.produce({
+            track: _stream.getVideoTracks()[0],
+            encodings: camEncodings(),
+            appData: { mediaTag: 'cam-video' }
+        });    
+    }
 
     /*
         dataProducer = await sendTransport.produceData({
         });
     */
 
-    console.log('local audio settings', _stream.getAudioTracks()[0].getSettings());
+    if( typeof kind == "undefined" || kind == "audio" )
+    {
+        console.log('local audio settings', _stream.getAudioTracks()[0].getSettings());
 
-    camAudioProducer = await sendTransport.produce({
-        track: _stream.getAudioTracks()[0],
-        appData: { mediaTag: 'cam-audio' }
-    });
+        camAudioProducer = await sendTransport.produce({
+            track: _stream.getAudioTracks()[0],
+            appData: { mediaTag: 'cam-audio' }
+        });
+    }
 
 
 }
 
+
+export async function pauseAudioSend(){ 
+    pauseProducer(camAudioProducer);
+}
+
+export async function pauseVideoSend(){ 
+    pauseProducer(camVideoProducer);
+}
 
 export function on_joinedRoom() {}
 

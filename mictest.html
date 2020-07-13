@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" href="">
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <video controls></video>
+    <br>
+    <input id="gain" type="range" min="0" max="1." step="0.001">
+    <input id="pan" type="range" min="-1" max="0" step="0.001">
+
+  </body>
+<script>
+
+const range = document.querySelector('#gain');
+const panSlider = document.querySelector('#pan');
+
+if (navigator.mediaDevices) {
+    console.log('getUserMedia supported.');
+    navigator.mediaDevices.getUserMedia ({audio: true, video: true})
+    .then(function(stream) {
+        video.srcObject = stream;
+        video.onloadedmetadata = function(e) {
+            video.play();
+            video.muted = true;
+        };
+        // Create a MediaStreamAudioSourceNode
+        // Feed the HTMLMediaElement into it
+      //  const audioCtx = new AudioContext();
+        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var gainNode = audioCtx.createGain();
+       // var panNode = audioCtx.createStereoPanner(); // no support on safari
+        var panner = audioCtx.createPanner();
+
+        var dest = audioCtx.createMediaStreamDestination();
+
+
+        panner.panningModel = 'HRTF';
+        panner.distanceModel = 'inverse';
+        panner.refDistance = 1;
+        panner.maxDistance = 10000;
+        panner.rolloffFactor = 1;
+        panner.coneInnerAngle = 360;
+        panner.coneOuterAngle = 0;
+        panner.coneOuterGain = 0;
+
+        
+  let listener = audioCtx.listener;
+
+  if(listener.forwardX) 
+  {
+    listener.forwardX.value = 0;
+    listener.forwardY.value = 0;
+    listener.forwardZ.value = -1;
+    listener.upX.value = 0;
+    listener.upY.value = 1;
+    listener.upZ.value = 0;
+  } else {
+    listener.setOrientation(0, 0, -1, 0, 1, 0);
+  }
+
+        let xPos = 0;
+        let yPos = 0;
+        let zPos = -1;
+
+        let dist = 2;
+        
+        if(panner.positionX) {
+            panner.positionX.value = xPos;
+            panner.positionY.value = yPos;
+            panner.positionZ.value = zPos;
+        } else {
+            panner.setPosition(xPos,yPos,zPos);
+        }
+
+
+        /*
+        panner.orientationX.value = 1;
+        panner.orientationY.value = 0;
+        panner.orientationZ.value = 0;
+    `   */
+
+        const source = audioCtx.createMediaStreamSource(stream);
+
+        source.connect(gainNode);
+        gainNode.connect(panner);
+        panner.connect(audioCtx.destination);
+
+        
+        range.oninput = function() {
+            gainNode.gain.setValueAtTime(range.value, audioCtx.currentTime);
+        }
+
+        panSlider.oninput = () => {
+            let az = panSlider.value * Math.PI; // k-rate
+            xPos =  dist * Math.cos(az);
+            zPos = dist * Math.sin(az);
+          //  console.log(`az ${az}, xPos ${xPos}, yPos ${yPos}, zPos ${zPos}` )
+
+            if(panner.positionX) {
+                panner.positionX.value = xPos;
+                panner.positionY.value = yPos;
+                panner.positionZ.value = zPos;
+            } else {
+                panner.setPosition(xPos,yPos,zPos);
+            }
+
+        }
+
+    })
+    .catch(function(err) {
+        console.log('The following gUM error occured: ' + err);
+    });
+} else {
+    console.log('getUserMedia not supported on your browser!');
+}
+
+</script>
+</html>
