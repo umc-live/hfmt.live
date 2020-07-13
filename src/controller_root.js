@@ -45,7 +45,7 @@ import { isGeneratorFunction } from 'pdfjs-dist/build/pdf.worker';
     window.drawsocket.getMediaStreams = function(){ return soupclient.getStreams() };
 
     window.drawsocket.sendStream = async function(stream, kind) {
-        soupclient.sendStream(stream.kind);
+        soupclient.sendStream(stream, kind);
         return 0;
     }
 

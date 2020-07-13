@@ -65,7 +65,7 @@
         var gainNode = audioCtx.createGain();
 
         let gainSlider = makeVolumeSlider('gainSlider');
-        document.getElementById('forms').appendChild(gainSlider);
+        document.body.appendChild(gainSlider);
 
         //let gainSlider = document.getElementById('gain');
         gainSlider.oninput = () => {
