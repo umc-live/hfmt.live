@@ -3,7 +3,8 @@
     mouse drag video example
  </div>
  
-  
+ <input id="gain" type="range" min="0" max="1." step="0.001">
+
 
 
   <style>
@@ -38,6 +39,57 @@
         return newSlider;
     }
 
+
+    let localMdeaStream;
+
+    drawsocket.startStream = () => {
+        if (localMediaStream)
+            return;
+
+        try {
+            localMediaStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            });
+
+        }
+        catch (e) {
+            console.error('start camera error', e);
+        }
+
+        console.log(localMediaStream);
+
+        await soupclient.sendStream(localMediaStream, 'video');
+        console.log('added video stream only');
+
+
+        let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var gainNode = audioCtx.createGain();
+
+        let gainSlider = document.getElementById('gain');
+        gainSlider.oninput = function() {
+            gainNode.gain.setValueAtTime(gainSlider.value, audioCtx.currentTime);
+        }
+
+        var panner = audioCtx.createPanner();
+
+
+        const source = audioCtx.createMediaStreamSource(stream);
+
+        var dest = audioCtx.createMediaStreamDestination();
+
+        source.connect(gainNode);
+        gainNode.connect(dest);
+
+       // gainNode.connect(panner);
+       // panner.connect(audioCtx.destination);
+
+
+        await soupclient.sendStream(dest.stream, 'audio');
+        console.log('added video stream only');
+
+
+    }
 
    function init()
    {

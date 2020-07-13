@@ -441,6 +441,7 @@ async function showCameraInfo()
 
 
 // Oscilliscope
+// all the default display should be moved out of the controller module
 
 let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let analyser = audioCtx.createAnalyser();
