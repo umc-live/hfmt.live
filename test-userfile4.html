@@ -5,11 +5,14 @@
  
 
   <style>
+        .volume {
+            z-index: 200;
+        }
 
         /* for vertical slider */
         input[type="range"] {
             writing-mode: bt-lr;
-            -webkit-appearance: slider-vertical;
+            -webkit-appearance: slider-vertical;s
         }
   </style>
 
@@ -65,7 +68,7 @@
         var gainNode = audioCtx.createGain();
 
         let gainSlider = makeVolumeSlider('gainSlider');
-        document.body.appendChild(gainSlider);
+        document.getElementById('videos').appendChild(gainSlider);
 
         //let gainSlider = document.getElementById('gain');
         gainSlider.oninput = () => {
@@ -109,7 +112,7 @@
         ui.replaceChild(startButton, loggedButton);
 
        let vidTag = document.getElementById('videos');
-       vidTag.style ="z-index: 100";
+       vidTag.style ="z-index: 50";
 
        document.body.appendChild(vidTag);
 
