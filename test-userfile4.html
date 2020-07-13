@@ -89,6 +89,9 @@
         await drawsocket.sendStream(dest.stream, 'audio');
         console.log('added video stream only');
 
+        let display = document.querySelector('#localVideo');
+        display.srcObject = localMediaStream;
+        //display.setAttribute('muted', true);
 
 
     }
