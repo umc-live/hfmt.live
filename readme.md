@@ -42,6 +42,29 @@ The `hfmt.live` wrapper API uses of the [drawsocket](https://github.com/HfMT-ZM4
 
 * `drawsocket.startStream()`: starts audio/video send stream to room, and automatically calls `joinRoom` if not already joined.
 
+* `drawsocket.sendStream(stream, kind)`: lower level stream sending function, for use in situations where you want to process the streams before sending. For example, for use with WebAudio:
+
+```
+  localMediaStream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true
+  });
+
+  await drawsocket.sendStream(localMediaStream, 'video');
+
+  let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  let source = audioCtx.createMediaStreamSource(localMediaStream);
+  let gainNode = audioCtx.createGain();
+  let dest = audioCtx.createMediaStreamDestination();
+
+  source.connect(gainNode);
+  gainNode.connect(dest);
+
+  await drawsocket.sendStream(dest.stream, 'audio');
+```
+
+
 * `drawsocket.getMediaStreams()`: returns an object of media streams, sorted by video and audio. Useful for initialization on load, to get list of current streams active in the room.
     ```
     {
@@ -49,7 +72,7 @@ The `hfmt.live` wrapper API uses of the [drawsocket](https://github.com/HfMT-ZM4
         audio: [ a_stream1, a_stream2, etc.]        
     }
     ```
-* `drawsocket.on_newPeerStream`: callback function for handling new media streams. Returning a non-zero value prevents the default handler from being called. Arguments:
+* `drawsocket.on_newPeerStream(stream, kind, id)`: callback function for handling new media streams. Returning a non-zero value prevents the default handler from being called. Arguments:
   * `stream`: the media stream object
   * `kind`: a string, either "audio" or "video"
   * `id`: the unique id associated with the user sending the stream.
@@ -60,7 +83,7 @@ The `hfmt.live` wrapper API uses of the [drawsocket](https://github.com/HfMT-ZM4
   }
   ```
 
-* `drawsocket.on_newLocalStream`: callback function for handling new media streams created on the local machine. Returning a non-zero value prevents the default handler from being called. Arguments:
+* `drawsocket.on_newLocalStream(stream)`: callback function for handling new media streams created on the local machine. Returning a non-zero value prevents the default handler from being called. Arguments:
   * `stream`: the media stream object
   ```
   drawsocket.on_newLocalStream = async (stream) => {
@@ -68,7 +91,7 @@ The `hfmt.live` wrapper API uses of the [drawsocket](https://github.com/HfMT-ZM4
   }
   ```
 
-* `drawsocket.on_removedPeerStream`: callback function for handling removal of media streams. Returning a non-zero value prevents the default handler from being called. Arguments:
+* `drawsocket.on_removedPeerStream(id)`: callback function for handling removal of media streams. Returning a non-zero value prevents the default handler from being called. Arguments:
   * `id`: the unique id associated with the user sending the stream.
   ```
   drawsocket.on_removedPeerStream = async (id) => {
