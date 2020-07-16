@@ -42,7 +42,11 @@ The `hfmt.live` wrapper API uses of the [drawsocket](https://github.com/HfMT-ZM4
 
 * `drawsocket.startStream()`: starts audio/video send stream to room, and automatically calls `joinRoom` if not already joined.
 
-* `drawsocket.sendStream(stream, kind)`: lower level stream sending function, for use in situations where you want to process the streams before sending. For example, for use with WebAudio:
+* `drawsocket.sendStream(stream, kind)`: lower level stream sending function, for use in situations where you want to process the streams before sending.
+  * `stream`: the media stream
+  * `kind`: a string, either `'video'` or `'audio'`, or if undefined, sendStream will attempt to use audio and video streams from the input `stream`.
+  
+  For example, for use with WebAudio:
 
   ```
   localMediaStream = await navigator.mediaDevices.getUserMedia({
