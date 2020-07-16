@@ -44,7 +44,7 @@ The `hfmt.live` wrapper API uses of the [drawsocket](https://github.com/HfMT-ZM4
 
 * `drawsocket.sendStream(stream, kind)`: lower level stream sending function, for use in situations where you want to process the streams before sending. For example, for use with WebAudio:
 
-```
+  ```
   localMediaStream = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true
@@ -62,7 +62,7 @@ The `hfmt.live` wrapper API uses of the [drawsocket](https://github.com/HfMT-ZM4
   gainNode.connect(dest);
 
   await drawsocket.sendStream(dest.stream, 'audio');
-```
+  ```
 
 
 * `drawsocket.getMediaStreams()`: returns an object of media streams, sorted by video and audio. Useful for initialization on load, to get list of current streams active in the room.
